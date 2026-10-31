@@ -42,7 +42,8 @@ export class OriginalGameHost {
     const token = ++this.token;
     let pending = false;
     this.dialog.querySelector("h2").textContent =
-      action.label + (spec.kind === "pipeMaze" ? " · 方向键或字母键移动" : " · 原版小游戏");
+      (spec.kind === "store" ? "瑞德的超市工作" : action.label) +
+      (spec.kind === "pipeMaze" ? " · 方向键或字母键移动" : " · 原版小游戏");
     this.dialog.classList.toggle("thunder-mode", spec.kind === "thunder");
     this.root.textContent = "正在打开…";
     this.dialog.showModal();
