@@ -1,0 +1,9 @@
+{
+  "id": "scene-office",
+  "file": "references/scene-office-典狱长办公室-v3.png",
+  "referenced_image_paths": [
+    "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/scene-office-典狱长办公室-v2.png",
+    "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-embroidery-遮挡保险柜的刺绣-v1.png"
+  ],
+  "prompt": "精准编辑图1，图2只作隐藏机构的安装关系参考。完整保留图1的画风、横向版式、房间、灯光、桌椅、灰绿窗帘和中文标题。此次只有一个核心改动：删除所有整体场景中那台位于挂画右侧、站在地板上的大型黑色保险柜！空出的位置补回连续的原有石墙和地砖，绝不能保留落地柜，也不能再放任何新柜子。真正的保险柜只有一个，缩小为浅薄嵌墙箱体，完全藏在现有木框山水挂画正后方，挂画闭合时从房间内看不见柜体或柜门。左上整体、右上正面、左下俯视、中下拆件等所有场景视图都必须删除那台落地大柜，默认只看到墙上的木框山水画。右下“保险柜细节”两个面板全部重画为：木框山水画通过左侧铰链掀开，露出墙洞内与墙面齐平的小金属柜门与旋钮；另一个显示这只嵌墙小柜门开启及柜内空间。可参照图2左下的正确嵌墙安装关系。不得在挂画旁边显示保险柜。右侧窗帘及所有窗帘材质特写统一深灰绿厚布，其他图像不变。无人物，保留页脚“审阅稿 · 尺寸待校准”。"
+}
