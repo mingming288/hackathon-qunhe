@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { createActor } from './actor.js';
 import { createRoadCar } from './road-car.js';
 import { createStoreProp } from './store-props.js';
+import { createStoreFixture } from './store-fixtures.js';
 
 export const COLORS = { ink: '#34313e', stone: '#9da5a1', trim: '#ddd2b8', wood: '#947558', steel: '#657781', gold: '#d6ac69' };
 export const CHARACTER_NAMES = { red: '瑞德', brooks: '老布', guard: '狱警', warden: '典狱长', manager: '超市经理', clerk: '银行职员', tommy: '汤米', haywood: '海伍德', floyd: '弗洛伊德' };
@@ -102,7 +103,7 @@ function vehicle(group, kind) {
   if (police) { box(group, .5, .2, .3, -.35, 2.3, 0, '#b96c60'); box(group, .5, .2, .3, .35, 2.3, 0, '#6a90ad'); }
 }
 
-export function makeProp(kind) {
+export function makeProp(kind, { sceneId } = {}) {
   const anchor = new THREE.Group(), visual = new THREE.Group(); anchor.add(visual);
   anchor.userData = { assetKey: kind, placeholder: visual, label: CHARACTER_NAMES[kind] || '', targetHeight: 1 };
   if (CHARACTER_NAMES[kind]) {
@@ -118,7 +119,8 @@ export function makeProp(kind) {
     box(visual, 2, .3, 3.3, 0, .91, 0, medical ? '#b5ceca' : '#b2b0a2');
     box(visual, 1.5, .16, .7, 0, 1.13, -1.1, '#e0d8bf');
     for (const x of [-.9, .9]) for (const z of [-1.5, 1.5]) box(visual, .12, .65, .12, x, .33, z, COLORS.steel);
-  } else if (kind === 'shelf') shelf(visual);
+  } else if (sceneId === 'supermarket' && ['shelf', 'freezer'].includes(kind)) createStoreFixture(visual, kind);
+  else if (kind === 'shelf') shelf(visual);
   else if (kind === 'sofa' || kind === 'bench') {
     box(visual, 3.3, .5, 1.2, 0, .65, 0, kind === 'sofa' ? '#8d927e' : COLORS.wood);
     box(visual, 3.3, 1.2, .25, 0, 1.2, -.55, kind === 'sofa' ? '#7e8573' : COLORS.wood);

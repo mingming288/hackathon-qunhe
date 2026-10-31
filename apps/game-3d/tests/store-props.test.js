@@ -21,3 +21,20 @@ test('超市商品和纸袋位于柜台上且可以从柜台前互动', () => {
   }
   disposeWorld(world);
 });
+
+test('超市货架使用成批商品并保持既有碰撞尺寸', () => {
+  const world = createWorld(SCENE_BY_ID.get('supermarket'));
+  const shelves = world.anchors.filter(a => a.userData.assetKey === 'shelf');
+  assert.equal(shelves.length, 3);
+  for (const shelf of shelves) {
+    const batches = shelf.userData.placeholder.children.filter(child => child.isInstancedMesh);
+    assert.deepEqual(batches.map(batch => batch.count), [24, 24]);
+    const size = new THREE.Box3().setFromObject(shelf).getSize(new THREE.Vector3());
+    assert.ok(size.x <= 3.6 && size.z <= 1.1 && size.y <= 3.5);
+  }
+  const freezer = world.anchors.find(a => a.userData.assetKey === 'freezer');
+  assert.ok(freezer.userData.placeholder.children.length > 5);
+  const size = new THREE.Box3().setFromObject(freezer).getSize(new THREE.Vector3());
+  assert.ok(size.x <= 2.8 && size.z <= 1.8);
+  disposeWorld(world);
+});

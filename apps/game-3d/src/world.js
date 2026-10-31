@@ -38,7 +38,7 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
   }
   function prop(kind, x, z, angle = 0) {
     if (!includeCharacters && Object.hasOwn(CHARACTER_NAMES, kind)) return null;
-    const anchor = makeProp(kind); anchor.position.set(x, 0, z); anchor.rotation.y = angle;
+    const anchor = makeProp(kind, { sceneId: config.id }); anchor.position.set(x, 0, z); anchor.rotation.y = angle;
     if (['hammer', 'bible', 'books', 'ledger', 'letter', 'bag', 'groceries'].includes(kind)) anchor.position.y = 1.32;
     if (config.id === 'supermarket' && ['bag', 'groceries'].includes(kind)) anchor.position.y = 1.35;
     root.add(anchor); world.anchors.push(anchor);
