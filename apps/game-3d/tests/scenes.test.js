@@ -7,6 +7,15 @@ import { validateModelEntry } from '../src/assets.js';
 import { entryPosition } from '../src/navigation.js';
 import * as THREE from 'three';
 
+test('监区走廊两侧门洞可接近，门洞之间的墙垛阻挡通行', () => {
+  const world = createWorld(SCENE_BY_ID.get('cellCorridor'));
+  for (const x of [-6, 6]) {
+    for (const z of [-11.2, -5.6, 0, 5.6, 11.2]) assert.ok(canStand(x, z, world.config.size, world.colliders));
+    assert.ok(!canStand(x, 2.8, world.config.size, world.colliders));
+  }
+  disposeWorld(world);
+});
+
 test('全部十九组场景可以构造，出生点安全，出入口可通过行走抵达', () => {
   assert.equal(SCENES.length, 19); assert.equal(SCENE_BY_ID.size, 19);
   for (const config of SCENES) {

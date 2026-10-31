@@ -4,8 +4,8 @@ import { YARD_ENTRANCES } from './yard-layout.js';
 // 门、洞口和道路使用固定位置，正向/返回方向共用同一个入口标识。
 export const PORTALS = {
   livingRoom: { cell: [0, 4.9] },
-  cell: { cellCorridor: [0, 5.4], dig: [0, -5.4] },
-  cellCorridor: { cell: [5, -2, Math.PI / 2], yard: [0, 12.7], solitary: [-5, -8, -Math.PI / 2] },
+  cell: { cellCorridor: [-3.8, 5.4], dig: [0, -5.4] },
+  cellCorridor: { cell: [5, 0, Math.PI / 2], yard: [0, 12.7], solitary: [-5, -5.6, -Math.PI / 2] },
   yard: { cellCorridor: [0, 16.8], ...YARD_ENTRANCES, operatingRoom: [0, -16.8] },
   library: { yard: [0, 9] }, office: { yard: [0, 8] }, solitary: { cellCorridor: [0, 4.7] },
   dig: { cell: [0, 10.2], pipe: [0, -10.2] },

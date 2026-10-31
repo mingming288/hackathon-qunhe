@@ -63,7 +63,30 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     }
   }
 
-  if (['room', 'corridor'].includes(config.kind)) {
+  if (config.kind === 'corridor') {
+    // 与双侧门洞模型共用墙体尺寸，入口只保留墙垛碰撞。
+    const centers = [-11.2, -5.6, 0, 5.6, 11.2];
+    for (const x of [-6.1, 6.1]) {
+      let start = -14;
+      for (const center of centers) {
+        const end = center - 1.1;
+        obstacle(.6, 4, end - start, x, (start + end) / 2);
+        box(shell, .6, .93, 2.2, x, 3.535, center, wallColor);
+        start = center + 1.1;
+      }
+      obstacle(.6, 4, 14 - start, x, (start + 14) / 2);
+    }
+    obstacle(12.8, 4, .6, 0, -14.1);
+  } else if (config.id === 'cell') {
+    // 牢房源模型朝镜头侧敞开；以房间边界限制移动，墙体碰撞对齐内部墙面。
+    obstacle(12.4, 4, .5, 0, -6.2);
+    obstacle(.5, 4, 12.4, -6.1, 0);
+    obstacle(.5, 4, 12.4, 6.1, 0);
+  } else if (config.id === 'library') {
+    obstacle(21.6, 4, .5, 0, -10);
+    obstacle(.5, 4, 20, -10.75, 0);
+    obstacle(.5, 4, 20, 10.75, 0);
+  } else if (config.kind === 'room') {
     obstacle(width, 4, .4, 0, -depth / 2);
     obstacle(.4, 4, depth, -width / 2, 0); obstacle(.4, 4, depth, width / 2, 0);
     // 镜头侧保留中央开口，墙体仍有实体碰撞；后续可用同尺寸建筑模型替换。
@@ -71,14 +94,6 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     obstacle(sideWidth, 2.1, .4, -(width + 4) / 4, depth / 2);
     obstacle(sideWidth, 2.1, .4, (width + 4) / 4, depth / 2);
     windowFrame(0, -depth / 2 + .25);
-    if (config.kind === 'corridor') {
-      for (let z = -depth / 2 + 3; z < depth / 2 - 2; z += 5) {
-        for (const side of [-1, 1]) {
-          box(shell, .16, 3.2, 2.5, side * (width / 2 - .25), 1.6, z, COLORS.steel);
-          for (let i = 0; i < 5; i++) cylinder(shell, .04, 3, side * (width / 2 - .35), 1.5, z - 1 + i * .5, COLORS.trim, 5);
-        }
-      }
-    }
     if (config.id === 'livingRoom') box(shell, 5.2, .035, 3.5, 0, .025, -.8, '#b5aa8c');
     if (config.id === 'supermarket') {
       for (let x = -10; x <= 10; x += 2) box(shell, .03, .015, depth - 1, x, .02, 0, '#c4cabb', false);
