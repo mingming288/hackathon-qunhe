@@ -1,0 +1,3097 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-31T14:34:26.979Z",
+  "notes": [
+    "只读统计当前清单和模型文件，配置成功不代表视觉验收通过。",
+    "场景统计包含配置的全部道具，含剧情隐藏物件；不包含程序基础几何和主角，也不是每帧实测面数。",
+    "文件字节为模型下载体积，不代表显存；重复引用按场景去重计算下载、按实例计算三角面。",
+    "尺寸为默认场景静止姿态包围盒；缺少边界或存在骨骼时见单项警告。贴图尺寸仅解析内嵌的便携式网络图形格式。"
+  ],
+  "summary": {
+    "configuredSlots": 22,
+    "uniqueFiles": 22,
+    "totalBytes": 319984844,
+    "totalFileTriangles": 3790957
+  },
+  "entries": {
+    "cell-architecture": {
+      "url": "/assets/models/cell-shell.glb",
+      "normalize": false
+    },
+    "library-architecture": {
+      "url": "/assets/models/library-shell.glb",
+      "normalize": false
+    },
+    "solitary-architecture": {
+      "url": "/assets/models/solitary-shell.glb",
+      "normalize": false
+    },
+    "yard-architecture": {
+      "url": "/assets/models/yard-shell.glb",
+      "normalize": false
+    },
+    "operatingRoom-architecture": {
+      "url": "/assets/models/operatingroom-shell.glb",
+      "normalize": false
+    },
+    "evidence-architecture": {
+      "url": "/assets/models/evidence-shell.glb",
+      "normalize": false
+    },
+    "supermarket-architecture": {
+      "url": "/assets/models/supermarket-shell.glb",
+      "normalize": false
+    },
+    "bank-architecture": {
+      "url": "/assets/models/bank-shell.glb",
+      "normalize": false
+    },
+    "oak-architecture": {
+      "url": "/assets/models/oak-shell.glb",
+      "normalize": false
+    },
+    "road-architecture": {
+      "url": "/assets/models/road-shell.glb",
+      "normalize": false
+    },
+    "beach-architecture": {
+      "url": "/assets/models/beach-shell.glb",
+      "normalize": false
+    },
+    "medicalExterior-architecture": {
+      "url": "/assets/models/medicalexterior-shell.glb",
+      "normalize": false
+    },
+    "yard-library-exterior": {
+      "url": "/assets/models/library-exterior.glb",
+      "height": 6.2
+    },
+    "yard-office-exterior": {
+      "url": "/assets/models/office-exterior.glb",
+      "height": 8.6
+    },
+    "cellCorridor-architecture": {
+      "url": "/assets/models/cell-corridor.glb",
+      "normalize": false
+    },
+    "cell:bed": {
+      "url": "/assets/models/bed.glb",
+      "height": 1.5
+    },
+    "cell:desk": {
+      "url": "/assets/models/desk.glb",
+      "height": 1.3
+    },
+    "cell:chair": {
+      "url": "/assets/models/chair.glb",
+      "height": 1.7
+    },
+    "library:shelf": {
+      "url": "/assets/models/shelf.glb",
+      "height": 3.5
+    },
+    "library:table": {
+      "url": "/assets/models/table.glb",
+      "height": 1.3
+    },
+    "hammer": {
+      "url": "/assets/models/hammer.glb",
+      "height": 0.13
+    },
+    "rubble": {
+      "url": "/assets/models/rubble.glb",
+      "height": 0.6
+    }
+  },
+  "files": {
+    "/assets/models/cell-shell.glb": {
+      "bytes": 20288360,
+      "sha256": "099cf5642ed5d9d428926a4f9e1fe60a53771bd463e8813e7770fbb8d1636103",
+      "triangles": 298873,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -8.412452697753906,
+          -0.16254541277885437,
+          -7.72920036315918
+        ],
+        "max": [
+          7.287847518920898,
+          4.043208122253418,
+          7.730421543121338
+        ],
+        "size": [
+          15.700300216674805,
+          4.205753535032272,
+          15.459621906280518
+        ]
+      },
+      "materials": [
+        {
+          "name": "Material_0",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "Image_0",
+          "mimeType": "image/png",
+          "bytes": 6830400,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_1",
+          "mimeType": "image/png",
+          "bytes": 3392036,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/library-shell.glb": {
+      "bytes": 19193576,
+      "sha256": "3b9cef2839d6a71ca496395efd39ed2d79979f4697fa36c5814fa324d59ec88e",
+      "triangles": 285588,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -15.359575271606445,
+          -0.1712317317724228,
+          -13.588887214660645
+        ],
+        "max": [
+          13.731524467468262,
+          4.098412036895752,
+          14.239051818847656
+        ],
+        "size": [
+          29.091099739074707,
+          4.269643768668175,
+          27.8279390335083
+        ]
+      },
+      "materials": [
+        {
+          "name": "Material_0",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "Image_0",
+          "mimeType": "image/png",
+          "bytes": 6828836,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_1",
+          "mimeType": "image/png",
+          "bytes": 2056920,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/solitary-shell.glb": {
+      "bytes": 31171920,
+      "sha256": "70001980a94d0becfec3fa67d78b3b1d4fbe7a9021eee3a4cf0456705c36d951",
+      "triangles": 416615,
+      "meshInstances": 8,
+      "primitiveInstances": 8,
+      "bounds": {
+        "min": [
+          -5.095731258392334,
+          -0.5130031704902649,
+          -5.47292947769165
+        ],
+        "max": [
+          5.095731258392334,
+          3.8400001525878906,
+          5.812467098236084
+        ],
+        "size": [
+          10.191462516784668,
+          4.3530033230781555,
+          11.285396575927734
+        ]
+      },
+      "materials": [
+        {
+          "name": "地面原始颜色_湿润物理响应",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": false,
+          "occlusion": false,
+          "unlit": false
+        },
+        {
+          "name": "Material_0",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        },
+        {
+          "name": "Designer_Logic_PBR",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "Image_0",
+          "mimeType": "image/png",
+          "bytes": 7028984,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_1",
+          "mimeType": "image/png",
+          "bytes": 3649728,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_0",
+          "mimeType": "image/png",
+          "bytes": 3021860,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_1",
+          "mimeType": "image/png",
+          "bytes": 2315076,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/yard-shell.glb": {
+      "bytes": 20631708,
+      "sha256": "e7ac3da7a430dda76b27bc1ab3403dedee6fd4c04e31e67ccdbd2cd60696c5e5",
+      "triangles": 211115,
+      "meshInstances": 2,
+      "primitiveInstances": 2,
+      "bounds": {
+        "min": [
+          -19.452693939208984,
+          -0.6204541325569153,
+          -18.542354583740234
+        ],
+        "max": [
+          19.212553024291992,
+          8.904273986816406,
+          18.57380485534668
+        ],
+        "size": [
+          38.66524696350098,
+          9.524728119373322,
+          37.116159439086914
+        ]
+      },
+      "materials": [
+        {
+          "name": "Material_0",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        },
+        {
+          "name": "共用旧石地面-本地补面",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": false,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "Image_0",
+          "mimeType": "image/png",
+          "bytes": 6678664,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_1",
+          "mimeType": "image/png",
+          "bytes": 1106316,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "石材表面参考",
+          "mimeType": "image/png",
+          "bytes": 4741123,
+          "dimensions": [
+            1254,
+            1254
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/operatingroom-shell.glb": {
+      "bytes": 8351892,
+      "sha256": "dd18c57da8246347532127d7de7379360ba3fb9078e936d55f5da2eec3ab351d",
+      "triangles": 58658,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -9,
+          -0.5881741046905518,
+          -10.531769752502441
+        ],
+        "max": [
+          9,
+          4.028173923492432,
+          10.531769752502441
+        ],
+        "size": [
+          18,
+          4.616348028182983,
+          21.063539505004883
+        ]
+      },
+      "materials": [
+        {
+          "name": "Material_0",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "Image_0",
+          "mimeType": "image/png",
+          "bytes": 5478760,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_1",
+          "mimeType": "image/png",
+          "bytes": 933872,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/evidence-shell.glb": {
+      "bytes": 9556840,
+      "sha256": "a773f06cebd78780e102aa2af076a49b32ad3247ed0905b23c8d1a21ee0873bc",
+      "triangles": 48450,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -9.90000057220459,
+          -0.3553888499736786,
+          -8.833807945251465
+        ],
+        "max": [
+          9.90000057220459,
+          4.011788845062256,
+          8.833807945251465
+        ],
+        "size": [
+          19.80000114440918,
+          4.3671776950359344,
+          17.66761589050293
+        ]
+      },
+      "materials": [
+        {
+          "name": "Material_0",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "Image_0",
+          "mimeType": "image/png",
+          "bytes": 5711456,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_1",
+          "mimeType": "image/png",
+          "bytes": 2222384,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/supermarket-shell.glb": {
+      "bytes": 8976508,
+      "sha256": "ac28138a727cb27e8548882b38191d4af9cfa403a6f0c7e5019325290a42e1bc",
+      "triangles": 58703,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -13.500000953674316,
+          -0.08958926051855087,
+          -13.172258377075195
+        ],
+        "max": [
+          13.500000953674316,
+          4.02078914642334,
+          13.172258377075195
+        ],
+        "size": [
+          27.000001907348633,
+          4.110378406941891,
+          26.34451675415039
+        ]
+      },
+      "materials": [
+        {
+          "name": "Material_0",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "Image_0",
+          "mimeType": "image/png",
+          "bytes": 6029120,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_1",
+          "mimeType": "image/png",
+          "bytes": 1129552,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/bank-shell.glb": {
+      "bytes": 9073432,
+      "sha256": "c9ae516e2d2945b5f51726c7d81e303c495d0c501e66996557028124dcd179bd",
+      "triangles": 59518,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -10.5,
+          -0.15543660521507263,
+          -8.694111824035645
+        ],
+        "max": [
+          10.5,
+          3.947436571121216,
+          8.694111824035645
+        ],
+        "size": [
+          21,
+          4.1028731763362885,
+          17.38822364807129
+        ]
+      },
+      "materials": [
+        {
+          "name": "Material_0",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "Image_0",
+          "mimeType": "image/png",
+          "bytes": 5665416,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_1",
+          "mimeType": "image/png",
+          "bytes": 1918056,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/oak-shell.glb": {
+      "bytes": 7859464,
+      "sha256": "876c38f7ea12e414a13daccc0bc39586f26e700b32fa52fbaf2f8d942519ee27",
+      "triangles": 59833,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -18,
+          -2.3253419399261475,
+          -17.09004783630371
+        ],
+        "max": [
+          18,
+          3.405341863632202,
+          17.09004783630371
+        ],
+        "size": [
+          36,
+          5.73068380355835,
+          34.18009567260742
+        ]
+      },
+      "materials": [
+        {
+          "name": "Material_0",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "Image_0",
+          "mimeType": "image/png",
+          "bytes": 4630036,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_1",
+          "mimeType": "image/png",
+          "bytes": 1219212,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/road-shell.glb": {
+      "bytes": 9404104,
+      "sha256": "7ff954f63e5bbe38ad3afad63a8f9def353e8046eaff9199512d91c2de58b9ec",
+      "triangles": 78795,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -18.900001525878906,
+          -0.4533163905143738,
+          -19.94662857055664
+        ],
+        "max": [
+          18.900001525878906,
+          6.348316192626953,
+          19.94662857055664
+        ],
+        "size": [
+          37.80000305175781,
+          6.801632583141327,
+          39.89325714111328
+        ]
+      },
+      "materials": [
+        {
+          "name": "Material_0",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "Image_0",
+          "mimeType": "image/png",
+          "bytes": 5142648,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_1",
+          "mimeType": "image/png",
+          "bytes": 1814364,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/beach-shell.glb": {
+      "bytes": 7539236,
+      "sha256": "65a0e66029423551e83e53ba71e01e5efd08e340867633c703d9b7034909eceb",
+      "triangles": 33251,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -18.749868392944336,
+          -2.0130581855773926,
+          -8.089357376098633
+        ],
+        "max": [
+          18.75,
+          3.9338748455047607,
+          17.962858200073242
+        ],
+        "size": [
+          37.499868392944336,
+          5.946933031082153,
+          26.052215576171875
+        ]
+      },
+      "materials": [
+        {
+          "name": "Material_0",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "Image_0",
+          "mimeType": "image/png",
+          "bytes": 5385384,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_1",
+          "mimeType": "image/png",
+          "bytes": 995144,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/medicalexterior-shell.glb": {
+      "bytes": 9513028,
+      "sha256": "04f0683d7aa4e6170c94e2157a31d7b1b729551cc7cc3c6d6a7bc5b30651f63f",
+      "triangles": 77977,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -18.375,
+          -1.115864872932434,
+          -16.204505920410156
+        ],
+        "max": [
+          18.375,
+          4.155864715576172,
+          16.204505920410156
+        ],
+        "size": [
+          36.75,
+          5.271729588508606,
+          32.40901184082031
+        ]
+      },
+      "materials": [
+        {
+          "name": "Material_0",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "Image_0",
+          "mimeType": "image/png",
+          "bytes": 5358480,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "Image_1",
+          "mimeType": "image/png",
+          "bytes": 1061392,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/library-exterior.glb": {
+      "bytes": 19821752,
+      "sha256": "35c45fbd0e808df0de47df83f8323109a70bae96d9cac78e5db7c0dee7f94bbd",
+      "triangles": 284611,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -0.5010966062545776,
+          -0.26206931471824646,
+          -0.399699866771698
+        ],
+        "max": [
+          0.50193190574646,
+          0.2544332444667816,
+          0.3920670747756958
+        ],
+        "size": [
+          1.0030285120010376,
+          0.5165025591850281,
+          0.7917669415473938
+        ]
+      },
+      "materials": [
+        {
+          "name": "",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 6740820,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 2881476,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/office-exterior.glb": {
+      "bytes": 21456964,
+      "sha256": "170c29bf047b2ef05f2f1ffc2c414e5ee3f57bff10454cc492175df5baee2a38",
+      "triangles": 281877,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -0.5019524693489075,
+          -0.3552636206150055,
+          -0.37475717067718506
+        ],
+        "max": [
+          0.5019815564155579,
+          0.3503100275993347,
+          0.3764475882053375
+        ],
+        "size": [
+          1.0039340257644653,
+          0.7055736482143402,
+          0.7512047588825226
+        ]
+      },
+      "materials": [
+        {
+          "name": "",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 7631564,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 3171836,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/cell-corridor.glb": {
+      "bytes": 9488096,
+      "sha256": "8d33b85d1f2515f4bd26e13bddc631b05a4b1fece2758a43113aadefc44a7e9e",
+      "triangles": 324,
+      "meshInstances": 27,
+      "primitiveInstances": 27,
+      "bounds": {
+        "min": [
+          -6.400000095367432,
+          -0.2666666795810064,
+          -14.400000393390656
+        ],
+        "max": [
+          6.400000095367432,
+          4.0000002125898995,
+          14.399999618530273
+        ],
+        "size": [
+          12.800000190734863,
+          4.266666892170906,
+          28.80000001192093
+        ]
+      },
+      "materials": [
+        {
+          "name": "石板地面",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": false,
+          "occlusion": false,
+          "unlit": false
+        },
+        {
+          "name": "旧石墙",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": false,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "floor-basecolor",
+          "mimeType": "image/png",
+          "bytes": 4680575,
+          "dimensions": [
+            1536,
+            1536
+          ]
+        },
+        {
+          "name": "stone-basecolor",
+          "mimeType": "image/png",
+          "bytes": 4764936,
+          "dimensions": [
+            1536,
+            1536
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/bed.glb": {
+      "bytes": 12119512,
+      "sha256": "e2b738f7ff54c7d1a10fb6c94d95242ff03a8a2439590ba3f4a38c3c67f65c62",
+      "triangles": 67592,
+      "meshInstances": 5,
+      "primitiveInstances": 7,
+      "bounds": {
+        "min": [
+          -0.7246521711349487,
+          0.010000020265579224,
+          -1.0369999408721924
+        ],
+        "max": [
+          0.7246521711349487,
+          1.0469855070114136,
+          1.0390000343322754
+        ],
+        "size": [
+          1.4493043422698975,
+          1.0369854867458344,
+          2.0759999752044678
+        ]
+      },
+      "materials": [
+        {
+          "name": "旧铁与锈斑",
+          "baseColor": true,
+          "normal": true,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        },
+        {
+          "name": "氧化钉头",
+          "baseColor": false,
+          "normal": false,
+          "metallicRoughness": false,
+          "occlusion": false,
+          "unlit": false
+        },
+        {
+          "name": "旧条纹棉布",
+          "baseColor": true,
+          "normal": true,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        },
+        {
+          "name": "旧缝线",
+          "baseColor": false,
+          "normal": false,
+          "metallicRoughness": false,
+          "occlusion": false,
+          "unlit": false
+        },
+        {
+          "name": "实拍蓝灰织物",
+          "baseColor": true,
+          "normal": true,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "旧铁与锈斑-法线",
+          "mimeType": "image/png",
+          "bytes": 2454565,
+          "dimensions": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "旧铁与锈斑-颜色",
+          "mimeType": "image/png",
+          "bytes": 1637271,
+          "dimensions": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "旧铁与锈斑-粗糙度",
+          "mimeType": "image/png",
+          "bytes": 482760,
+          "dimensions": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "旧条纹棉布-法线",
+          "mimeType": "image/png",
+          "bytes": 832480,
+          "dimensions": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "旧条纹棉布-颜色",
+          "mimeType": "image/png",
+          "bytes": 1108020,
+          "dimensions": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "旧条纹棉布-粗糙度",
+          "mimeType": "image/png",
+          "bytes": 210293,
+          "dimensions": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "denim_fabric_nor_gl",
+          "mimeType": "image/jpeg",
+          "bytes": 474669,
+          "dimensions": null
+        },
+        {
+          "name": "蓝灰织物颜色",
+          "mimeType": "image/png",
+          "bytes": 1828832,
+          "dimensions": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "denim_fabric_Rough",
+          "mimeType": "image/png",
+          "bytes": 1187298,
+          "dimensions": [
+            1024,
+            1024
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/desk.glb": {
+      "bytes": 20471808,
+      "sha256": "849fe88c38b4b7e7147618e844fb3574181186ea820553dfdd54e397d9a0d9b7",
+      "triangles": 296340,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -0.5017666220664978,
+          -0.38782763481140137,
+          -0.3500818610191345
+        ],
+        "max": [
+          0.5012038946151733,
+          0.3873555064201355,
+          0.353024959564209
+        ],
+        "size": [
+          1.0029705166816711,
+          0.7751831412315369,
+          0.7031068205833435
+        ]
+      },
+      "materials": [
+        {
+          "name": "",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 6158504,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 5623176,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/chair.glb": {
+      "bytes": 2842776,
+      "sha256": "da6c4e28eb787a7d9992f8f546ec50a3662c3f8c3029a4983fb94a8b3b59b4b0",
+      "triangles": 5300,
+      "meshInstances": 1,
+      "primitiveInstances": 3,
+      "bounds": {
+        "min": [
+          -0.2375275045633316,
+          -0.0006023198366165161,
+          -0.23899999260902405
+        ],
+        "max": [
+          0.2375275045633316,
+          0.954602375626564,
+          0.2370000034570694
+        ],
+        "size": [
+          0.4750550091266632,
+          0.9552046954631805,
+          0.47599999606609344
+        ]
+      },
+      "materials": [
+        {
+          "name": "实拍旧木材.001",
+          "baseColor": true,
+          "normal": true,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        },
+        {
+          "name": "边缘磨露木质.001",
+          "baseColor": false,
+          "normal": false,
+          "metallicRoughness": false,
+          "occlusion": false,
+          "unlit": false
+        },
+        {
+          "name": "氧化钉头.001",
+          "baseColor": false,
+          "normal": false,
+          "metallicRoughness": false,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "wood_table_worn_nor_gl",
+          "mimeType": "image/jpeg",
+          "bytes": 747433,
+          "dimensions": null
+        },
+        {
+          "name": "wood_table_worn_Diffuse",
+          "mimeType": "image/jpeg",
+          "bytes": 761543,
+          "dimensions": null
+        },
+        {
+          "name": "wood_table_worn_Rough",
+          "mimeType": "image/png",
+          "bytes": 1065035,
+          "dimensions": [
+            1024,
+            1024
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/shelf.glb": {
+      "bytes": 16166460,
+      "sha256": "4418006469d64899961f4de95b15058496118b42cadbb86c1ca4abb5608d1b6b",
+      "triangles": 288133,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -0.32378315925598145,
+          -0.5019508600234985,
+          -0.10865359008312225
+        ],
+        "max": [
+          0.32372283935546875,
+          0.5019493103027344,
+          0.10990221798419952
+        ],
+        "size": [
+          0.6475059986114502,
+          1.003900170326233,
+          0.21855580806732178
+        ]
+      },
+      "materials": [
+        {
+          "name": "",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 5979780,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 900668,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/table.glb": {
+      "bytes": 16900048,
+      "sha256": "aaec9acd57be02e2b59ba1ff985cfebf5ddfce35864ab1ce1bcd41367f57fec3",
+      "triangles": 292001,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -0.24754202365875244,
+          -0.16824889183044434,
+          -0.5014365911483765
+        ],
+        "max": [
+          0.24805466830730438,
+          0.167180597782135,
+          0.5016638040542603
+        ],
+        "size": [
+          0.4955966919660568,
+          0.33542948961257935,
+          1.0031003952026367
+        ]
+      },
+      "materials": [
+        {
+          "name": "",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 6101576,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 1838588,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/hammer.glb": {
+      "bytes": 18044772,
+      "sha256": "e6781bd03f67c53f4d0e2aa0b89e3ff7952e4e91a97630a3d6ee425da1fdeb5d",
+      "triangles": 298003,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -0.5015809535980225,
+          -0.09309154748916626,
+          -0.2968342900276184
+        ],
+        "max": [
+          0.5018669962882996,
+          0.09362365305423737,
+          0.30024245381355286
+        ],
+        "size": [
+          1.003447949886322,
+          0.18671520054340363,
+          0.5970767438411713
+        ]
+      },
+      "materials": [
+        {
+          "name": "",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 5742884,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 3285804,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/rubble.glb": {
+      "bytes": 21112588,
+      "sha256": "063d1b7f05ec085d7a2d1e06355fb341bd016660f6c08819d20334f6f74bc99b",
+      "triangles": 289400,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -0.5002518892288208,
+          -0.16950532793998718,
+          -0.501179039478302
+        ],
+        "max": [
+          0.5012054443359375,
+          0.17501193284988403,
+          0.49905574321746826
+        ],
+        "size": [
+          1.0014573335647583,
+          0.3445172607898712,
+          1.0002347826957703
+        ]
+      },
+      "materials": [
+        {
+          "name": "",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 8389668,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 1434220,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    }
+  },
+  "scenes": [
+    {
+      "id": "livingRoom",
+      "name": "电视前的夜晚",
+      "size": [
+        14,
+        12
+      ],
+      "slots": [
+        {
+          "id": "livingRoom-architecture",
+          "name": "电视前的夜晚建筑",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "source": null
+        },
+        {
+          "id": "sofa",
+          "name": "旧沙发",
+          "position": [
+            -3,
+            0,
+            -2
+          ],
+          "source": null
+        },
+        {
+          "id": "television",
+          "name": "电视与电视柜",
+          "position": [
+            0,
+            0,
+            -4
+          ],
+          "source": null
+        },
+        {
+          "id": "table",
+          "name": "木桌",
+          "position": [
+            0,
+            0,
+            -1
+          ],
+          "source": null
+        },
+        {
+          "id": "lamp",
+          "name": "灯具",
+          "position": [
+            4,
+            0,
+            -3
+          ],
+          "source": null
+        }
+      ],
+      "configuredFileBytes": 0,
+      "configuredInstanceTriangles": 0
+    },
+    {
+      "id": "cell",
+      "name": "安迪的牢房",
+      "size": [
+        13,
+        13
+      ],
+      "slots": [
+        {
+          "id": "cell-architecture",
+          "name": "安迪的牢房建筑",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "source": "/assets/models/cell-shell.glb",
+          "triangles": 298873,
+          "localSizeAfterNormalization": [
+            15.700300216674805,
+            4.205753535032272,
+            15.459621906280518
+          ]
+        },
+        {
+          "id": "bed",
+          "name": "铁床与床铺",
+          "position": [
+            -3.9,
+            0,
+            -2.6
+          ],
+          "source": "/assets/models/bed.glb",
+          "triangles": 67592,
+          "localSizeAfterNormalization": [
+            2.0964194207065927,
+            1.5,
+            3.002934951943011
+          ]
+        },
+        {
+          "id": "desk",
+          "name": "书桌与办公桌",
+          "position": [
+            3.4,
+            0,
+            -3.2
+          ],
+          "source": "/assets/models/desk.glb",
+          "triangles": 296340,
+          "localSizeAfterNormalization": [
+            1.6820046803581432,
+            1.3,
+            1.179126348524826
+          ]
+        },
+        {
+          "id": "chair",
+          "name": "椅子",
+          "position": [
+            3.4,
+            0,
+            -1.6
+          ],
+          "source": "/assets/models/chair.glb",
+          "triangles": 5300,
+          "localSizeAfterNormalization": [
+            0.8454664422725894,
+            1.7,
+            0.8471482574946684
+          ]
+        },
+        {
+          "id": "poster",
+          "name": "海报",
+          "position": [
+            0,
+            0,
+            -6.2
+          ],
+          "source": null
+        },
+        {
+          "id": "hammer",
+          "name": "石锤",
+          "position": [
+            3,
+            1.32,
+            -3.2
+          ],
+          "source": "/assets/models/hammer.glb",
+          "triangles": 298003,
+          "localSizeAfterNormalization": [
+            0.6986481716837939,
+            0.13,
+            0.41571321709990505
+          ]
+        },
+        {
+          "id": "bible",
+          "name": "圣经",
+          "position": [
+            3.8,
+            1.32,
+            -3.2
+          ],
+          "source": null
+        }
+      ],
+      "configuredFileBytes": 73767228,
+      "configuredInstanceTriangles": 966108
+    },
+    {
+      "id": "cellCorridor",
+      "name": "监区走廊",
+      "size": [
+        13,
+        29
+      ],
+      "slots": [
+        {
+          "id": "cellCorridor-architecture",
+          "name": "监区走廊建筑",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "source": "/assets/models/cell-corridor.glb",
+          "triangles": 324,
+          "localSizeAfterNormalization": [
+            12.800000190734863,
+            4.266666892170906,
+            28.80000001192093
+          ]
+        },
+        {
+          "id": "guard",
+          "name": "狱警",
+          "position": [
+            3,
+            0,
+            -6
+          ],
+          "source": null
+        }
+      ],
+      "configuredFileBytes": 9488096,
+      "configuredInstanceTriangles": 324
+    },
+    {
+      "id": "yard",
+      "name": "院子与监狱大门",
+      "size": [
+        40,
+        38
+      ],
+      "slots": [
+        {
+          "id": "yard-architecture",
+          "name": "院子与监狱大门建筑",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "source": "/assets/models/yard-shell.glb",
+          "triangles": 211115,
+          "localSizeAfterNormalization": [
+            38.66524696350098,
+            9.524728119373322,
+            37.116159439086914
+          ]
+        },
+        {
+          "id": "yard-library-exterior",
+          "name": "yard-library-exterior",
+          "position": [
+            -15,
+            0,
+            -5
+          ],
+          "source": "/assets/models/library-exterior.glb",
+          "triangles": 284611,
+          "localSizeAfterNormalization": [
+            12.040166430576512,
+            6.2,
+            9.504222099769487
+          ]
+        },
+        {
+          "id": "yard-office-exterior",
+          "name": "yard-office-exterior",
+          "position": [
+            15,
+            0,
+            -5
+          ],
+          "source": "/assets/models/office-exterior.glb",
+          "triangles": 281877,
+          "localSizeAfterNormalization": [
+            12.236614339870588,
+            8.6,
+            9.156182267775334
+          ]
+        },
+        {
+          "id": "red",
+          "name": "瑞德",
+          "position": [
+            3,
+            0,
+            -3
+          ],
+          "source": null
+        },
+        {
+          "id": "brooks",
+          "name": "老布",
+          "position": [
+            -7,
+            0,
+            1
+          ],
+          "source": null
+        },
+        {
+          "id": "guard",
+          "name": "狱警",
+          "position": [
+            7.8,
+            0,
+            -8.5
+          ],
+          "source": null
+        },
+        {
+          "id": "bench",
+          "name": "长椅",
+          "position": [
+            -5,
+            0,
+            -1
+          ],
+          "source": null
+        },
+        {
+          "id": "radio",
+          "name": "收音机",
+          "position": [
+            3.9,
+            0,
+            -2.5
+          ],
+          "source": null
+        },
+        {
+          "id": "gate",
+          "name": "监狱大门",
+          "position": [
+            0,
+            0,
+            -17
+          ],
+          "source": null
+        },
+        {
+          "id": "warden",
+          "name": "典狱长",
+          "position": [
+            0,
+            0,
+            -7
+          ],
+          "source": null
+        },
+        {
+          "id": "tommy",
+          "name": "汤米",
+          "position": [
+            -3,
+            0,
+            2
+          ],
+          "source": null
+        },
+        {
+          "id": "haywood",
+          "name": "海伍德",
+          "position": [
+            -10,
+            0,
+            4
+          ],
+          "source": null
+        },
+        {
+          "id": "floyd",
+          "name": "弗洛伊德",
+          "position": [
+            8,
+            0,
+            4
+          ],
+          "source": null
+        },
+        {
+          "id": "soilSpot",
+          "name": "soilSpot",
+          "position": [
+            -10,
+            0,
+            7
+          ],
+          "source": null
+        }
+      ],
+      "configuredFileBytes": 61910424,
+      "configuredInstanceTriangles": 777603
+    },
+    {
+      "id": "library",
+      "name": "老布的图书馆",
+      "size": [
+        23,
+        21
+      ],
+      "slots": [
+        {
+          "id": "library-architecture",
+          "name": "老布的图书馆建筑",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "source": "/assets/models/library-shell.glb",
+          "triangles": 285588,
+          "localSizeAfterNormalization": [
+            29.091099739074707,
+            4.269643768668175,
+            27.8279390335083
+          ]
+        },
+        {
+          "id": "shelf",
+          "name": "书架与货架",
+          "position": [
+            -7,
+            0,
+            -6
+          ],
+          "source": "/assets/models/shelf.glb",
+          "triangles": 288133,
+          "localSizeAfterNormalization": [
+            2.2574664913181715,
+            3.5,
+            0.7619735017945514
+          ]
+        },
+        {
+          "id": "shelf",
+          "name": "书架与货架",
+          "position": [
+            0,
+            0,
+            -6
+          ],
+          "source": "/assets/models/shelf.glb",
+          "triangles": 288133,
+          "localSizeAfterNormalization": [
+            2.2574664913181715,
+            3.5,
+            0.7619735017945514
+          ]
+        },
+        {
+          "id": "shelf",
+          "name": "书架与货架",
+          "position": [
+            7,
+            0,
+            -6
+          ],
+          "source": "/assets/models/shelf.glb",
+          "triangles": 288133,
+          "localSizeAfterNormalization": [
+            2.2574664913181715,
+            3.5,
+            0.7619735017945514
+          ]
+        },
+        {
+          "id": "shelf",
+          "name": "书架与货架",
+          "position": [
+            -7,
+            0,
+            -1
+          ],
+          "source": "/assets/models/shelf.glb",
+          "triangles": 288133,
+          "localSizeAfterNormalization": [
+            2.2574664913181715,
+            3.5,
+            0.7619735017945514
+          ]
+        },
+        {
+          "id": "shelf",
+          "name": "书架与货架",
+          "position": [
+            7,
+            0,
+            -1
+          ],
+          "source": "/assets/models/shelf.glb",
+          "triangles": 288133,
+          "localSizeAfterNormalization": [
+            2.2574664913181715,
+            3.5,
+            0.7619735017945514
+          ]
+        },
+        {
+          "id": "table",
+          "name": "木桌",
+          "position": [
+            0,
+            0,
+            1
+          ],
+          "source": "/assets/models/table.glb",
+          "triangles": 292001,
+          "localSizeAfterNormalization": [
+            1.9207485313828894,
+            1.3,
+            3.8876442118120904
+          ]
+        },
+        {
+          "id": "books",
+          "name": "整理用图书",
+          "position": [
+            0,
+            1.32,
+            1
+          ],
+          "source": null
+        },
+        {
+          "id": "brooks",
+          "name": "老布",
+          "position": [
+            4,
+            0,
+            4
+          ],
+          "source": null
+        }
+      ],
+      "configuredFileBytes": 52260084,
+      "configuredInstanceTriangles": 2018254
+    },
+    {
+      "id": "office",
+      "name": "典狱长办公室",
+      "size": [
+        20,
+        19
+      ],
+      "slots": [
+        {
+          "id": "office-architecture",
+          "name": "典狱长办公室建筑",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "source": null
+        },
+        {
+          "id": "desk",
+          "name": "书桌与办公桌",
+          "position": [
+            0,
+            0,
+            -3
+          ],
+          "source": null
+        },
+        {
+          "id": "chair",
+          "name": "椅子",
+          "position": [
+            0,
+            0,
+            -5
+          ],
+          "source": null
+        },
+        {
+          "id": "safe",
+          "name": "保险柜",
+          "position": [
+            -6.4,
+            0,
+            -6.8
+          ],
+          "source": null
+        },
+        {
+          "id": "embroidery",
+          "name": "墙面刺绣",
+          "position": [
+            -6.4,
+            0,
+            -7
+          ],
+          "source": null
+        },
+        {
+          "id": "curtain",
+          "name": "窗帘",
+          "position": [
+            7.3,
+            0,
+            -6
+          ],
+          "source": null
+        },
+        {
+          "id": "warden",
+          "name": "典狱长",
+          "position": [
+            3,
+            0,
+            -4
+          ],
+          "source": null
+        },
+        {
+          "id": "ledger",
+          "name": "账本与档案",
+          "position": [
+            0,
+            1.32,
+            -3
+          ],
+          "source": null
+        }
+      ],
+      "configuredFileBytes": 0,
+      "configuredInstanceTriangles": 0
+    },
+    {
+      "id": "solitary",
+      "name": "禁闭室",
+      "size": [
+        10,
+        12
+      ],
+      "slots": [
+        {
+          "id": "solitary-architecture",
+          "name": "禁闭室建筑",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "source": "/assets/models/solitary-shell.glb",
+          "triangles": 416615,
+          "localSizeAfterNormalization": [
+            10.191462516784668,
+            4.3530033230781555,
+            11.285396575927734
+          ]
+        },
+        {
+          "id": "mat",
+          "name": "草席",
+          "position": [
+            -2,
+            0,
+            -2
+          ],
+          "source": null
+        },
+        {
+          "id": "stone",
+          "name": "石板与石块",
+          "position": [
+            2,
+            0,
+            -3
+          ],
+          "source": null
+        }
+      ],
+      "configuredFileBytes": 31171920,
+      "configuredInstanceTriangles": 416615
+    },
+    {
+      "id": "dig",
+      "name": "墙后的挖掘通道",
+      "size": [
+        14,
+        24
+      ],
+      "slots": [
+        {
+          "id": "dig-architecture",
+          "name": "墙后的挖掘通道建筑",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "source": null
+        },
+        {
+          "id": "rubble",
+          "name": "碎土与碎石",
+          "position": [
+            -2,
+            0,
+            -4
+          ],
+          "source": "/assets/models/rubble.glb",
+          "triangles": 289400,
+          "localSizeAfterNormalization": [
+            1.7441053570472387,
+            0.6,
+            1.7419762024158827
+          ]
+        },
+        {
+          "id": "rubble",
+          "name": "碎土与碎石",
+          "position": [
+            2,
+            0,
+            -7
+          ],
+          "source": "/assets/models/rubble.glb",
+          "triangles": 289400,
+          "localSizeAfterNormalization": [
+            1.7441053570472387,
+            0.6,
+            1.7419762024158827
+          ]
+        },
+        {
+          "id": "hammer",
+          "name": "石锤",
+          "position": [
+            1.6,
+            1.32,
+            -2
+          ],
+          "source": "/assets/models/hammer.glb",
+          "triangles": 298003,
+          "localSizeAfterNormalization": [
+            0.6986481716837939,
+            0.13,
+            0.41571321709990505
+          ]
+        }
+      ],
+      "configuredFileBytes": 39157360,
+      "configuredInstanceTriangles": 876803
+    },
+    {
+      "id": "pipe",
+      "name": "雷声中的砸管处",
+      "size": [
+        17,
+        19
+      ],
+      "slots": [
+        {
+          "id": "pipe-architecture",
+          "name": "雷声中的砸管处建筑",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "source": null
+        },
+        {
+          "id": "pipeTarget",
+          "name": "可破损管段",
+          "position": [
+            0,
+            0,
+            -4
+          ],
+          "source": null
+        },
+        {
+          "id": "rubble",
+          "name": "碎土与碎石",
+          "position": [
+            4,
+            0,
+            -3
+          ],
+          "source": "/assets/models/rubble.glb",
+          "triangles": 289400,
+          "localSizeAfterNormalization": [
+            1.7441053570472387,
+            0.6,
+            1.7419762024158827
+          ]
+        }
+      ],
+      "configuredFileBytes": 21112588,
+      "configuredInstanceTriangles": 289400
+    },
+    {
+      "id": "pipeNetwork",
+      "name": "地下管网",
+      "size": [
+        28,
+        31
+      ],
+      "slots": [
+        {
+          "id": "pipeNetwork-architecture",
+          "name": "地下管网建筑",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "source": null
+        }
+      ],
+      "configuredFileBytes": 0,
+      "configuredInstanceTriangles": 0
+    },
+    {
+      "id": "rain",
+      "name": "高墙外的雨夜",
+      "size": [
+        34,
+        32
+      ],
+      "slots": [
+        {
+          "id": "rain-architecture",
+          "name": "高墙外的雨夜建筑",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "source": null
+        },
+        {
+          "id": "drain",
+          "name": "排水口",
+          "position": [
+            0,
+            0,
+            -10
+          ],
+          "source": null
+        }
+      ],
+      "configuredFileBytes": 0,
+      "configuredInstanceTriangles": 0
+    },
+    {
+      "id": "operatingRoom",
+      "name": "异常支线 · 手术室",
+      "size": [
+        18,
+        18
+      ],
+      "slots": [
+        {
+          "id": "operatingRoom-architecture",
+          "name": "异常支线 · 手术室建筑",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "source": "/assets/models/operatingroom-shell.glb",
+          "triangles": 58658,
+          "localSizeAfterNormalization": [
+            18,
+            4.616348028182983,
+            21.063539505004883
+          ]
+        },
+        {
+          "id": "operatingTable",
+          "name": "手术台",
+          "position": [
+            0,
+            0,
+            -2
+          ],
+          "source": null
+        },
+        {
+          "id": "medicalCart",
+          "name": "医疗设备车",
+          "position": [
+            5,
+            0,
+            -4
+          ],
+          "source": null
+        },
+        {
+          "id": "lamp",
+          "name": "灯具",
+          "position": [
+            -4,
+            0,
+            -4
+          ],
+          "source": null
+        }
+      ],
+      "configuredFileBytes": 8351892,
+      "configuredInstanceTriangles": 58658
+    },
+    {
+      "id": "oak",
+      "name": "石墙尽头的橡树",
+      "size": [
+        38,
+        35
+      ],
+      "slots": [
+        {
+          "id": "oak-architecture",
+          "name": "石墙尽头的橡树建筑",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "source": "/assets/models/oak-shell.glb",
+          "triangles": 59833,
+          "localSizeAfterNormalization": [
+            36,
+            5.73068380355835,
+            34.18009567260742
+          ]
+        },
+        {
+          "id": "oak",
+          "name": "橡树",
+          "position": [
+            16,
+            0,
+            -14.5
+          ],
+          "source": null
+        },
+        {
+          "id": "oak",
+          "name": "橡树",
+          "position": [
+            -16,
+            0,
+            -14.5
+          ],
+          "source": null
+        },
+        {
+          "id": "oak",
+          "name": "橡树",
+          "position": [
+            16,
+            0,
+            -9.5
+          ],
+          "source": null
+        },
+        {
+          "id": "oak",
+          "name": "橡树",
+          "position": [
+            -16,
+            0,
+            -9.5
+          ],
+          "source": null
+        },
+        {
+          "id": "oak",
+          "name": "橡树",
+          "position": [
+            16,
+            0,
+            -4.5
+          ],
+          "source": null
+        },
+        {
+          "id": "oak",
+          "name": "橡树",
+          "position": [
+            -16,
+            0,
+            -4.5
+          ],
+          "source": null
+        },
+        {
+          "id": "oak",
+          "name": "橡树",
+          "position": [
+            16,
+            0,
+            0.5
+          ],
+          "source": null
+        },
+        {
+          "id": "oak",
+          "name": "橡树",
+          "position": [
+            -16,
+            0,
+            0.5
+          ],
+          "source": null
+        },
+        {
+          "id": "oak",
+          "name": "橡树",
+          "position": [
+            16,
+            0,
+            5.5
+          ],
+          "source": null
+        },
+        {
+          "id": "oak",
+          "name": "橡树",
+          "position": [
+            -16,
+            0,
+            5.5
+          ],
+          "source": null
+        },
+        {
+          "id": "oak",
+          "name": "橡树",
+          "position": [
+            16,
+            0,
+            10.5
+          ],
+          "source": null
+        },
+        {
+          "id": "oak",
+          "name": "橡树",
+          "position": [
+            -16,
+            0,
+            10.5
+          ],
+          "source": null
+        },
+        {
+          "id": "oak",
+          "name": "橡树",
+          "position": [
+            -6,
+            0,
+            -7
+          ],
+          "source": null
+        },
+        {
+          "id": "stone",
+          "name": "石板与石块",
+          "position": [
+            -4.6,
+            0,
+            -5.5
+          ],
+          "source": null
+        },
+        {
+          "id": "box",
+          "name": "藏信铁盒",
+          "position": [
+            -5.5,
+            0,
+            -5
+          ],
+          "source": null
+        }
+      ],
+      "configuredFileBytes": 7859464,
+      "configuredInstanceTriangles": 59833
+    },
+    {
+      "id": "road",
+      "name": "公路与边境小镇",
+      "size": [
+        40,
+        42
+      ],
+      "slots": [
+        {
+          "id": "road-architecture",
+          "name": "公路与边境小镇建筑",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "source": "/assets/models/road-shell.glb",
+          "triangles": 78795,
+          "localSizeAfterNormalization": [
+            37.80000305175781,
+            6.801632583141327,
+            39.89325714111328
+          ]
+        },
+        {
+          "id": "oak",
+          "name": "橡树",
+          "position": [
+            -7,
+            0,
+            -17
+          ],
+          "source": null
+        },
+        {
+          "id": "oak",
+          "name": "橡树",
+          "position": [
+            -7,
+            0,
+            12
+          ],
+          "source": null
+        },
+        {
+          "id": "oak",
+          "name": "橡树",
+          "position": [
+            7,
+            0,
+            -17
+          ],
+          "source": null
+        },
+        {
+          "id": "oak",
+          "name": "橡树",
+          "position": [
+            7,
+            0,
+            12
+          ],
+          "source": null
+        },
+        {
+          "id": "bus",
+          "name": "巴士",
+          "position": [
+            3,
+            0,
+            -9
+          ],
+          "source": null
+        },
+        {
+          "id": "car",
+          "name": "汽车",
+          "position": [
+            -3,
+            0,
+            0
+          ],
+          "source": null
+        },
+        {
+          "id": "roadSign",
+          "name": "路牌",
+          "position": [
+            7,
+            0,
+            1
+          ],
+          "source": null
+        }
+      ],
+      "configuredFileBytes": 9404104,
+      "configuredInstanceTriangles": 78795
+    },
+    {
+      "id": "beach",
+      "name": "海滩与修船区",
+      "size": [
+        40,
+        37
+      ],
+      "slots": [
+        {
+          "id": "beach-architecture",
+          "name": "海滩与修船区建筑",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "source": "/assets/models/beach-shell.glb",
+          "triangles": 33251,
+          "localSizeAfterNormalization": [
+            37.499868392944336,
+            5.946933031082153,
+            26.052215576171875
+          ]
+        },
+        {
+          "id": "oak",
+          "name": "橡树",
+          "position": [
+            15,
+            0,
+            8
+          ],
+          "source": null
+        },
+        {
+          "id": "oak",
+          "name": "橡树",
+          "position": [
+            -15,
+            0,
+            10
+          ],
+          "source": null
+        },
+        {
+          "id": "boat",
+          "name": "旧船",
+          "position": [
+            -5,
+            0,
+            -2
+          ],
+          "source": null
+        },
+        {
+          "id": "red",
+          "name": "瑞德",
+          "position": [
+            4,
+            0,
+            2
+          ],
+          "source": null
+        },
+        {
+          "id": "toolbox",
+          "name": "修船工具箱",
+          "position": [
+            -2,
+            0,
+            -1
+          ],
+          "source": null
+        }
+      ],
+      "configuredFileBytes": 7539236,
+      "configuredInstanceTriangles": 33251
+    },
+    {
+      "id": "supermarket",
+      "name": "瑞德工作的超市",
+      "size": [
+        27,
+        26
+      ],
+      "slots": [
+        {
+          "id": "supermarket-architecture",
+          "name": "瑞德工作的超市建筑",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "source": "/assets/models/supermarket-shell.glb",
+          "triangles": 58703,
+          "localSizeAfterNormalization": [
+            27.000001907348633,
+            4.110378406941891,
+            26.34451675415039
+          ]
+        },
+        {
+          "id": "shelf",
+          "name": "书架与货架",
+          "position": [
+            -8,
+            0,
+            -5
+          ],
+          "source": null
+        },
+        {
+          "id": "shelf",
+          "name": "书架与货架",
+          "position": [
+            0,
+            0,
+            -5
+          ],
+          "source": null
+        },
+        {
+          "id": "shelf",
+          "name": "书架与货架",
+          "position": [
+            8,
+            0,
+            -5
+          ],
+          "source": null
+        },
+        {
+          "id": "freezer",
+          "name": "冰柜",
+          "position": [
+            -9,
+            0,
+            -9
+          ],
+          "source": null
+        },
+        {
+          "id": "counter",
+          "name": "业务柜台与装袋台",
+          "position": [
+            5,
+            0,
+            5
+          ],
+          "source": null
+        },
+        {
+          "id": "bag",
+          "name": "装袋纸袋",
+          "position": [
+            5,
+            1.32,
+            5
+          ],
+          "source": null
+        },
+        {
+          "id": "groceries",
+          "name": "商品组合",
+          "position": [
+            8,
+            1.32,
+            5
+          ],
+          "source": null
+        },
+        {
+          "id": "manager",
+          "name": "超市经理",
+          "position": [
+            -6,
+            0,
+            6
+          ],
+          "source": null
+        }
+      ],
+      "configuredFileBytes": 8976508,
+      "configuredInstanceTriangles": 58703
+    },
+    {
+      "id": "bank",
+      "name": "新身份 · 银行柜台",
+      "size": [
+        22,
+        19
+      ],
+      "slots": [
+        {
+          "id": "bank-architecture",
+          "name": "新身份 · 银行柜台建筑",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "source": "/assets/models/bank-shell.glb",
+          "triangles": 59518,
+          "localSizeAfterNormalization": [
+            21,
+            4.1028731763362885,
+            17.38822364807129
+          ]
+        },
+        {
+          "id": "counter",
+          "name": "业务柜台与装袋台",
+          "position": [
+            -4,
+            0,
+            -3
+          ],
+          "source": null
+        },
+        {
+          "id": "counter",
+          "name": "业务柜台与装袋台",
+          "position": [
+            4,
+            0,
+            -3
+          ],
+          "source": null
+        },
+        {
+          "id": "ledger",
+          "name": "账本与档案",
+          "position": [
+            -4,
+            1.32,
+            -3
+          ],
+          "source": null
+        },
+        {
+          "id": "clerk",
+          "name": "银行职员",
+          "position": [
+            4,
+            0,
+            -6
+          ],
+          "source": null
+        }
+      ],
+      "configuredFileBytes": 9073432,
+      "configuredInstanceTriangles": 59518
+    },
+    {
+      "id": "evidence",
+      "name": "名单、证据与寄出的信",
+      "size": [
+        18,
+        17
+      ],
+      "slots": [
+        {
+          "id": "evidence-architecture",
+          "name": "名单、证据与寄出的信建筑",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "source": "/assets/models/evidence-shell.glb",
+          "triangles": 48450,
+          "localSizeAfterNormalization": [
+            19.80000114440918,
+            4.3671776950359344,
+            17.66761589050293
+          ]
+        },
+        {
+          "id": "desk",
+          "name": "书桌与办公桌",
+          "position": [
+            0,
+            0,
+            -3
+          ],
+          "source": null
+        },
+        {
+          "id": "evidenceBoard",
+          "name": "证据板",
+          "position": [
+            -5,
+            0,
+            -6
+          ],
+          "source": null
+        },
+        {
+          "id": "ledger",
+          "name": "账本与档案",
+          "position": [
+            -0.7,
+            1.32,
+            -3
+          ],
+          "source": null
+        },
+        {
+          "id": "letter",
+          "name": "信件与信封",
+          "position": [
+            0.6,
+            1.32,
+            -3
+          ],
+          "source": null
+        },
+        {
+          "id": "postbox",
+          "name": "邮筒",
+          "position": [
+            5,
+            0,
+            2
+          ],
+          "source": null
+        }
+      ],
+      "configuredFileBytes": 9556840,
+      "configuredInstanceTriangles": 48450
+    },
+    {
+      "id": "medicalExterior",
+      "name": "追查与抓捕现场",
+      "size": [
+        38,
+        34
+      ],
+      "slots": [
+        {
+          "id": "medicalExterior-architecture",
+          "name": "追查与抓捕现场建筑",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "source": "/assets/models/medicalexterior-shell.glb",
+          "triangles": 77977,
+          "localSizeAfterNormalization": [
+            36.75,
+            5.271729588508606,
+            32.40901184082031
+          ]
+        },
+        {
+          "id": "policeCar",
+          "name": "警车",
+          "position": [
+            -6,
+            0,
+            1
+          ],
+          "source": null
+        },
+        {
+          "id": "warden",
+          "name": "典狱长",
+          "position": [
+            4,
+            0,
+            -3
+          ],
+          "source": null
+        },
+        {
+          "id": "guard",
+          "name": "狱警",
+          "position": [
+            7,
+            0,
+            -2
+          ],
+          "source": null
+        }
+      ],
+      "configuredFileBytes": 9513028,
+      "configuredInstanceTriangles": 77977
+    }
+  ],
+  "errors": []
+}

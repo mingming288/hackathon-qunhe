@@ -1,0 +1,50 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { replaceAsset } from '../src/assets.js';
+
+function anchor() {
+  const root = new THREE.Group(), result = new THREE.Group(), placeholder = new THREE.Group();
+  root.add(result); result.add(placeholder);
+  result.userData = { placeholder, targetHeight: 2 };
+  return result;
+}
+
+test('正式模型及缓存副本参与阴影，落地缩放不改变缓存源模型', async context => {
+  const source = new THREE.Group(), nested = new THREE.Group(); source.add(nested);
+  nested.add(new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial()));
+  const load = context.mock.method(GLTFLoader.prototype, 'loadAsync', async () => ({ scene: source, animations: [] }));
+  const first = anchor(), second = anchor(), entry = { url: '/assets/models/shadow-test.glb', height: 2 };
+  await replaceAsset(first, entry); await replaceAsset(second, entry);
+  assert.equal(load.mock.callCount(), 1, '同一模型只读取一次');
+  for (const item of [first, second]) {
+    assert.equal(item.userData.placeholder.visible, false);
+    const model = item.children[1];
+    const mesh = model.children[0].children[0];
+    assert.ok(mesh.castShadow && mesh.receiveShadow, '嵌套网格也必须参与阴影');
+    const bounds = new THREE.Box3().setFromObject(model);
+    assert.equal(bounds.min.y, 0); assert.equal(bounds.max.y, 2);
+  }
+  assert.notEqual(first.children[1], second.children[1]);
+  assert.equal(nested.children[0].castShadow, false, '不能修改共享缓存的源场景');
+  await replaceAsset(first, entry); assert.equal(first.children.length, 2, '重复接入不添加副本');
+});
+
+test('加载失败保留占位物且允许重试，已离开场景的结果不再接入', async context => {
+  const source = new THREE.Group(); source.add(new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1)));
+  let fail = true;
+  context.mock.method(GLTFLoader.prototype, 'loadAsync', async () => {
+    if (fail) throw new Error('模拟读取失败');
+    return { scene: source, animations: [] };
+  });
+  const target = anchor(), entry = { url: '/assets/models/retry-test.glb' };
+  await assert.rejects(replaceAsset(target, entry), /模拟读取失败/);
+  assert.equal(target.userData.placeholder.visible, true);
+  fail = false; await replaceAsset(target, entry);
+  assert.equal(target.userData.replaced, true);
+  const detached = anchor(); detached.removeFromParent();
+  await replaceAsset(detached, entry);
+  assert.equal(detached.userData.placeholder.visible, true);
+  assert.equal(detached.children.length, 1);
+});

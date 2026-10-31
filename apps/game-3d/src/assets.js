@@ -43,6 +43,10 @@ export async function replaceAsset(anchor, entry) {
   if (!anchor.parent) return null; // 切换场景后，不再把旧的异步结果放入场景。
   if (anchor.userData.replaced) return anchor.userData.mixer || null;
   const model = clone(gltf.scene);
+  // 正式模型与基础几何使用同一套光照；三维文件不会保存引擎的阴影开关。
+  model.traverse(node => {
+    if (node.isMesh) node.castShadow = node.receiveShadow = true;
+  });
   model.rotation.y = entry.rotationY || 0;
   model.updateMatrixWorld(true);
   const box = new THREE.Box3().setFromObject(model);
