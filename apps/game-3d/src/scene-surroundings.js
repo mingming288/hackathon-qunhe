@@ -12,6 +12,12 @@ export function addSceneSurroundings(world) {
   if (!indoor.has(config.kind)) {
     const ground = new THREE.Mesh(new THREE.PlaneGeometry(600, 600), new THREE.MeshStandardMaterial({ color: grounds[config.kind] || '#687169', roughness: 1 }));
     ground.rotation.x = -Math.PI / 2; ground.position.y = -.32; ground.receiveShadow = true; group.add(ground);
+    if (config.kind === 'beach') {
+      // 近岸水面止于场景边界，远海向外延伸并由雾自然收至天际。
+      const sea = new THREE.Mesh(new THREE.PlaneGeometry(600, 300), new THREE.MeshToonMaterial({ color: '#668b8f' }));
+      sea.name = '海滩远海'; sea.rotation.x = -Math.PI / 2;
+      sea.position.set(0, .035, -depth / 2 + 11.5 - 150); group.add(sea);
+    }
     world.background = skies[config.kind] || '#83918e'; world.fog = world.background;
     return;
   }
