@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { SCENES } from '../src/scenes.js';
 import { CHARACTER_NAMES } from '../src/kit.js';
 import { createWorld, disposeWorld } from '../src/world.js';
-import { propCatalog, scenePropKeys, environmentDescription, DEDICATED_CHARACTERS, CHARACTER_TEMPLATES, assetDetails, sceneAssetDetails } from '../src/asset-catalog.js';
+import { propCatalog, scenePropKeys, environmentDescription, DEDICATED_CHARACTERS, CHARACTER_TEMPLATES, assetDetails, sceneAssetDetails, assetState } from '../src/asset-catalog.js';
 import { SCENE_USAGE_GROUPS, sceneUsage } from '../src/scene-usage.js';
 
 test('十九个环境预览不创建人物、人物碰撞或出入口辅助物，正式游玩仍保留人物', () => {
@@ -59,6 +59,7 @@ test('共享资产清单覆盖全部环境物件，五位独立人物与三类�
   assert.ok(sceneAssetDetails(library, {}).some(line => line.startsWith('整理用图书')));
   assert.ok(!sceneAssetDetails(library, {}).some(line => line.startsWith('老布 ·')));
   const scoped = { 'library:shelf': {} };
+  assert.equal(assetState('medicalExterior-architecture', {}), '已内置建筑');
   assert.match(assetDetails(assets.find(asset => asset.id === 'shelf'), scoped).join(''), /部分场景已配置/);
   assert.ok(sceneAssetDetails(library, scoped).some(line => line.includes('已配置模型') && line.includes('书架')));
   const supermarket = SCENES.find(scene => scene.id === 'supermarket');

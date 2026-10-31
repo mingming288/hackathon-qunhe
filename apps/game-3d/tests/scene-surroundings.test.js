@@ -44,6 +44,8 @@ test('医疗机构庭院在游玩和预览中均有独立铺装，不影响碰�
     assert.deepEqual([ground.geometry.parameters.width, ground.geometry.parameters.height], scene.size);
     assert.equal(ground.parent, world.root);
     assert.ok(!world.colliders.some(c => c.assetKey === '医疗机构庭院铺装'));
+    const building = world.root.getObjectByName('医疗机构建筑');
+    assert.ok(building && building.children.length > 20, '建筑入口、窗户与侧翼应完整保留');
     disposeWorld(world);
   }
 });

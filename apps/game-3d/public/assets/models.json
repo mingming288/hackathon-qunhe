@@ -34,7 +34,6 @@
     "oak-architecture": { "url": "/assets/models/oak-shell.glb", "normalize": false },
     "road-architecture": { "url": "/assets/models/road-shell.glb", "normalize": false },
     "beach-architecture": { "url": "/assets/models/beach-shell.glb", "normalize": false },
-    "medicalExterior-architecture": { "url": "/assets/models/medicalexterior-shell.glb", "normalize": false },
     "yard-library-exterior": { "url": "/assets/models/library-exterior.glb", "height": 6.2 },
     "yard-office-exterior": { "url": "/assets/models/office-exterior.glb", "height": 8.6 },
     "cellCorridor-architecture": { "url": "/assets/models/corridor-rebuilt.glb", "normalize": false },

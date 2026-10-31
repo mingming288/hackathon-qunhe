@@ -10,6 +10,7 @@ import { addCorridorYardVista, addYardCorridorVista } from './corridor-yard-vist
 import { addPipeRainVista } from './pipe-rain-vista.js';
 import { addCellVista, addCellCorridorVista } from './cell-corridor-vista.js';
 import { addMedicalCourtyard } from './medical-courtyard.js';
+import { addMedicalBuilding } from './medical-building.js';
 
 const TONES = {
   warm: ['#39352d', '#686459', '#857d6c'], dark: ['#292f2e', '#555d59', '#777970'],
@@ -26,8 +27,8 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
   const world = { root, config, colliders: [], anchors: [architecture], portals: [], animations: [], background, fog: background };
   const [width, depth] = config.size;
   if (includeHelpers) addSceneSurroundings(world);
-  box(shell, width + 1, .35, depth + 1, 0, -.2, 0, floorColor);
-  if (includeHelpers) {
+  if (config.id !== 'medicalExterior') box(shell, width + 1, .35, depth + 1, 0, -.2, 0, floorColor);
+  if (includeHelpers && config.id !== 'medicalExterior') {
     const grid = new THREE.GridHelper(Math.max(width, depth), Math.round(Math.max(width, depth)), '#676d60', '#77796b');
     grid.position.y = .005; grid.material.transparent = true; grid.material.opacity = .18; shell.add(grid);
   }
@@ -148,6 +149,7 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     }
   } else if (config.id === 'medicalExterior') {
     addMedicalCourtyard(root, config.size);
+    addMedicalBuilding(shell);
     // 医疗机构源模型的两翼和后侧主体占据庭院边缘。
     for (const x of [-14, 14]) world.colliders.push({ x, z: -7, w: 8, d: 12, h: 6, camera: true });
     world.colliders.push({ x: 0, z: -13.5, w: 36, d: 2, h: 6, camera: true });
