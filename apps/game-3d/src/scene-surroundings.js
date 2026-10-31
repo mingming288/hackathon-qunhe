@@ -45,6 +45,15 @@ export function addSceneSurroundings(world) {
     wall(-(opening + side) / 2, d / 2, side, .25);
     wall((opening + side) / 2, d / 2, side, .25);
     world.background = '#82918d'; world.fog = world.background;
+  } else if (config.id === 'cell') {
+    const left = -4.9, right = -2.0, start = -w / 2, end = w / 2;
+    wall((start + left) / 2, d / 2, left - start, .25);
+    wall((right + end) / 2, d / 2, end - right, .25);
   } else wall(0, d / 2, w, .25);
-  wall(-w / 2, 0, .25, d); wall(w / 2, 0, .25, d);
+  wall(-w / 2, 0, .25, d);
+  if (config.id === 'cellCorridor') {
+    const opening = 2.2, side = (d - opening) / 2;
+    wall(w / 2, -(opening + side) / 2, .25, side);
+    wall(w / 2, (opening + side) / 2, .25, side);
+  } else wall(w / 2, 0, .25, d);
 }

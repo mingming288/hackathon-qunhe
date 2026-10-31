@@ -24,6 +24,8 @@ export const PORTALS = {
 // 院子与走廊的出口相对，跨越时对视角和人物朝向做相同的坐标变换。
 export function transitionOrientation(from, to, yaw, facing) {
   if (from === 'pipeNetwork' && to === 'rain') return { yaw: Math.PI, facing: 0 };
+  if (from === 'cell' && to === 'cellCorridor') return { yaw: yaw - Math.PI / 2, facing: facing - Math.PI / 2 };
+  if (from === 'cellCorridor' && to === 'cell') return { yaw: yaw + Math.PI / 2, facing: facing + Math.PI / 2 };
   if ((from === 'cellCorridor' && to === 'yard') || (from === 'yard' && to === 'cellCorridor')) {
     return { yaw: yaw + Math.PI, facing: facing + Math.PI };
   }

@@ -14,7 +14,7 @@ test('走廊与院子的入口在远景坐标中对齐，视野不被补景墙�
   root.updateWorldMatrix(true, false); root.localToWorld(entry);
   assert.ok(Math.abs(entry.z - PORTALS.cellCorridor.yard[1]) < 1e-6);
   assert.equal(corridorYardTransform(), 29.5);
-  assert.equal(world.vistaAnchors.length, 3);
+  assert.equal(world.vistaAnchors.filter(anchor => anchor.userData.assetKey.startsWith('yard-')).length, 3);
   assert.ok(world.vistaAnchors.every(anchor => anchor.userData.clipPlane));
   const front = world.cameraColliders.filter(item => item.z > 0 && item.w > .25);
   assert.equal(front.length, 2);
@@ -46,5 +46,5 @@ test('院子与走廊往返时视角和人物方向使用同一坐标变换', ()
   const back = transitionOrientation('yard', 'cellCorridor', first.yaw, first.facing);
   assert.ok(Math.abs(Math.sin(back.yaw - .42)) < 1e-9);
   assert.ok(Math.abs(Math.sin(back.facing - 1.2)) < 1e-9);
-  assert.deepEqual(transitionOrientation('cell', 'cellCorridor', .42, 1.2), { yaw: 0, facing: Math.PI });
+  assert.deepEqual(transitionOrientation('cell', 'cellCorridor', .42, 1.2), { yaw: .42 - Math.PI / 2, facing: 1.2 - Math.PI / 2 });
 });

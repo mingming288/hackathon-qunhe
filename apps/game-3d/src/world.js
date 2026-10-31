@@ -8,6 +8,7 @@ import { addCorridorDetails } from './corridor-details.js';
 import { addSceneSurroundings } from './scene-surroundings.js';
 import { addCorridorYardVista, addYardCorridorVista } from './corridor-yard-vista.js';
 import { addPipeRainVista } from './pipe-rain-vista.js';
+import { addCellVista, addCellCorridorVista } from './cell-corridor-vista.js';
 
 const TONES = {
   warm: ['#39352d', '#686459', '#857d6c'], dark: ['#292f2e', '#555d59', '#777970'],
@@ -71,6 +72,11 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
   if (config.kind === 'corridor') {
     addCorridorDetails(root);
     if (includeHelpers) addCorridorYardVista(world);
+    if (includeHelpers) {
+      addCellVista(world);
+      // 角色仍可走到门前，镜头则不能穿过门楣和相邻场景。
+      world.cameraColliders.push({ x: 6.1, z: 0, w: .6, d: 2.2, h: 10, camera: true });
+    }
     // 与双侧门洞模型共用墙体尺寸，入口只保留墙垛碰撞。
     const centers = [-11.2, -5.6, 0, 5.6, 11.2];
     for (const x of [-6.1, 6.1]) {
@@ -85,6 +91,10 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     }
     obstacle(12.8, 4, .6, 0, -14.1);
   } else if (config.id === 'cell') {
+    if (includeHelpers) {
+      addCellCorridorVista(world);
+      world.cameraColliders.push({ x: -3.8, z: 6.2, w: 2.9, d: .5, h: 10, camera: true });
+    }
     // 牢房源模型朝镜头侧敞开；以房间边界限制移动，墙体碰撞对齐内部墙面。
     obstacle(12.4, 4, .5, 0, -6.2);
     obstacle(.5, 4, 12.4, -6.1, 0);
