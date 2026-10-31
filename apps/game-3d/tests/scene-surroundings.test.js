@@ -34,3 +34,16 @@ test('每个室外场景都有远景地面与对应背景', () => {
     disposeWorld(game);
   }
 });
+
+test('医疗机构庭院在游玩和预览中均有独立铺装，不影响碰撞', () => {
+  const scene = SCENE_BY_ID.get('medicalExterior');
+  const game = createWorld(scene), preview = createWorld(scene, { includeCharacters: false, includeHelpers: false });
+  for (const world of [game, preview]) {
+    const ground = world.root.getObjectByName('医疗机构庭院铺装');
+    assert.ok(ground);
+    assert.deepEqual([ground.geometry.parameters.width, ground.geometry.parameters.height], scene.size);
+    assert.equal(ground.parent, world.root);
+    assert.ok(!world.colliders.some(c => c.assetKey === '医疗机构庭院铺装'));
+    disposeWorld(world);
+  }
+});

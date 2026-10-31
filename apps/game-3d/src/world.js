@@ -9,6 +9,7 @@ import { addSceneSurroundings } from './scene-surroundings.js';
 import { addCorridorYardVista, addYardCorridorVista } from './corridor-yard-vista.js';
 import { addPipeRainVista } from './pipe-rain-vista.js';
 import { addCellVista, addCellCorridorVista } from './cell-corridor-vista.js';
+import { addMedicalCourtyard } from './medical-courtyard.js';
 
 const TONES = {
   warm: ['#39352d', '#686459', '#857d6c'], dark: ['#292f2e', '#555d59', '#777970'],
@@ -146,6 +147,7 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
       for (let x = -10; x <= 10; x += 2) box(shell, .03, .015, depth - 1, x, .02, 0, '#c4cabb', false);
     }
   } else if (config.id === 'medicalExterior') {
+    addMedicalCourtyard(root, config.size);
     // 医疗机构源模型的两翼和后侧主体占据庭院边缘。
     for (const x of [-14, 14]) world.colliders.push({ x, z: -7, w: 8, d: 12, h: 6, camera: true });
     world.colliders.push({ x: 0, z: -13.5, w: 36, d: 2, h: 6, camera: true });
