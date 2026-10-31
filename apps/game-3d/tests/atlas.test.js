@@ -58,4 +58,9 @@ test('共享资产清单覆盖全部环境物件，五位独立人物与三类�
   const library = SCENES.find(scene => scene.id === 'library');
   assert.ok(sceneAssetDetails(library, {}).some(line => line.startsWith('整理用图书')));
   assert.ok(!sceneAssetDetails(library, {}).some(line => line.startsWith('老布 ·')));
+  const scoped = { 'library:shelf': {} };
+  assert.match(assetDetails(assets.find(asset => asset.id === 'shelf'), scoped).join(''), /部分场景已配置/);
+  assert.ok(sceneAssetDetails(library, scoped).some(line => line.includes('已配置模型') && line.includes('书架')));
+  const supermarket = SCENES.find(scene => scene.id === 'supermarket');
+  assert.ok(sceneAssetDetails(supermarket, scoped).some(line => line.includes('待接入模型') && line.includes('书架')));
 });

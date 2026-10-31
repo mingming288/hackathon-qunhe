@@ -86,7 +86,11 @@ export function propCatalog() {
   return [...records.values()];
 }
 
-export function assetState(id, catalog) { return catalog[id] ? '已配置模型' : '待接入模型'; }
+export function assetState(id, catalog, sceneId) {
+  if (catalog[id] || (sceneId && catalog[sceneId + ':' + id])) return '已配置模型';
+  if (!sceneId && Object.keys(catalog).some(key => key.endsWith(':' + id))) return '部分场景已配置';
+  return '待接入模型';
+}
 
 export function assetDetails(asset, catalog) {
   const state = assetState(asset.id, catalog);
@@ -108,7 +112,7 @@ export function sceneAssetDetails(scene, catalog) {
     '使用分类：' + sceneUsage(scene).name + '。' + sceneUsage(scene).reason,
     '需准备的状态：' + sceneUsage(scene).states,
     '建筑主体：' + assetState(scene.id + '-architecture', catalog) + '。校准门洞、地面、原点与整体比例。',
-    ...props.map(id => PROP_NAMES[id] + ' · ' + assetState(id, catalog)),
+    ...props.map(id => PROP_NAMES[id] + ' · ' + assetState(id, catalog, scene.id)),
     '人物在独立分类中管理，正式剧情保留人物身份、站位和任务关系。'
   ];
 }

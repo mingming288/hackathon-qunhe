@@ -69,7 +69,7 @@ export class WorldView {
     this.interactions = []; this.current = null; this.button.hidden = true; this.goal = null;
     const version = this.version;
     for (const anchor of [...this.world.anchors, ...(environmentOnly ? [] : [this.hero])]) {
-      const entry = catalog[anchor.userData.assetKey]; if (!entry) continue;
+      const entry = catalog[config.id + ':' + anchor.userData.assetKey] || catalog[anchor.userData.assetKey]; if (!entry) continue;
       replaceAsset(anchor, entry).then(mixer => {
         if (version === this.version) { if (mixer) this.mixers.push(mixer); this.stage?.sync(); }
       }).catch(() => { if (version === this.version) this.notify('部分正式模型未载入，保留基础模型继续游戏。'); });
