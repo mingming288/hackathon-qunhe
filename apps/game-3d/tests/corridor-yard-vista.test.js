@@ -16,6 +16,12 @@ test('走廊与院子的入口在远景坐标中对齐，视野不被补景墙�
   assert.equal(corridorYardTransform(), 29.5);
   assert.equal(world.vistaAnchors.filter(anchor => anchor.userData.assetKey.startsWith('yard-')).length, 3);
   const yard = createWorld(SCENE_BY_ID.get('yard'));
+  const gate = yard.anchors.find(anchor => anchor.userData.assetKey === 'gate');
+  const distantGate = root.children.find(child => child.userData.assetKey === 'gate');
+  assert.ok(gate && distantGate);
+  assert.equal(gate.userData.placeholder.children.length, distantGate.userData.placeholder.children.length);
+  assert.ok(gate.userData.placeholder.children.length > 30);
+  assert.deepEqual([gate.position.x, gate.position.z], [distantGate.position.x, distantGate.position.z]);
   for (const [kind, x, z] of SCENE_BY_ID.get('yard').props) {
     const far = world.vistaAnchors.find(anchor => anchor.userData.assetKey === kind);
     const actual = yard.anchors.find(anchor => anchor.userData.assetKey === kind);

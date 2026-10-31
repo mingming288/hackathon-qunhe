@@ -8,6 +8,7 @@ import { createBeachToolbox } from './beach-toolbox.js';
 import { createOakTree } from './oak-tree.js';
 import { createOakKeepsake } from './oak-keepsakes.js';
 import { createRoadBus } from './road-bus.js';
+import { createPrisonGate } from './prison-gate.js';
 
 export const COLORS = { ink: '#34313e', stone: '#9da5a1', trim: '#ddd2b8', wood: '#947558', steel: '#657781', gold: '#d6ac69' };
 export const CHARACTER_NAMES = { andy: '安迪', red: '瑞德', brooks: '老布', guard: '狱警', warden: '典狱长', manager: '超市经理', clerk: '银行职员', tommy: '汤米', haywood: '海伍德', floyd: '弗洛伊德' };
@@ -178,11 +179,8 @@ export function makeProp(kind, { sceneId, landmark = false } = {}) {
   } else if (['counter', 'freezer', 'medicalCart'].includes(kind)) {
     box(visual, kind === 'counter' ? 4 : 2.5, 1.2, 1.5, 0, .6, 0, kind === 'freezer' ? '#b2cac7' : '#b6b099');
     box(visual, kind === 'counter' ? 4.2 : 2.7, .14, 1.7, 0, 1.28, 0, '#e4d9bd');
-  } else if (kind === 'gate') {
-    for (const side of [-1, 1]) box(visual, .3, 3.5, .4, side * 1.5, 1.75, 0, COLORS.steel);
-    box(visual, 3.3, .3, .4, 0, 3.4, 0, COLORS.steel);
-    for (let i = -2; i <= 2; i++) box(visual, .08, 3.1, .15, i * .5, 1.65, 0, COLORS.steel);
-  } else if (kind === 'postbox') {
+  } else if (kind === 'gate') createPrisonGate(visual);
+  else if (kind === 'postbox') {
     box(visual, 1.1, 1.7, .9, 0, .85, 0, '#8e6c5c'); box(visual, .7, .08, .03, 0, 1.25, .47, '#393d42');
   } else if (kind === 'mat') box(visual, 1.6, .07, 2.8, 0, .04, 0, '#8f8b73');
   else if (['groceries', 'bag'].includes(kind)) createStoreProp(visual, kind);
