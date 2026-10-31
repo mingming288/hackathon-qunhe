@@ -854,7 +854,7 @@
                 return true;
               }
               place(bag) {
-                if (!this.held) return {ok:false,text:"先到传送带拿起一件商品。"};
+                if (!this.held) return {ok:false,text:"先到货架或冰柜拿起一件商品。"};
                 if (bag !== this.held.bag) {
                   const text = this.held.kind === "clean" ? "清洁用品应该分开放。" : "这样装会压坏商品。";
                   this.held = null;
@@ -1033,9 +1033,9 @@
                   else showMessage(this.bagging.held?"手里已经拿着商品。":"这件商品已经拿走了。");
                   return;
                 }
-                let bag=-1;
-                if (Math.hypot(p.x-230,p.y-218)<48) bag=0;
-                if (Math.hypot(p.x-315,p.y-218)<48) bag=1;
+                const foodDistance=Math.hypot(p.x-230,p.y-218);
+                const cleanDistance=Math.hypot(p.x-315,p.y-218);
+                const bag=Math.min(foodDistance,cleanDistance)<48?(foodDistance<=cleanDistance?0:1):-1;
                 if (bag>=0) {
                   const result=this.bagging.place(bag);
                   showMessage(result.ok?"放置正确。":result.text,result.ok?800:1700);
