@@ -21,6 +21,14 @@ export const PORTALS = {
   medicalExterior: { evidence: [0, 14.6], operatingRoom: [0, -11.2] }
 };
 
+// 院子与走廊的出口相对，跨越时对视角和人物朝向做相同的坐标变换。
+export function transitionOrientation(from, to, yaw, facing) {
+  if ((from === 'cellCorridor' && to === 'yard') || (from === 'yard' && to === 'cellCorridor')) {
+    return { yaw: yaw + Math.PI, facing: facing + Math.PI };
+  }
+  return { yaw: 0, facing: Math.PI };
+}
+
 export function entryPosition(world, from, saved = null) {
   const candidate = saved || (() => {
     const portal = world.portals.find(item => item.id === from);

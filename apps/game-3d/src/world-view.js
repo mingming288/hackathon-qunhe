@@ -4,7 +4,7 @@ import { createWorld, disposeWorld } from './world.js';
 import { createActor } from './actor.js';
 import { ThirdPersonController } from './controller.js';
 import { replaceAsset } from './assets.js';
-import { entryPosition } from './navigation.js';
+import { entryPosition, transitionOrientation } from './navigation.js';
 
 export class WorldView {
   constructor({ canvas, labelRoot, interactButton, enabled, onAutosave, notify }) {
@@ -14,6 +14,7 @@ export class WorldView {
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75)); this.renderer.setSize(innerWidth, innerHeight);
     this.renderer.shadowMap.enabled = true; this.renderer.shadowMap.type = THREE.PCFShadowMap;
+    this.renderer.localClippingEnabled = true;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace; this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = .95;
     this.scene = new THREE.Scene(); this.camera = new THREE.PerspectiveCamera(48, innerWidth / innerHeight, .1, 130);
@@ -54,6 +55,8 @@ export class WorldView {
   }
 
   show(config, { from = null, location = null, character = 'andy', catalog = {}, environmentOnly = false } = {}) {
+    const orientation = environmentOnly ? { yaw: 0, facing: Math.PI }
+      : transitionOrientation(from, config.id, this.controls.yaw, this.hero.rotation.y);
     this.setStage(null);
     if (this.world) disposeWorld(this.world);
     this.environmentOnly = environmentOnly;
@@ -63,18 +66,20 @@ export class WorldView {
     this.baseColliders = [...this.world.colliders]; this.scene.add(this.world.root);
     this.scene.background = new THREE.Color(this.world.background); this.scene.fog = new THREE.Fog(this.world.fog, 35, 95);
     const position = entryPosition(this.world, from, location);
-    this.hero.position.set(position.x, 0, position.z); this.hero.rotation.y = Math.PI;
+    this.hero.position.set(position.x, 0, position.z); this.hero.rotation.y = orientation.facing;
     this.hero.scale.y = config.id === 'pipeNetwork' ? .72 : 1;
-    this.resetCamera();
+    this.resetCamera(orientation.yaw);
     this.interactions = []; this.current = null; this.button.hidden = true; this.goal = null;
     const version = this.version;
-    for (const anchor of [...this.world.anchors, ...(environmentOnly ? [] : [this.hero])]) {
+    const loading = [];
+    for (const anchor of [...this.world.anchors, ...(this.world.vistaAnchors || []), ...(environmentOnly ? [] : [this.hero])]) {
       const entry = catalog[config.id + ':' + anchor.userData.assetKey] || catalog[anchor.userData.assetKey]; if (!entry) continue;
-      replaceAsset(anchor, entry).then(mixer => {
+      loading.push(replaceAsset(anchor, entry, () => version === this.version).then(mixer => {
         if (version === this.version) { if (mixer) this.mixers.push(mixer); this.stage?.sync(); }
-      }).catch(() => { if (version === this.version) this.notify('部分正式模型未载入，保留基础模型继续游戏。'); });
+      }).catch(() => { if (version === this.version) this.notify('部分正式模型未载入，保留基础模型继续游戏。'); }));
     }
     this.canvas.focus();
+    return Promise.all(loading);
   }
 
   anchor(target) {
@@ -109,8 +114,9 @@ export class WorldView {
 
   position() { return { x: this.hero.position.x, z: this.hero.position.z }; }
   pause() { this.controls.keys.clear(); }
-  resetCamera() {
+  resetCamera(yaw = 0) {
     this.controls.reset();
+    this.controls.yaw = yaw;
     if (this.environmentOnly && this.world) {
       const sphere = new THREE.Box3().setFromObject(this.world.root).getBoundingSphere(new THREE.Sphere());
       const verticalAngle = THREE.MathUtils.degToRad(this.camera.fov / 2);
@@ -122,7 +128,9 @@ export class WorldView {
       this.camera.far = Math.max(130, distance * 4); this.scene.fog = null;
       this.orbit.update();
     } else {
-      this.camera.position.copy(this.hero.position).add(new THREE.Vector3(0, 5, 7));
+      const target = this.hero.position.clone().add(new THREE.Vector3(0, 1.45, 0));
+      const pitch = this.controls.pitch, distance = this.controls.distance;
+      this.camera.position.copy(target).add(new THREE.Vector3(Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), Math.cos(yaw) * Math.cos(pitch)).multiplyScalar(distance));
       this.camera.far = 130;
     }
     this.camera.updateProjectionMatrix(); this.canvas.focus();

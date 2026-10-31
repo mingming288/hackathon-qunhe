@@ -6,7 +6,7 @@ import { createWorld, disposeWorld } from '../src/world.js';
  test('室内游玩四周有可避让的背景墙，展示模式不包含背景墙', () => {
   for (const scene of SCENES.filter(s => ['room', 'corridor', 'tunnel', 'maze'].includes(s.kind))) {
     const game = createWorld(scene), preview = createWorld(scene, { includeCharacters: false, includeHelpers: false });
-    assert.equal(game.cameraColliders.length, 4, scene.id);
+    assert.equal(game.cameraColliders.length, scene.id === 'cellCorridor' ? 5 : 4, scene.id);
     assert.equal(preview.cameraColliders, undefined, scene.id);
     assert.ok(game.cameraColliders.every(w => w.h === 10 && w.camera));
     assert.ok(!game.colliders.some(w => game.cameraColliders.includes(w)), '背景墙不影响角色行走');

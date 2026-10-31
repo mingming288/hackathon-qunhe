@@ -23,11 +23,21 @@ export function addSceneSurroundings(world) {
     texture.repeat.set(5, 2); material.map = texture;
   }
   const height = 10, margin = 1.3, w = width + margin * 2, d = depth + margin * 2;
-  function wall(x, z, sizeX, sizeZ) {
-    const mesh = new THREE.Mesh(new THREE.BoxGeometry(sizeX, height, sizeZ), material);
-    mesh.position.set(x, height / 2, z); mesh.receiveShadow = true; group.add(mesh);
-    world.cameraColliders.push({ x, z, w: sizeX, d: sizeZ, h: height, camera: true });
+  // 开放门洞和墙面之间的地面也需覆盖，避免转身时露出背景色的细条。
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(w, d), material.clone());
+  floor.rotation.x = -Math.PI / 2; floor.position.y = -.29; group.add(floor);
+  function wall(x, z, sizeX, sizeZ, h = height, y = h / 2) {
+    const mesh = new THREE.Mesh(new THREE.BoxGeometry(sizeX, h, sizeZ), material);
+    mesh.position.set(x, y, z); mesh.receiveShadow = true; group.add(mesh);
+    world.cameraColliders.push({ x, z, w: sizeX, d: sizeZ, h: y + h / 2, camera: true });
   }
-  wall(0, -d / 2, w, .25); wall(0, d / 2, w, .25);
+  wall(0, -d / 2, w, .25);
+  if (config.id === 'cellCorridor') {
+    // 院子入口保持开阔；墙垛仍供镜头避让，不改变玩家移动碰撞。
+    const opening = 11.6, side = (w - opening) / 2;
+    wall(-(opening + side) / 2, d / 2, side, .25);
+    wall((opening + side) / 2, d / 2, side, .25);
+    world.background = '#82918d'; world.fog = world.background;
+  } else wall(0, d / 2, w, .25);
   wall(-w / 2, 0, .25, d); wall(w / 2, 0, .25, d);
 }

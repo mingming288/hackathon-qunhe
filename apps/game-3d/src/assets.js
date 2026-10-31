@@ -32,7 +32,7 @@ export async function readModelCatalog() {
   return catalog.models;
 }
 
-export async function replaceAsset(anchor, entry) {
+export async function replaceAsset(anchor, entry, isCurrent = () => true) {
   validateModelEntry(entry);
   if (anchor.userData.replaced) return anchor.userData.mixer || null;
   if (!cache.has(entry.url)) {
@@ -40,12 +40,20 @@ export async function replaceAsset(anchor, entry) {
     cache.set(entry.url, pending);
   }
   const gltf = await cache.get(entry.url);
-  if (!anchor.parent) return null; // 切换场景后，不再把旧的异步结果放入场景。
+  if (!anchor.parent || !isCurrent()) return null; // 切换场景后，不再把旧的异步结果放入场景。
   if (anchor.userData.replaced) return anchor.userData.mixer || null;
   const model = clone(gltf.scene);
   // 正式模型与基础几何使用同一套光照；三维文件不会保存引擎的阴影开关。
   model.traverse(node => {
-    if (node.isMesh) node.castShadow = node.receiveShadow = true;
+    if (!node.isMesh) return;
+    node.castShadow = node.receiveShadow = true;
+    if (anchor.userData.clipPlane) {
+      const clipped = material => {
+        const copy = material.clone(); copy.clippingPlanes = [anchor.userData.clipPlane];
+        copy.clipShadows = true; return copy;
+      };
+      node.material = Array.isArray(node.material) ? node.material.map(clipped) : clipped(node.material);
+    }
   });
   model.rotation.y = entry.rotationY || 0;
   model.updateMatrixWorld(true);
@@ -59,6 +67,7 @@ export async function replaceAsset(anchor, entry) {
     model.position.set(-center.x, -box.min.y * scale, -center.z);
   }
   model.userData.externalAsset = true;
+  model.userData.ownsClippedMaterials = Boolean(anchor.userData.clipPlane);
   anchor.userData.placeholder.visible = false;
   anchor.add(model);
   anchor.userData.replaced = true;

@@ -14,6 +14,7 @@ import { EarlyPlay } from './early-play.js';
 const $ = id => document.getElementById(id);
 const atlas = $('atlas'), menu = $('menu');
 let mode = 'menu', game = null, gameLocation = null, view, catalog = {}, sceneId = 'cell', noticeTimer, atlasView, earlyPlay;
+let sceneRevision = 0;
 const storage = { getItem: key => localStorage.getItem(key), setItem: (key, value) => localStorage.setItem(key, value) };
 let storageFailed = false;
 function notify(message) {
@@ -34,14 +35,22 @@ function saveCurrent() {
 const dialogue = new Dialogue(() => view?.canvas.focus());
 
 function renderScene(id, options = {}) {
+  const revision = ++sceneRevision;
   sceneId = id; const config = SCENE_BY_ID.get(id);
-  view.show(config, { ...options, character: mode === 'game' ? heroId(game) : 'andy', catalog, environmentOnly: mode !== 'game' });
+  const ready = view.show(config, { ...options, character: mode === 'game' ? heroId(game) : 'andy', catalog, environmentOnly: mode !== 'game' });
   if (mode === 'game') earlyPlay.attach();
   $('chapter').textContent = config.chapter; $('scene-title').textContent = config.name;
   $('scene-note').textContent = mode === 'game' ? config.note : environmentDescription(config);
   $('scene-count').textContent = String(SCENES.indexOf(config) + 1).padStart(2, '0') + ' / ' + SCENES.length;
   document.querySelectorAll('[data-scene]').forEach(button => button.classList.toggle('active', button.dataset.scene === id));
-  $('fade').classList.add('show'); setTimeout(() => $('fade').classList.remove('show'), 180);
+  $('fade').classList.add('show');
+  const crossing = (options.from === 'cellCorridor' && id === 'yard') || (options.from === 'yard' && id === 'cellCorridor');
+  if (crossing && mode === 'game') {
+    let finished = false;
+    const finish = () => { if (!finished) { finished = true; if (sceneRevision === revision) $('fade').classList.remove('show'); } };
+    const timeout = setTimeout(finish, 5000);
+    ready.then(() => { clearTimeout(timeout); setTimeout(finish, 180); });
+  } else setTimeout(() => { if (sceneRevision === revision) $('fade').classList.remove('show'); }, 180);
   refresh(); saveCurrent();
 }
 

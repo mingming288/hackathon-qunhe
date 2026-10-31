@@ -6,6 +6,7 @@ import { addYardBuildings } from './yard-buildings.js';
 import { YARD_BUILDINGS } from './yard-layout.js';
 import { addCorridorDetails } from './corridor-details.js';
 import { addSceneSurroundings } from './scene-surroundings.js';
+import { addCorridorYardVista, addYardCorridorVista } from './corridor-yard-vista.js';
 
 const TONES = {
   warm: ['#39352d', '#686459', '#857d6c'], dark: ['#292f2e', '#555d59', '#777970'],
@@ -68,6 +69,7 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
 
   if (config.kind === 'corridor') {
     addCorridorDetails(root);
+    if (includeHelpers) addCorridorYardVista(world);
     // 与双侧门洞模型共用墙体尺寸，入口只保留墙垛碰撞。
     const centers = [-11.2, -5.6, 0, 5.6, 11.2];
     for (const x of [-6.1, 6.1]) {
@@ -125,7 +127,10 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     obstacle(width, 6, .6, 0, -depth / 2); obstacle(.6, 6, depth, -width / 2, 0); obstacle(.6, 6, depth, width / 2, 0);
     const towerOffset = width / 2 - 2.5;
     tower(-towerOffset, -depth / 2 + 2.5); tower(towerOffset, -depth / 2 + 2.5);
-    if (config.id === 'yard') addYardBuildings(world, shell);
+    if (config.id === 'yard') {
+      addYardBuildings(world, shell);
+      if (includeHelpers) addYardCorridorVista(world);
+    }
     else {
       building(-width / 2 + 6, -depth / 2 + 9, 6, 10, 10);
       building(width / 2 - 6, -depth / 2 + 9, 6, 10, 10);
@@ -212,7 +217,13 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
 export function disposeWorld(world) {
   // 载入的模型由缓存持有；只释放本次构造的基础几何和材质。
   function release(node) {
-    if (node.userData.externalAsset) return;
+    if (node.userData.externalAsset) {
+      // 远景专用的裁切材质属于本场景；网格和贴图仍由缓存持有。
+      if (node.userData.ownsClippedMaterials) node.traverse(child => {
+        for (const material of [child.material].flat().filter(Boolean)) material.dispose();
+      });
+      return;
+    }
     node.geometry?.dispose();
     const materials = Array.isArray(node.material) ? node.material : node.material ? [node.material] : [];
     materials.forEach(material => { material.map?.dispose(); material.dispose(); });

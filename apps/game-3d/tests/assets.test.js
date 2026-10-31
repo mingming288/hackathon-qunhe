@@ -48,3 +48,28 @@ test('加载失败保留占位物且允许重试，已离开场景的结果不�
   assert.equal(detached.userData.placeholder.visible, true);
   assert.equal(detached.children.length, 1);
 });
+
+test('裁切远景只克隆材质，不修改缓存模型和共享贴图', async context => {
+  const source = new THREE.Group(), material = new THREE.MeshStandardMaterial();
+  source.add(new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material));
+  context.mock.method(GLTFLoader.prototype, 'loadAsync', async () => ({ scene: source, animations: [] }));
+  const target = anchor(); target.userData.clipPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), -15);
+  await replaceAsset(target, { url: '/assets/models/clipped-test.glb' });
+  const model = target.children[1], clipped = model.children[0].material;
+  assert.notEqual(clipped, material);
+  assert.equal(material.clippingPlanes, null);
+  assert.deepEqual(clipped.clippingPlanes, [target.userData.clipPlane]);
+  assert.equal(model.userData.ownsClippedMaterials, true);
+});
+
+test('场景已切换时，仍有父节点的远景不会接入过期模型', async context => {
+  const source = new THREE.Group(); source.add(new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1)));
+  let finish;
+  context.mock.method(GLTFLoader.prototype, 'loadAsync', () => new Promise(resolve => { finish = resolve; }));
+  const target = anchor(); let current = true;
+  const pending = replaceAsset(target, { url: '/assets/models/late-vista-test.glb' }, () => current);
+  current = false; finish({ scene: source, animations: [] });
+  assert.equal(await pending, null);
+  assert.equal(target.children.length, 1);
+  assert.equal(target.userData.placeholder.visible, true);
+});
