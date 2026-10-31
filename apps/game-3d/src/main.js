@@ -84,7 +84,7 @@ function refresh() {
   $('return-game').hidden = mode !== 'explore' || !game;
   $('open-assets').hidden = mode !== 'explore';
   $('mode-label').textContent = mode === 'game' ? (heroId(game) === 'red' ? '剧情游玩 · 瑞德 · 第三人称' : '剧情游玩 · 安迪 · 第三人称') : '纯环境查看 · 人物独立管理';
-  $('build-note').textContent = mode === 'game' ? '剧情贯通版 · 简化交互与基础模型' : '环境资产检查 · 不影响游戏进度';
+  $('build-note').textContent = mode === 'game' ? '剧情贯通版 · 原版小游戏与三维场景' : '环境资产检查 · 不影响游戏进度';
   $('world').setAttribute('aria-label', mode === 'game' ? '第三人称三维游戏，方向键移动，拖动环顾，空格互动' : '三维环境资产查看，拖动旋转，右键拖动平移，滚轮缩放');
   $('quest').hidden = mode !== 'game';
   const interactions = [], rules = {};
@@ -104,6 +104,7 @@ function refresh() {
     $('evidence-count').textContent = '可选调查（影响结局）：线索 ' + game.evidence.length + '/5 · 旁听 ' + game.observed.length + '/2';
     const grouped = new Map();
     for (const action of getActions(game, sceneId)) {
+      if (action.onArrival) continue;
       if (!grouped.has(action.target)) grouped.set(action.target, []);
       grouped.get(action.target).push(action);
     }

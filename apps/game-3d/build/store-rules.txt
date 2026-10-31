@@ -1,0 +1,112 @@
+export function createStoreRules({
+  elements,
+  onComplete,
+  onContext,
+  phase = "collect",
+}) {
+  const {
+    confirmBag,
+    productList,
+    bagSlots,
+    sortInstruction,
+    sortingLayer,
+    paperBag,
+    controls,
+    gameHud,
+    gameMessage,
+    redSubtitle,
+    canvas,
+  } = elements;
+  const rc = canvas.getContext("2d"),
+    keys = new Set(),
+    dragInput = { x: 0, y: 0 };
+  const timers = new Set();
+  const window = {
+    setTimeout(fn, delay) {
+      let id = globalThis.setTimeout(() => {
+        timers.delete(id);
+        fn();
+      }, delay);
+      timers.add(id);
+      return id;
+    },
+    clearTimeout(id) {
+      timers.delete(id);
+      globalThis.clearTimeout(id);
+    },
+  };
+  const controller = { red: null, gameFinished: onComplete };
+  const image = (url) => {
+    const img = new Image();
+    img.src = url;
+    return img;
+  };
+  const sprite = {
+    front: image("../assets/main/images/red_walk_down_sheet.webp"),
+    back: image("../assets/main/images/red_walk_up_sheet.webp"),
+    side: image("../assets/main/images/red_walk_side_sheet.webp"),
+    ready: true,
+  };
+  const storeImage = image(
+    "../assets/ending-three/runtime/store/supermarket_floor.webp",
+  );
+  const managerImage = image(
+    "../assets/ending-three/runtime/manager/manager_front.webp",
+  );
+  const managerSideImage = image(
+    "../assets/ending-three/runtime/manager/manager_side.webp",
+  );
+  const syncEndingControls = () => {
+    const r = controller.red;
+    onContext?.({
+      playable: !r.locked && !r.sortMode && r.phase !== "done",
+      label: r.actionLabel(),
+      highlighted: r.canInteract(),
+    });
+  };
+  const setTextLines = (element, lines) => {
+    element.textContent = lines.join("\n");
+  };
+  let messageTimer = 0;
+  /* 原版类 */
+  /* 原版函数 */
+  controller.red = new RedSupermarketGame();
+  const sortingGame = new SortingBagGame();
+  if (phase === "sorting") sortingGame.start();
+  else if (phase === "orders") controller.red.startCustomerOrders();
+  else controller.red.startCollection();
+  return {
+    update(dt, now) {
+      controller.red.update(dt, now);
+      syncEndingControls();
+    },
+    draw: drawStore,
+    interact() {
+      controller.red.interact();
+    },
+    move(x, y) {
+      dragInput.x = x;
+      dragInput.y = y;
+    },
+    keyDown(key) {
+      keys.add(key);
+    },
+    keyUp(key) {
+      keys.delete(key);
+    },
+    getState() {
+      const r = controller.red;
+      return {
+        phase: r.phase,
+        collected: r.collectionItems.filter((i) => i.collected).length,
+        order: r.bagging.order,
+        index: r.bagging.index,
+      };
+    },
+    destroy() {
+      timers.forEach((id) => globalThis.clearTimeout(id));
+      timers.clear();
+      keys.clear();
+    },
+  };
+}

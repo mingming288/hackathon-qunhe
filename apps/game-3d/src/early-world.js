@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import { createActor } from './actor.js';
 import { canStand } from './movement.js';
-import { LIBRARY_BOOKS, SHELF_LABELS, practiceComplete } from './practice-state.js';
-import { block, bookModel, hammerModel, lettering, disposePracticeObject } from './practice-geometry.js';
+import { practiceComplete } from './practice-state.js';
+import { block, bookModel, lettering, disposePracticeObject } from './practice-geometry.js';
 
 // 玩法附件只引用现有物件和入口，不修改建筑、陈设数据或碰撞布局。
 export class EarlyWorld {
@@ -23,7 +23,6 @@ export class EarlyWorld {
       if (this.originalBible) {
         this.cellBook = bookModel('#6a7763', true); this.cellBook.scale.setScalar(.45);
         this.cellBook.position.copy(this.originalBible.position); this.cellBook.rotation.x = -Math.PI / 2; this.root.add(this.cellBook);
-        this.hiddenHammer = hammerModel(); this.hiddenHammer.scale.setScalar(.85); this.hiddenHammer.position.z = .23; this.cellBook.add(this.hiddenHammer);
       }
       const wall = this.point('wallClue', find('poster'), new THREE.Vector3(0, 0, .28));
       if (wall) {
@@ -34,24 +33,6 @@ export class EarlyWorld {
       this.door = view.world.portals.find(portal => portal.id === 'cellCorridor')?.object.position.clone() || new THREE.Vector3();
       this.checkPoint = this.nearDesk();
     }
-    if (view.world.config.id === 'library') {
-      this.originalBooks = find('books');
-      const desk = this.point('books', this.originalBooks);
-      if (desk) this.pile = LIBRARY_BOOKS.map((book, index) => {
-        const model = bookModel(book.color, false, book.code); model.scale.setScalar(.35); model.rotation.x = -Math.PI / 2;
-        model.position.set((index - 1) * .6, 1.4, 0); desk.add(model); return model;
-      });
-      const shelves = anchors.filter(anchor => anchor.userData.assetKey === 'shelf').slice(0, 3);
-      this.shelves = shelves.map((shelf, index) => {
-        const point = this.point('bookShelf:' + index, shelf, new THREE.Vector3(0, 0, 1.35));
-        lettering(point, SHELF_LABELS[index], 0, 2, .05, 1.8, .3);
-        const book = LIBRARY_BOOKS.find(book => book.shelf === index);
-        const returned = bookModel(book.color, false, book.code);
-        returned.scale.setScalar(.35); returned.position.set(0, 1.2, 0); point.add(returned); point.userData.returned = returned;
-        return point;
-      });
-      this.held = bookModel('#6d796e', false, '馆藏书'); this.held.scale.setScalar(.3); this.held.position.set(.35, 1.2, .5); view.hero.add(this.held);
-    }
     this.sync();
   }
   point(id, source, offset = new THREE.Vector3()) {
@@ -61,15 +42,8 @@ export class EarlyWorld {
     point.rotation.y = source.rotation.y; this.root.add(point); this.points.set(id, point); return point;
   }
   anchor(id) { return this.points.get(id); }
-  get labels() {
-    return this.getGame().step === 'sortBooks' ? (this.shelves || []).map((object, i) => ({ object, text: SHELF_LABELS[i], height: 2.8 })) : [];
-  }
-  interactions() {
-    const game = this.getGame();
-    if (game.step !== 'sortBooks' || !game.practice.books.carrying) return [];
-    return (this.shelves || []).map((point, shelf) => ({ target: 'bookShelf:' + shelf, priority: 3, range: 2.5,
-      label: '把手中的书放入 ' + SHELF_LABELS[shelf], run: () => this.update('books', { type: 'place', shelf }, true) }));
-  }
+  get labels() { return []; }
+  interactions() { return []; }
   sync() {
     const game = this.getGame();
     const wall = this.points.get('wallClue'); if (wall) wall.visible = game.step === 'inspectWall';
@@ -79,36 +53,16 @@ export class EarlyWorld {
       const available = game.items.includes('bible');
       this.cellBook.visible = available && !this.originalBible.userData.replaced;
       this.originalBible.visible = available && Boolean(this.originalBible.userData.replaced);
-      this.cellBook.userData.cover.rotation.y = game.practice.hide.open ? -2.25 : 0;
-      this.hiddenHammer.visible = game.practice.hide.placed && game.practice.hide.open;
-    }
-    if (this.originalBooks) {
-      this.originalBooks.visible = false;
-      const state = game.practice.books;
-      if (state.carrying && state.carrying !== this.heldId) {
-        const book = LIBRARY_BOOKS.find(item => item.id === state.carrying);
-        disposePracticeObject(this.held); this.held = bookModel(book.color, false, book.code);
-        this.held.scale.setScalar(.3); this.held.position.set(.35, 1.2, .5); this.view.hero.add(this.held); this.heldId = book.id;
-      }
-      this.pile.forEach((model, index) => { const book = LIBRARY_BOOKS[index]; model.visible = !state.placed.includes(book.id) && state.carrying !== book.id; });
-      this.shelves.forEach((shelf, index) => {
-        shelf.visible = game.step === 'sortBooks' || state.placed.length > 0;
-        shelf.userData.returned.visible = state.placed.some(id => LIBRARY_BOOKS.find(book => book.id === id).shelf === index);
-      });
-      this.held.visible = Boolean(state.carrying) && game.step === 'sortBooks';
+      this.cellBook.userData.cover.rotation.y = 0;
     }
   }
+
   guide(guide) {
     const game = this.getGame(), state = game.practice;
     if (['enter', 'search', 'leave'].includes(state.inspection.phase)) {
       return { ...guide, title: '站在床边，观察检查过程', target: 'bed', marker: '检查中 · 请留在床边',
         place: '狱警正在' + ({ enter: '进入牢房。', search: '查看书桌。', leave: '离开牢房。' }[state.inspection.phase]),
         action: '可以环顾观察；离开床边会暂停检查。等检查结束后再继续活动。' };
-    }
-    if (game.step === 'sortBooks' && game.scene === 'library') {
-      const book = LIBRARY_BOOKS.find(item => item.id === state.books.carrying);
-      return { ...guide, target: book ? null : 'books', place: '已归位 ' + state.books.placed.length + '/3 · ' + (book ? '手持《' + book.title + '》，书脊编号 ' + book.code : '去整理桌拿下一本书。'),
-        action: book ? '阅读书脊字母，走到相应书架前，按空格放入。放错不会清除进度。' : '靠近整理桌，按空格拿起一本，再走到对应分类书架。' };
     }
     return guide;
   }
@@ -133,6 +87,11 @@ export class EarlyWorld {
   }
   updateFrame(dt, elapsed) {
     const game = this.getGame(), check = game.practice.inspection;
+    if (game.step === 'finalDig' && this.view.world.config.id === 'dig' && this.enabled()) {
+      const exit = this.view.world.portals.find(portal => portal.id === 'pipe')?.object;
+      this.entryTime = exit && this.view.hero.position.distanceTo(exit.position) < 2.2 ? (this.entryTime || 0) + dt : 0;
+      if (this.entryTime >= .3) { this.entryTime = 0; this.finish('finalDig'); return; }
+    }
     if (!this.guard || ['idle', 'passed'].includes(check.phase)) return;
     this.guard.visible = true;
     if (!this.enabled() || (typeof document !== 'undefined' && document.hidden)) return;
@@ -157,5 +116,5 @@ export class EarlyWorld {
       this.finish(check.unsafe ? 'riskInspection' : 'inspection');
     }
   }
-  dispose() { if (this.held) disposePracticeObject(this.held); disposePracticeObject(this.root); }
+  dispose() { disposePracticeObject(this.root); }
 }

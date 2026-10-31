@@ -1,0 +1,132 @@
+.original-dialog {
+  width: 100vw;
+  max-width: 100vw;
+  height: 100dvh;
+  max-height: 100dvh;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: #0c100e;
+  color: #eee2c6;
+  overflow: hidden;
+}
+.original-dialog::backdrop {
+  background: #000d;
+}
+.original-dialog > header {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 18px;
+  border-bottom: 1px solid #79735c;
+  background: #19211d;
+}
+.original-dialog h2 {
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0;
+}
+.original-dialog > header button {
+  font-size: 12px;
+  padding: 6px 12px;
+  background: #343c31;
+  color: #eee2c6;
+  border: 1px solid #8b9477;
+}
+.original-viewport {
+  height: calc(100% - 48px);
+  width: 100%;
+  overflow: auto;
+  outline: none;
+}
+.original-component {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}
+.original-hide-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  touch-action: none;
+}
+.original-timing {
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+  gap: 12px;
+  box-sizing: border-box;
+  text-align: center;
+  background: radial-gradient(ellipse at top, #273a33, #111916);
+}
+.original-timing h3 {
+  font-size: 27px;
+  margin: 0;
+}
+.original-timing p {
+  margin: 0;
+  max-width: 720px;
+  line-height: 1.8;
+}
+.original-timing canvas {
+  height: min(49dvh, 440px);
+  width: auto;
+  max-width: 92vw;
+  border: 1px solid #899c7a;
+}
+.original-timing canvas[hidden] {
+  display: none;
+}
+.original-timing progress {
+  width: min(540px, 85vw);
+  height: 15px;
+  accent-color: #c2c082;
+}
+.original-timing button {
+  padding: 12px 24px;
+  background: #586746;
+  color: #fff4d7;
+  border: 1px solid #c6c797;
+  touch-action: none;
+}
+.original-timing .timing-status {
+  font-size: 19px;
+  min-height: 2em;
+  color: #e6dda5;
+}
+.original-timing.thunder-lit {
+  background: radial-gradient(ellipse at top, #697e75, #223b35);
+}
+@media (max-width: 650px) {
+  .original-dialog > header {
+    height: 56px;
+    padding: 0 8px;
+    gap: 8px;
+  }
+  .original-dialog h2 {
+    font-size: 12px;
+  }
+  .original-viewport {
+    height: calc(100% - 56px);
+  }
+  .original-timing {
+    padding: 10px;
+    gap: 8px;
+  }
+  .original-timing h3 {
+    font-size: 20px;
+  }
+  .original-timing p {
+    font-size: 12px;
+  }
+  .original-timing .timing-status {
+    font-size: 14px;
+  }
+}
