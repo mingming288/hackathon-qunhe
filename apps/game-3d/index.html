@@ -4,22 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#e6e0ca">
-  <title>高墙之外 · 三维场景</title>
+  <title>高墙之外 · 三维剧情</title>
 </head>
 <body>
   <canvas id="world" tabindex="0" aria-label="高墙之外第三人称三维场景，方向键移动，拖动旋转镜头，空格互动"></canvas>
   <header class="masthead">
     <div class="brand"><span class="brand-mark" aria-hidden="true">Ⅲ</span><div><strong>高墙之外</strong><span>十九处空间 · 同一个故事</span></div></div>
-    <div class="top-actions"><button id="camera-reset" type="button">重置镜头</button><button id="open-atlas" class="primary" type="button">场景总览 <span id="scene-count">01 / 19</span></button></div>
+    <div class="top-actions"><button id="open-menu" type="button">游戏菜单</button><button id="return-game" type="button" hidden>返回游戏</button><button id="open-assets" type="button" hidden>资产清单</button><button id="camera-reset" type="button">重置镜头</button><button id="open-atlas" class="primary" type="button">场景总览 <span id="scene-count">01 / 19</span></button></div>
   </header>
-  <aside class="scene-caption"><span id="chapter" class="eyebrow"></span><h1 id="scene-title"></h1><p id="scene-note"></p><div class="scene-status"><i></i>空间预览 · 全部使用第三人称</div></aside>
+  <aside class="scene-caption"><span id="chapter" class="eyebrow"></span><h1 id="scene-title"></h1><p id="scene-note"></p><div class="scene-status"><i></i><span id="mode-label">第三人称</span></div></aside>
+  <aside id="quest" class="quest-panel" aria-live="polite" hidden><span class="eyebrow">当前目标</span><h2 id="quest-title"></h2><p id="quest-place"></p><p id="inventory"></p><p id="evidence-count"></p></aside>
   <div id="floating-labels" aria-hidden="true"></div>
   <button id="interact" class="interaction" type="button" hidden></button>
   <div id="notice" class="notice" role="status" aria-live="polite"></div>
-  <footer class="controls"><span><b>↑ ↓ ← →</b> 移动</span><span>拖动 · 环顾</span><span>滚轮 · 远近</span><span>空格 · 互动</span><span class="build-note">基础场景已搭建 · 剧情任务待迁移</span></footer>
+  <footer class="controls"><span><b>↑ ↓ ← →</b> 移动</span><span>拖动 · 环顾</span><span>滚轮 · 远近</span><span>空格 · 互动</span><span id="build-note" class="build-note"></span></footer>
   <div class="touch-controls" aria-label="移动控制"><button data-move="ArrowUp" aria-label="向前">↑</button><button data-move="ArrowLeft" aria-label="向左">←</button><button data-move="ArrowDown" aria-label="向后">↓</button><button data-move="ArrowRight" aria-label="向右">→</button></div>
-  <dialog id="atlas" aria-labelledby="atlas-title"><div class="dialog-heading"><div><span class="eyebrow">场景档案</span><h2 id="atlas-title">从高墙，到远方。</h2></div><button id="close-atlas" aria-label="关闭场景总览" type="button">关闭</button></div><p class="atlas-note">选择一个地点，检查三维空间与通路。各场景的原剧情和任务将在后续逐项接入。</p><div id="scene-list"></div></dialog>
-  <dialog id="detail" aria-labelledby="detail-title"><span class="eyebrow">场景观察</span><h2 id="detail-title"></h2><p id="detail-copy"></p><button id="close-detail" class="primary" type="button">继续探索</button></dialog>
+  <dialog id="menu" aria-labelledby="menu-title"><span class="eyebrow">第三人称 · 剧情贯通版</span><h2 id="menu-title">高墙之外</h2><p>一间牢房，一段漫长准备。沿着原有故事，亲自走向高墙的另一边。</p><div class="menu-actions"><button id="new-game" class="primary" type="button">开始新游戏</button><button id="resume-game" type="button">继续游戏</button><button id="menu-atlas" type="button">场景总览 · 自由查看</button><button id="menu-last-preview" type="button">继续上次的场景查看</button></div><small>十九组基础场景 · 主线、备用路线与三条结局 · 场景查看独立保存</small></dialog>
+  <dialog id="atlas" aria-labelledby="atlas-title"><div class="dialog-heading"><div><span class="eyebrow">场景档案</span><h2 id="atlas-title">从高墙，到远方。</h2></div><button id="close-atlas" aria-label="关闭场景总览" type="button">关闭</button></div><p id="atlas-note" class="atlas-note"></p><div id="scene-list"></div></dialog>
+  <dialog id="detail" aria-labelledby="detail-title"><span class="eyebrow">高墙之外</span><h2 id="detail-title"></h2><div id="detail-copy"></div><div id="challenge"></div><div id="detail-actions"></div><button id="close-detail" type="button">返回探索</button></dialog>
+  <div id="fade" aria-hidden="true"></div>
   <div id="fatal" class="fatal" role="alert" hidden><h2>暂时无法打开三维场景</h2><p id="fatal-message"></p><button type="button" onclick="location.reload()">重新尝试</button></div>
   <script type="module" src="/src/main.js"></script>
 </body>

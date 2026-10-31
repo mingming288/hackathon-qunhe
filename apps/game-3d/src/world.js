@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { box, cylinder, makeProp, PROP_COLLIDERS, COLORS } from './kit.js';
 import { SCENE_BY_ID } from './scenes.js';
+import { PORTALS } from './navigation.js';
 
 const TONES = {
   warm: ['#d4c8ad', '#a9a18d', '#eee3c9'], dark: ['#a3ada5', '#6f7e7c', '#cccbb6'],
@@ -131,10 +132,19 @@ export function createWorld(config) {
     }
   }
   config.props.forEach(([kind, x, z, rotation]) => prop(kind, x, z, rotation));
+  if (config.id === 'yard') {
+    prop('gate', 0, -17); prop('warden', 0, -7);
+    prop('tommy', -3, 2); prop('haywood', -10, 4); prop('floyd', 8, 4);
+    const soil = prop('rubble', -10, 7); soil.userData.assetKey = 'soilSpot';
+  }
   config.links.forEach((targetId, index) => {
     const target = SCENE_BY_ID.get(targetId);
-    const marker = new THREE.Group(); marker.position.set((index - (config.links.length - 1) / 2) * 3.2, 0, depth / 2 - 2.4);
-    cylinder(marker, .7, .06, 0, .04, 0, COLORS.gold, 24);
+    const marker = new THREE.Group();
+    const placement = PORTALS[config.id]?.[targetId] || [(index - (config.links.length - 1) / 2) * 3.2, depth / 2 - 2.4];
+    marker.position.set(placement[0], 0, placement[1]); marker.rotation.y = placement[2] || 0;
+    for (const side of [-1, 1]) box(marker, .13, 3, .15, side * 1.05, 1.5, 0, COLORS.steel);
+    box(marker, 2.3, .15, .2, 0, 3, 0, COLORS.trim);
+    cylinder(marker, .5, .04, 0, .025, 0, COLORS.gold, 24);
     const ring = new THREE.Mesh(new THREE.TorusGeometry(.62, .035, 6, 24), new THREE.MeshBasicMaterial({ color: '#f4e4b8' }));
     ring.rotation.x = Math.PI / 2; ring.position.y = .09; marker.add(ring); root.add(marker);
     world.portals.push({ id: targetId, name: target.name, object: marker, ring });
