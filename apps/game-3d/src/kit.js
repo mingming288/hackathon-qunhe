@@ -5,6 +5,7 @@ import { createStoreProp } from './store-props.js';
 import { createStoreFixture } from './store-fixtures.js';
 import { createBeachBoat } from './beach-boat.js';
 import { createBeachToolbox } from './beach-toolbox.js';
+import { createOakTree } from './oak-tree.js';
 
 export const COLORS = { ink: '#34313e', stone: '#9da5a1', trim: '#ddd2b8', wood: '#947558', steel: '#657781', gold: '#d6ac69' };
 export const CHARACTER_NAMES = { red: '瑞德', brooks: '老布', guard: '狱警', warden: '典狱长', manager: '超市经理', clerk: '银行职员', tommy: '汤米', haywood: '海伍德', floyd: '弗洛伊德' };
@@ -105,7 +106,7 @@ function vehicle(group, kind) {
   if (police) { box(group, .5, .2, .3, -.35, 2.3, 0, '#b96c60'); box(group, .5, .2, .3, .35, 2.3, 0, '#6a90ad'); }
 }
 
-export function makeProp(kind, { sceneId } = {}) {
+export function makeProp(kind, { sceneId, landmark = false } = {}) {
   const anchor = new THREE.Group(), visual = new THREE.Group(); anchor.add(visual);
   anchor.userData = { assetKey: kind, placeholder: visual, label: CHARACTER_NAMES[kind] || '', targetHeight: 1 };
   if (CHARACTER_NAMES[kind]) {
@@ -158,10 +159,8 @@ export function makeProp(kind, { sceneId } = {}) {
       const rock = new THREE.Mesh(new THREE.DodecahedronGeometry(kind === 'stone' ? .5 : .32), new THREE.MeshToonMaterial({ color: '#7e8078' }));
       rock.position.set(Math.sin(i * 3) * .7, .27, Math.cos(i * 2) * .5); visual.add(rock);
     }
-  } else if (kind === 'oak') {
-    cylinder(visual, .6, 4, 0, 2, 0, '#7f6650');
-    for (let i = 0; i < 6; i++) sphere(visual, 1.8, Math.sin(i * 2) * 1.4, 4.8 + i % 2, Math.cos(i * 2) * 1.3, i % 2 ? '#8b9b71' : '#728665');
-  } else if (kind === 'car') createRoadCar(visual);
+  } else if (kind === 'oak') createOakTree(visual, landmark);
+  else if (kind === 'car') createRoadCar(visual);
   else if (['bus', 'policeCar'].includes(kind)) vehicle(visual, kind);
   else if (kind === 'boat') createBeachBoat(visual);
   else if (kind === 'toolbox') createBeachToolbox(visual);
