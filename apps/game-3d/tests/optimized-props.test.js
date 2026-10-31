@@ -12,16 +12,17 @@ function images(buffer) {
   });
 }
 
-test('石锤和碎石减少面数，同时保留原贴图和尺度', async () => {
+test('常用道具减少面数，同时保留原贴图和尺度', async () => {
   const catalog = JSON.parse(await readFile(new URL('../public/assets/models.json', import.meta.url))).models;
-  for (const name of ['hammer', 'rubble']) {
+  const slots = { hammer: ['hammer'], rubble: ['rubble', 'yard:soilSpot'], desk: ['cell:desk', 'office:desk'],
+    shelf: ['library:shelf'], table: ['library:table'] };
+  for (const [name, keys] of Object.entries(slots)) {
     const original = await readFile(new URL('../public/assets/models/' + name + '.glb', import.meta.url));
     const optimized = await readFile(new URL('../public/assets/models/' + name + '-optimized.glb', import.meta.url));
     const before = inspectGlb(original), after = inspectGlb(optimized);
-    assert.equal(catalog[name].url, '/assets/models/' + name + '-optimized.glb');
+    for (const key of keys) assert.equal(catalog[key].url, '/assets/models/' + name + '-optimized.glb');
     assert.ok(after.triangles < before.triangles * .6 && after.bytes < before.bytes);
     assert.deepEqual(images(optimized), images(original), '贴图必须逐字节保留');
     for (let i = 0; i < 3; i++) assert.ok(Math.abs(before.bounds.size[i] - after.bounds.size[i]) < .002);
   }
-  assert.equal(catalog['yard:soilSpot'].url, catalog.rubble.url);
 });
