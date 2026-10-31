@@ -52,10 +52,13 @@ function renderScene(id, options = {}) {
   $('fade').classList.add('show');
   if (mode === 'game') {
     let finished = false;
-    const finish = () => { if (!finished) { finished = true; if (sceneLoad.finish(revision)) { view.pause(); $('fade').classList.remove('show'); } } };
-    const timeout = setTimeout(finish, 8000);
+    const finish = (timedOut = false) => { if (!finished) { finished = true; if (sceneLoad.finish(revision)) {
+      if (timedOut && view.revealPendingCharacters()) notify('人物模型仍在加载，暂时显示替代人物。');
+      view.pause(); $('fade').classList.remove('show');
+    } } };
+    const timeout = setTimeout(() => finish(true), 8000);
     // 人物和环境都就绪后再揭开场景，避免建筑模型在玩家眼前突然替换。
-    ready.then(() => { clearTimeout(timeout); setTimeout(finish, 180); });
+    ready.then(() => { clearTimeout(timeout); setTimeout(() => finish(), 180); });
   } else setTimeout(() => { if (sceneLoad.finish(revision)) $('fade').classList.remove('show'); }, 180);
   refresh(); saveCurrent();
 }

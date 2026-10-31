@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { replaceAsset } from '../src/assets.js';
+import { revealPendingCharacters } from '../src/scene-load-gate.js';
 
 function anchor() {
   const root = new THREE.Group(), result = new THREE.Group(), placeholder = new THREE.Group();
@@ -47,6 +48,23 @@ test('加载失败保留占位物且允许重试，已离开场景的结果不�
   await replaceAsset(detached, entry);
   assert.equal(detached.userData.placeholder.visible, true);
   assert.equal(detached.children.length, 1);
+});
+
+test('角色加载过慢时显示临时人物，正式模型到达后自动替换', async context => {
+  const source = new THREE.Group(); source.add(new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1)));
+  let finish;
+  context.mock.method(GLTFLoader.prototype, 'loadAsync', () => new Promise(resolve => { finish = resolve; }));
+  const target = anchor(), hidden = anchor();
+  target.userData.placeholder.visible = false;
+  hidden.userData.placeholder.visible = false; hidden.visible = false;
+  const pending = replaceAsset(target, { url: '/assets/models/slow-character-test.glb' });
+  assert.equal(revealPendingCharacters([target, hidden]), 2);
+  assert.equal(target.userData.placeholder.visible, true);
+  assert.equal(hidden.visible, false, '剧情隐藏的人物不应重新出现');
+  finish({ scene: source, animations: [] }); await pending;
+  assert.equal(target.userData.placeholder.visible, false);
+  assert.equal(target.userData.replaced, true);
+  assert.equal(revealPendingCharacters([target]), 0, '已替换模型不能重复显示临时人物');
 });
 
 test('裁切远景只克隆材质，不修改缓存模型和共享贴图', async context => {

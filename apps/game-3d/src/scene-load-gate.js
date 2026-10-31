@@ -7,3 +7,15 @@ export class SceneLoadGate {
     this.active = false; return true;
   }
 }
+
+// 只恢复尚未替换的角色；外层锚点的剧情显隐不受影响。
+export function revealPendingCharacters(anchors) {
+  let shown = 0;
+  for (const anchor of anchors) {
+    const { placeholder, replaced } = anchor.userData;
+    if (!replaced && placeholder && !placeholder.visible) {
+      placeholder.visible = true; shown++;
+    }
+  }
+  return shown;
+}

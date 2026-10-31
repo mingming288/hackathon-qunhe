@@ -7,6 +7,7 @@ import { replaceAsset } from './assets.js';
 import { entryPosition, transitionOrientation } from './navigation.js';
 import { CHARACTER_NAMES } from './kit.js';
 import { AutoTravel } from './auto-travel.js';
+import { revealPendingCharacters } from './scene-load-gate.js';
 
 export class WorldView {
   constructor({ canvas, labelRoot, interactButton, enabled, onAutosave, onAutoTravel = () => {}, notify }) {
@@ -98,6 +99,11 @@ export class WorldView {
   anchor(target) {
     return this.stage?.anchor(target) || (target.startsWith('exit:') ? this.world.portals.find(item => item.id === target.slice(5))?.object
       : this.world.anchors.find(item => item.userData.assetKey === target));
+  }
+
+  revealPendingCharacters() {
+    const characters = this.world.anchors.filter(anchor => Object.hasOwn(CHARACTER_NAMES, anchor.userData.assetKey));
+    return revealPendingCharacters([...characters, this.hero]);
   }
 
   setStage(stage) { this.stage?.dispose(); this.stage = stage; }
