@@ -7,6 +7,7 @@ import { createBeachBoat } from './beach-boat.js';
 import { createBeachToolbox } from './beach-toolbox.js';
 import { createOakTree } from './oak-tree.js';
 import { createOakKeepsake } from './oak-keepsakes.js';
+import { createRoadBus } from './road-bus.js';
 
 export const COLORS = { ink: '#34313e', stone: '#9da5a1', trim: '#ddd2b8', wood: '#947558', steel: '#657781', gold: '#d6ac69' };
 export const CHARACTER_NAMES = { red: '瑞德', brooks: '老布', guard: '狱警', warden: '典狱长', manager: '超市经理', clerk: '银行职员', tommy: '汤米', haywood: '海伍德', floyd: '弗洛伊德' };
@@ -163,7 +164,8 @@ export function makeProp(kind, { sceneId, landmark = false } = {}) {
     }
   } else if (kind === 'oak') createOakTree(visual, landmark);
   else if (kind === 'car') createRoadCar(visual);
-  else if (['bus', 'policeCar'].includes(kind)) vehicle(visual, kind);
+  else if (kind === 'bus') createRoadBus(visual);
+  else if (kind === 'policeCar') vehicle(visual, kind);
   else if (kind === 'boat') createBeachBoat(visual);
   else if (kind === 'toolbox') createBeachToolbox(visual);
   else if (['pipeTarget', 'drain'].includes(kind)) {
