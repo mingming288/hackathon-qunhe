@@ -93,7 +93,8 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
   } else if (config.id === 'cell') {
     if (includeHelpers) {
       addCellCorridorVista(world);
-      world.cameraColliders.push({ x: -3.8, z: 6.2, w: 2.9, d: .5, h: 10, camera: true });
+      // 整条前墙及门楣均限制镜头，避免出生时镜头落入门外的走廊墙体。
+      world.cameraColliders.push({ x: 0, z: 6.2, w: 12.4, d: .5, h: 10, camera: true });
     }
     // 牢房源模型朝镜头侧敞开；以房间边界限制移动，墙体碰撞对齐内部墙面。
     obstacle(12.4, 4, .5, 0, -6.2);
