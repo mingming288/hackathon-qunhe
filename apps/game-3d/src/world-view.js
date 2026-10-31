@@ -77,7 +77,7 @@ export class WorldView {
     this.resetCamera(orientation.yaw);
     this.interactions = []; this.current = null; this.button.hidden = true; this.goal = null;
     const version = this.version;
-    const loading = [], characters = [];
+    const loading = [];
     for (const anchor of [...this.world.anchors, ...(this.world.vistaAnchors || []), ...(environmentOnly ? [] : [this.hero])]) {
       const entry = catalog[config.id + ':' + anchor.userData.assetKey] || catalog[anchor.userData.assetKey]; if (!entry) continue;
       const character = anchor === this.hero || Object.hasOwn(CHARACTER_NAMES, anchor.userData.assetKey);
@@ -89,10 +89,10 @@ export class WorldView {
         if (!anchor.userData.replaced) anchor.userData.placeholder.visible = true;
         this.notify(anchor.userData.replaced ? '人物动作未载入，可继续游戏，重新进入场景后会重试。' : '部分正式模型未载入，保留基础模型继续游戏。');
       } });
-      loading.push(pending); if (character) characters.push(pending);
+      loading.push(pending);
     }
     this.canvas.focus();
-    const ready = Promise.all(loading); ready.characters = Promise.all(characters); return ready;
+    return Promise.all(loading);
   }
 
   anchor(target) {

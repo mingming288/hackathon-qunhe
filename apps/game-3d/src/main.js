@@ -45,12 +45,12 @@ function renderScene(id, options = {}) {
   $('scene-count').textContent = String(SCENES.indexOf(config) + 1).padStart(2, '0') + ' / ' + SCENES.length;
   document.querySelectorAll('[data-scene]').forEach(button => button.classList.toggle('active', button.dataset.scene === id));
   $('fade').classList.add('show');
-  const crossing = (options.from === 'cellCorridor' && ['yard', 'cell'].includes(id)) || (['yard', 'cell'].includes(options.from) && id === 'cellCorridor') || (options.from === 'pipeNetwork' && id === 'rain');
   if (mode === 'game') {
     let finished = false;
     const finish = () => { if (!finished) { finished = true; if (sceneLoad.finish(revision)) { view.pause(); $('fade').classList.remove('show'); } } };
     const timeout = setTimeout(finish, 8000);
-    (crossing ? ready : ready.characters).then(() => { clearTimeout(timeout); setTimeout(finish, 180); });
+    // 人物和环境都就绪后再揭开场景，避免建筑模型在玩家眼前突然替换。
+    ready.then(() => { clearTimeout(timeout); setTimeout(finish, 180); });
   } else setTimeout(() => { if (sceneLoad.finish(revision)) $('fade').classList.remove('show'); }, 180);
   refresh(); saveCurrent();
 }
