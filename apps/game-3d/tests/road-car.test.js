@@ -20,6 +20,9 @@ test('公路轿车保留尺寸与位置，车尾可接近并触发剧情', () =>
 test('海滩旧船的船头留有可交互位置', () => {
   const world = createWorld(SCENE_BY_ID.get('beach'));
   const boat = world.anchors.find(anchor => anchor.userData.assetKey === 'boat');
+  const size = new THREE.Box3().setFromObject(boat).getSize(new THREE.Vector3());
+  assert.ok(size.x <= 2.7 && size.z <= 6.7 && size.y > .9);
+  assert.ok(boat.userData.placeholder.children.length > 20, '船壳、肋骨和座板应独立可见');
   const point = { x: boat.position.x, z: boat.position.z + 3.8 };
   assert.ok(canStand(point.x, point.z, world.config.size, world.colliders));
   assert.ok(Math.hypot(point.x - boat.position.x, point.z - boat.position.z) < 4.2);

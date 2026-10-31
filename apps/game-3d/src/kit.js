@@ -3,6 +3,7 @@ import { createActor } from './actor.js';
 import { createRoadCar } from './road-car.js';
 import { createStoreProp } from './store-props.js';
 import { createStoreFixture } from './store-fixtures.js';
+import { createBeachBoat } from './beach-boat.js';
 
 export const COLORS = { ink: '#34313e', stone: '#9da5a1', trim: '#ddd2b8', wood: '#947558', steel: '#657781', gold: '#d6ac69' };
 export const CHARACTER_NAMES = { red: '瑞德', brooks: '老布', guard: '狱警', warden: '典狱长', manager: '超市经理', clerk: '银行职员', tommy: '汤米', haywood: '海伍德', floyd: '弗洛伊德' };
@@ -161,11 +162,8 @@ export function makeProp(kind, { sceneId } = {}) {
     for (let i = 0; i < 6; i++) sphere(visual, 1.8, Math.sin(i * 2) * 1.4, 4.8 + i % 2, Math.cos(i * 2) * 1.3, i % 2 ? '#8b9b71' : '#728665');
   } else if (kind === 'car') createRoadCar(visual);
   else if (['bus', 'policeCar'].includes(kind)) vehicle(visual, kind);
-  else if (kind === 'boat') {
-    const hull = sphere(visual, 1, 0, .6, 0, '#a0805e'); hull.scale.set(1.35, .6, 3.3);
-    box(visual, 2.1, .13, 5.2, 0, .95, 0, '#c4ad85');
-    for (const z of [-1.5, 0, 1.5]) box(visual, 2, .12, .32, 0, 1.12, z, '#80664e');
-  } else if (['pipeTarget', 'drain'].includes(kind)) {
+  else if (kind === 'boat') createBeachBoat(visual);
+  else if (['pipeTarget', 'drain'].includes(kind)) {
     const pipe = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 4, 14, 1, true), new THREE.MeshToonMaterial({ color: '#657678', side: THREE.DoubleSide }));
     pipe.rotation.z = Math.PI / 2; pipe.position.y = 1.6; visual.add(pipe);
     const flange = new THREE.Mesh(new THREE.TorusGeometry(1.2, .13, 6, 14), new THREE.MeshToonMaterial({ color: '#9aa39b' }));
