@@ -10,11 +10,12 @@ import { ITEM_NAMES } from './story-data.js';
 import { loadGame, saveGame, backupGame, loadPreview, savePreview } from './save.js';
 import { guidanceFor } from './guidance.js';
 import { EarlyPlay } from './early-play.js';
+import { SceneLoadGate } from './scene-load-gate.js';
 
 const $ = id => document.getElementById(id);
 const atlas = $('atlas'), menu = $('menu');
 let mode = 'menu', game = null, gameLocation = null, view, catalog = {}, sceneId = 'cell', noticeTimer, atlasView, earlyPlay;
-let sceneRevision = 0;
+const sceneLoad = new SceneLoadGate();
 const storage = { getItem: key => localStorage.getItem(key), setItem: (key, value) => localStorage.setItem(key, value) };
 let storageFailed = false;
 function notify(message) {
@@ -35,7 +36,7 @@ function saveCurrent() {
 const dialogue = new Dialogue(() => view?.canvas.focus());
 
 function renderScene(id, options = {}) {
-  const revision = ++sceneRevision;
+  const revision = sceneLoad.begin(mode === 'game');
   sceneId = id; const config = SCENE_BY_ID.get(id);
   const ready = view.show(config, { ...options, character: mode === 'game' ? heroId(game) : 'andy', catalog, environmentOnly: mode !== 'game' });
   if (mode === 'game') earlyPlay.attach();
@@ -47,10 +48,10 @@ function renderScene(id, options = {}) {
   const crossing = (options.from === 'cellCorridor' && ['yard', 'cell'].includes(id)) || (['yard', 'cell'].includes(options.from) && id === 'cellCorridor') || (options.from === 'pipeNetwork' && id === 'rain');
   if (mode === 'game') {
     let finished = false;
-    const finish = () => { if (!finished) { finished = true; if (sceneRevision === revision) $('fade').classList.remove('show'); } };
+    const finish = () => { if (!finished) { finished = true; if (sceneLoad.finish(revision)) { view.pause(); $('fade').classList.remove('show'); } } };
     const timeout = setTimeout(finish, 8000);
     (crossing ? ready : ready.characters).then(() => { clearTimeout(timeout); setTimeout(finish, 180); });
-  } else setTimeout(() => { if (sceneRevision === revision) $('fade').classList.remove('show'); }, 180);
+  } else setTimeout(() => { if (sceneLoad.finish(revision)) $('fade').classList.remove('show'); }, 180);
   refresh(); saveCurrent();
 }
 
@@ -171,10 +172,10 @@ async function start() {
   buildAtlas();
   view = new WorldView({
     canvas: $('world'), labelRoot: $('floating-labels'), interactButton: $('interact'), notify, onAutosave: saveCurrent, onAutoTravel: travel,
-    enabled: () => mode !== 'menu' && !atlas.open && !dialogue.dialog.open && !menu.open && !earlyPlay?.busy
+    enabled: () => mode !== 'menu' && !sceneLoad.active && !atlas.open && !dialogue.dialog.open && !menu.open && !earlyPlay?.busy
   });
   earlyPlay = new EarlyPlay({ view, getGame: () => game, notify,
-    enabled: () => mode === 'game' && !atlas.open && !dialogue.dialog.open && !menu.open && !earlyPlay.busy,
+    enabled: () => mode === 'game' && !sceneLoad.active && !atlas.open && !dialogue.dialog.open && !menu.open && !earlyPlay.busy,
     setPractice: (practice, redraw, save) => { game = { ...game, practice }; if (redraw) refresh(); if (save) saveCurrent(); },
     complete: id => {
       const action = getActions(game, sceneId).find(item => item.id === id);
