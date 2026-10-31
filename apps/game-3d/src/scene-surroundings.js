@@ -27,6 +27,18 @@ export function addSceneSurroundings(world) {
     const texture = new THREE.TextureLoader().load('/assets/textures/stone-wall.jpg');
     texture.colorSpace = THREE.SRGBColorSpace; texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
     texture.repeat.set(5, 2); material.map = texture;
+  } else if (typeof document !== 'undefined') {
+    // 门洞后的背景延续医疗墙砖，避免出现大块没有细节的灰色平面。
+    const canvas = document.createElement('canvas'); canvas.width = canvas.height = 256;
+    const context = canvas.getContext('2d');
+    context.fillStyle = '#73847e'; context.fillRect(0, 0, 256, 256);
+    for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) {
+      context.fillStyle = (x + y) % 3 ? '#d0d9cb' : '#bbc9bb';
+      context.fillRect(x * 32 + 1, y * 32 + 1, 30, 30);
+    }
+    const texture = new THREE.CanvasTexture(canvas); texture.colorSpace = THREE.SRGBColorSpace;
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping; texture.repeat.set(4, 2);
+    material.map = texture;
   }
   const height = 10, margin = 1.3, w = width + margin * 2, d = depth + margin * 2;
   // 开放门洞和墙面之间的地面也需覆盖，避免转身时露出背景色的细条。

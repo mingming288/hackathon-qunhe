@@ -11,6 +11,7 @@ import { createRoadBus } from './road-bus.js';
 import { createPrisonGate } from './prison-gate.js';
 import { createEvidenceBoard } from './evidence-board.js';
 import { createEvidenceProp } from './evidence-props.js';
+import { createMedicalCart } from './medical-cart.js';
 
 export const COLORS = { ink: '#34313e', stone: '#9da5a1', trim: '#ddd2b8', wood: '#947558', steel: '#657781', gold: '#d6ac69' };
 export const CHARACTER_NAMES = { andy: '安迪', red: '瑞德', brooks: '老布', guard: '狱警', warden: '典狱长', manager: '超市经理', clerk: '银行职员', tommy: '汤米', haywood: '海伍德', floyd: '弗洛伊德' };
@@ -167,7 +168,8 @@ export function makeProp(kind, { sceneId, landmark = false } = {}) {
     flange.rotation.y = Math.PI / 2; flange.position.set(2, 1.6, 0); visual.add(flange);
   } else if (kind === 'roadSign') {
     cylinder(visual, .07, 2.8, 0, 1.4, 0, COLORS.steel); box(visual, 2.3, .7, .1, 0, 2.6, 0, '#778c7b');
-  } else if (['counter', 'freezer', 'medicalCart'].includes(kind)) {
+  } else if (kind === 'medicalCart') createMedicalCart(visual);
+  else if (['counter', 'freezer'].includes(kind)) {
     box(visual, kind === 'counter' ? 4 : 2.5, 1.2, 1.5, 0, .6, 0, kind === 'freezer' ? '#b2cac7' : '#b6b099');
     box(visual, kind === 'counter' ? 4.2 : 2.7, .14, 1.7, 0, 1.28, 0, '#e4d9bd');
   } else if (kind === 'gate') createPrisonGate(visual);
