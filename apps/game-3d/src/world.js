@@ -186,6 +186,8 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
       for (let i = 0; i < 9; i++) box(shell, .8, .5 + i % 3 * .2, .8, (i % 2 ? -1 : 1) * (width / 2 - 1), .25, -depth / 2 + 2 + i * 2, '#958267');
     }
     if (config.id === 'pipe') {
+      // 入口门楣有实体模型，镜头必须留在室内，避免被门楣遮挡。
+      if (includeHelpers) world.cameraColliders.push({ x: 0, z: 9.35, w: 17, d: .4, h: 10, camera: true });
       for (const x of [-6.8, 6.8]) {
         const light = new THREE.PointLight('#edb06a', 22, 14, 2);
         light.position.set(x, 2.7, -4.5); root.add(light);

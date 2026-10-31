@@ -36,3 +36,21 @@ test('沿走廊行走时镜头不能越过两侧墙顶或门洞', () => {
   }
   disposeWorld(world);
 });
+
+test('从挖掘通道进入砸管处时，镜头不会越过入口门楣', async () => {
+  const { entryPosition, transitionOrientation } = await import('../src/navigation.js');
+  const world = createWorld(SCENE_BY_ID.get('pipe'));
+  const position = entryPosition(world, 'dig');
+  const portal = world.portals.find(portal => portal.id === 'dig').object.position;
+  const { yaw } = transitionOrientation('dig', 'pipe', 0, 0, { position, portal });
+  const player = new THREE.Group(); player.position.set(position.x, 0, position.z);
+  const target = player.position.clone().add(new THREE.Vector3(0, 1.45, 0));
+  const camera = new THREE.PerspectiveCamera();
+  camera.position.copy(target).add(new THREE.Vector3(Math.sin(yaw) * Math.cos(.4), Math.sin(.4), Math.cos(yaw) * Math.cos(.4)).multiplyScalar(7));
+  const controller = Object.assign(Object.create(ThirdPersonController.prototype), {
+    camera, player, yaw, pitch: .4, distance: 7, keys: new Set(), enabled: () => true,
+  });
+  controller.update(.016, world);
+  assert.ok(camera.position.z < 9, '镜头应留在入口门楣内侧');
+  disposeWorld(world);
+});
