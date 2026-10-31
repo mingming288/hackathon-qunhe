@@ -42,7 +42,8 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     if (['hammer', 'bible', 'books', 'ledger', 'letter', 'bag', 'groceries'].includes(kind)) anchor.position.y = 1.32;
     root.add(anchor); world.anchors.push(anchor);
     if (anchor.userData.animate) world.animations.push(anchor);
-    let dimensions = PROP_COLLIDERS[kind];
+    // 图书馆桌子的正式模型沿深度方向更长，碰撞与替换后的外形保持一致。
+    let dimensions = config.id === 'library' && kind === 'table' ? [2, 3.9] : PROP_COLLIDERS[kind];
     if (anchor.userData.label) dimensions = [1, 1];
     if (dimensions) {
       const rotated = Math.abs(Math.sin(angle)) > .7;
