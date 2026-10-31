@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { createActor } from './actor.js';
 import { createRoadCar } from './road-car.js';
+import { createStoreProp } from './store-props.js';
 
 export const COLORS = { ink: '#34313e', stone: '#9da5a1', trim: '#ddd2b8', wood: '#947558', steel: '#657781', gold: '#d6ac69' };
 export const CHARACTER_NAMES = { red: '瑞德', brooks: '老布', guard: '狱警', warden: '典狱长', manager: '超市经理', clerk: '银行职员', tommy: '汤米', haywood: '海伍德', floyd: '弗洛伊德' };
@@ -179,9 +180,8 @@ export function makeProp(kind) {
   } else if (kind === 'postbox') {
     box(visual, 1.1, 1.7, .9, 0, .85, 0, '#8e6c5c'); box(visual, .7, .08, .03, 0, 1.25, .47, '#393d42');
   } else if (kind === 'mat') box(visual, 1.6, .07, 2.8, 0, .04, 0, '#8f8b73');
-  else if (kind === 'groceries') {
-    for (let i = 0; i < 4; i++) box(visual, .4, .4 + i * .12, .4, (i - 1.5) * .5, .2 + i * .06, 0, ['#d6c098', '#8fa49d', '#b18a6d', '#d8d2bc'][i]);
-  } else box(visual, kind === 'bag' ? .6 : 1, kind === 'bag' ? .9 : .5, .65, 0, kind === 'bag' ? .45 : .25, 0, '#b49d76');
+  else if (['groceries', 'bag'].includes(kind)) createStoreProp(visual, kind);
+  else box(visual, 1, .5, .65, 0, .25, 0, '#b49d76');
   const bounds = new THREE.Box3().setFromObject(visual);
   anchor.userData.targetHeight = Math.max(.1, bounds.max.y - bounds.min.y);
   return anchor;

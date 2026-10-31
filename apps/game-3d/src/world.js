@@ -40,6 +40,7 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     if (!includeCharacters && Object.hasOwn(CHARACTER_NAMES, kind)) return null;
     const anchor = makeProp(kind); anchor.position.set(x, 0, z); anchor.rotation.y = angle;
     if (['hammer', 'bible', 'books', 'ledger', 'letter', 'bag', 'groceries'].includes(kind)) anchor.position.y = 1.32;
+    if (config.id === 'supermarket' && ['bag', 'groceries'].includes(kind)) anchor.position.y = 1.35;
     root.add(anchor); world.anchors.push(anchor);
     if (anchor.userData.animate) world.animations.push(anchor);
     // 图书馆桌子的正式模型沿深度方向更长，碰撞与替换后的外形保持一致。
