@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { createActor } from './actor.js';
+import { createRoadCar } from './road-car.js';
 
 export const COLORS = { ink: '#34313e', stone: '#9da5a1', trim: '#ddd2b8', wood: '#947558', steel: '#657781', gold: '#d6ac69' };
 export const CHARACTER_NAMES = { red: '瑞德', brooks: '老布', guard: '狱警', warden: '典狱长', manager: '超市经理', clerk: '银行职员', tommy: '汤米', haywood: '海伍德', floyd: '弗洛伊德' };
@@ -155,7 +156,8 @@ export function makeProp(kind) {
   } else if (kind === 'oak') {
     cylinder(visual, .6, 4, 0, 2, 0, '#7f6650');
     for (let i = 0; i < 6; i++) sphere(visual, 1.8, Math.sin(i * 2) * 1.4, 4.8 + i % 2, Math.cos(i * 2) * 1.3, i % 2 ? '#8b9b71' : '#728665');
-  } else if (['bus', 'car', 'policeCar'].includes(kind)) vehicle(visual, kind);
+  } else if (kind === 'car') createRoadCar(visual);
+  else if (['bus', 'policeCar'].includes(kind)) vehicle(visual, kind);
   else if (kind === 'boat') {
     const hull = sphere(visual, 1, 0, .6, 0, '#a0805e'); hull.scale.set(1.35, .6, 3.3);
     box(visual, 2.1, .13, 5.2, 0, .95, 0, '#c4ad85');

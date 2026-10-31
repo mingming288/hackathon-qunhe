@@ -119,7 +119,7 @@ function refresh() {
       grouped.get(action.target).push(action);
     }
     for (const [target, actions] of grouped) {
-      interactions.unshift({ target, range: sceneId === 'bank' && target === 'clerk' ? 3.4 : undefined, priority: actions.some(action => action.id === task?.id) ? 2 : 1, label: actions.length > 1 ? '交谈与调查' : actions[0].label, run: () => {
+      interactions.unshift({ target, range: sceneId === 'beach' && target === 'boat' ? 4.2 : (sceneId === 'bank' && target === 'clerk') || (sceneId === 'road' && target === 'car') ? 3.4 : undefined, priority: actions.some(action => action.id === task?.id) ? 2 : 1, label: actions.length > 1 ? '交谈与调查' : actions[0].label, run: () => {
         if (actions.length === 1) perform(actions[0]);
         else { view.pause(); dialogue.open('选择交谈内容', ['选择“主线”推进故事。“可选线索”会影响结局，可以自行决定是否调查。'], actions.map(action => ({ label: (action.id === task?.id ? '主线：' : action.evidence || action.observed ? '可选线索：' : '') + action.label, primary: action.id === task?.id, run: () => perform(action) }))); }
       } });
