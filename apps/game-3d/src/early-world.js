@@ -3,6 +3,7 @@ import { createActor } from './actor.js';
 import { canStand } from './movement.js';
 import { practiceComplete } from './practice-state.js';
 import { block, bookModel, lettering, disposePracticeObject } from './practice-geometry.js';
+import { createPipeDamage } from './pipe-damage.js';
 
 // 玩法附件只引用现有物件和入口，不修改建筑、陈设数据或碰撞布局。
 export class EarlyWorld {
@@ -12,6 +13,8 @@ export class EarlyWorld {
     const anchors = view.world.anchors;
     const find = key => anchors.find(anchor => anchor.userData.assetKey === key);
     this.desk = find('desk'); this.bed = find('bed');
+    const pipe = find('pipeTarget');
+    if (pipe && view.world.config.id === 'pipe') this.pipeDamage = createPipeDamage(pipe);
     const radio = find('radio');
     if (radio) {
       const indicator = this.point('radioRepaired', radio);
@@ -46,6 +49,7 @@ export class EarlyWorld {
   interactions() { return []; }
   sync() {
     const game = this.getGame();
+    this.setPipeDamage(game.events.includes('smashPipe') ? 5 : (this.pipeDamageHits || 0));
     const wall = this.points.get('wallClue'); if (wall) wall.visible = game.step === 'inspectWall';
     const radio = this.points.get('radioRepaired'); if (radio) radio.visible = game.events.includes('repairRadio');
     if (this.cellBook) {
@@ -56,6 +60,8 @@ export class EarlyWorld {
       this.cellBook.userData.cover.rotation.y = 0;
     }
   }
+
+  setPipeDamage(hits) { this.pipeDamageHits = hits; this.pipeDamage?.setHits(hits); }
 
   guide(guide) {
     const game = this.getGame(), state = game.practice;
@@ -116,5 +122,8 @@ export class EarlyWorld {
       this.finish(check.unsafe ? 'riskInspection' : 'inspection');
     }
   }
-  dispose() { disposePracticeObject(this.root); }
+  dispose() {
+    if (this.pipeDamage) disposePracticeObject(this.pipeDamage.root);
+    disposePracticeObject(this.root);
+  }
 }

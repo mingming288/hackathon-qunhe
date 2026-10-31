@@ -15,7 +15,10 @@ export class EarlyPlay {
     this.savedAt = 0;
     this.games = new OriginalGameHost({
       notify,
-      onClose: () => view.canvas.focus(),
+      onClose: () => { view.stage?.setPipeDamage(getGame()?.events.includes('smashPipe') ? 5 : 0); view.stage?.sync(); view.canvas.focus(); },
+      onProgress: (id, state) => {
+        if (id === 'smashPipe') view.stage?.setPipeDamage(state.failed ? 0 : state.smashSuccessCount);
+      },
       finish: (id) => {
         // 超市原版包含收集、排序、三位顾客与请示，全部完成后再写入对应剧情事件。
         for (const task of completionTasks(id))
@@ -57,6 +60,10 @@ export class EarlyPlay {
     }
     if (ORIGINAL_GAMES[action.id]) {
       this.view.pause();
+      if (action.id === 'smashPipe') {
+        const pipe = this.view.anchor('pipeTarget'), hero = this.view.hero.position;
+        if (pipe) this.view.resetCamera(Math.atan2(hero.x - pipe.position.x, hero.z - pipe.position.z));
+      }
       this.games.open(action);
       return true;
     }

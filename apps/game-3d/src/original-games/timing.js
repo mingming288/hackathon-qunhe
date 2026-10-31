@@ -17,7 +17,7 @@ const COPY = {
     "等雷声亮起，再按住零点七秒，成功五次。每次雷声只能成功一次；静默时敲击会被发现。",
   ],
 };
-export function mountTiming(root, { kind, onComplete }) {
+export function mountTiming(root, { kind, onComplete, onProgress = () => {} }) {
   root.innerHTML =
     '<section class="original-timing"><h3></h3><p class="timing-copy"></p><canvas width="580" height="620"></canvas><p class="timing-status" role="status"></p><progress max="1" value="0"></progress><div><button class="timing-hold" type="button">按住空格或这里</button><button class="timing-retry" type="button" hidden>从本关检查点重试</button></div></section>';
   const box = root.firstElementChild,
@@ -35,7 +35,7 @@ export function mountTiming(root, { kind, onComplete }) {
   audio.volume = 0.5;
   let rules,
     patrol,
-    completed = false;
+    completed = false, lastProgress = "";
   const reset = () => {
     input.clear();
     patrol = createSoilPatrol(input);
@@ -47,6 +47,7 @@ export function mountTiming(root, { kind, onComplete }) {
         audio.play().catch(() => {});
       },
     });
+    lastProgress = "";
     retry.hidden = true;
     hold.hidden = false;
     hold.disabled = false;
@@ -104,6 +105,10 @@ export function mountTiming(root, { kind, onComplete }) {
     }
     input.endFrame();
     const state = rules.getState();
+    if (kind === "thunder") {
+      const key = `${state.smashSuccessCount}:${state.failed}:${state.done}`;
+      if (key !== lastProgress) { lastProgress = key; onProgress(state); }
+    }
     if (kind === "soil") draw();
     const value =
       kind === "dig"

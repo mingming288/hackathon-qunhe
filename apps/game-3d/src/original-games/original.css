@@ -104,7 +104,20 @@
 .original-timing.thunder-lit {
   background: radial-gradient(ellipse at top, #697e75, #223b35);
 }
+.original-dialog.thunder-mode { background: transparent; }
+.original-dialog.thunder-mode::backdrop { background: #0003; }
+.thunder-mode .original-viewport { display: flex; justify-content: flex-end; align-items: center; padding: 16px; box-sizing: border-box; }
+.thunder-mode .original-timing {
+  width: min(410px, 38vw); height: auto; max-height: 100%; padding: 22px;
+  border: 1px solid #8b9477; background: #151f1dec; box-shadow: 0 12px 45px #0009;
+}
+.thunder-mode .original-timing.thunder-lit { background: #3c554feF; }
+.thunder-mode .original-timing h3 { font-size: 21px; }
+.thunder-mode .original-timing .timing-status { font-size: 16px; }
+.thunder-mode .original-timing progress { width: 100%; }
 @media (max-width: 650px) {
+  .thunder-mode .original-viewport { align-items: flex-end; justify-content: center; padding: 8px; }
+  .thunder-mode .original-timing { width: min(100%, 420px); padding: 10px; gap: 6px; }
   .original-dialog > header {
     height: 56px;
     padding: 0 8px;
