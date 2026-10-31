@@ -641,7 +641,7 @@ function Ce({ status: e, onStart: t }) {
 		},
 		children: /* @__PURE__ */ (0, T.jsxs)("div", {
 			className: "pipe-intro__message",
-			children: [/* @__PURE__ */ (0, T.jsx)("p", { children: "在10秒内按住屏幕，沿地下水管持续拖动到出口；通关路线会保存为图纸。" }), /* @__PURE__ */ (0, T.jsx)("span", { children: "点击空白处开始" })]
+			children: [/* @__PURE__ */ (0, T.jsx)("p", { children: "在十秒内使用方向键或按住画面拖动，沿地下水管找到出口；通关路线会保存为图纸。" }), /* @__PURE__ */ (0, T.jsx)("span", { children: "点击或按空格开始" })]
 		})
 	}) : null;
 }
@@ -650,13 +650,13 @@ function we({ status: e, onRetry: t }) {
 		className: "pipe-timeout",
 		role: "button",
 		tabIndex: 0,
-		"aria-label": "时间到，点击重新尝试",
+		"aria-label": "时间到，点击或按空格重新尝试",
 		onPointerDown: (e) => {
 			e.button !== void 0 && e.button !== 0 || (e.preventDefault(), t());
 		},
 		children: /* @__PURE__ */ (0, T.jsxs)("div", {
 			className: "pipe-timeout__message",
-			children: [/* @__PURE__ */ (0, T.jsx)("p", { children: "时间到" }), /* @__PURE__ */ (0, T.jsx)("span", { children: "点击空白处重新尝试" })]
+			children: [/* @__PURE__ */ (0, T.jsx)("p", { children: "时间到" }), /* @__PURE__ */ (0, T.jsx)("span", { children: "点击或按空格重新尝试" })]
 		})
 	}) : null;
 }
@@ -730,7 +730,7 @@ function Ee({ status: e, blueprint: t }) {
 	});
 }
 function De() {
-	let e = (0, _.useMemo)(k, []), t = (0, _.useRef)(null), n = (0, _.useRef)(ie(e.seed)), r = (0, _.useRef)({ ...n.current.start }), i = (0, _.useRef)([{ ...n.current.start }]), a = (0, _.useRef)("ready"), o = (0, _.useRef)(!0), s = (0, _.useRef)(!1), c = (0, _.useRef)(TIME_LIMIT), l = (0, _.useRef)(null), u = (0, _.useRef)(!1), d = (0, _.useRef)(TIME_LIMIT), f = (0, _.useRef)(null), p = (0, _.useRef)(null), m = (0, _.useRef)(e.nextDestination), h = (0, _.useRef)(null), g = (0, _.useRef)(null), v = (0, _.useRef)(() => {}), y = (0, _.useRef)(() => {}), b = (0, _.useRef)(() => {}), x = (0, _.useRef)(() => {}), ee = (0, _.useRef)(() => {}), S = (0, _.useRef)(() => {}), [C, te] = (0, _.useState)("ready"), [ne, re] = (0, _.useState)(TIME_LIMIT), [w, ae] = (0, _.useState)(0), [se, le] = (0, _.useState)(null), [E, ve] = (0, _.useState)(!1), [ye, xe] = (0, _.useState)(!1), [De, Oe] = (0, _.useState)(!0), [ke, Ae] = (0, _.useState)("请阅读玩法说明，点击空白处开始。"), A = (0, _.useCallback)(() => {
+	let e = (0, _.useMemo)(k, []), t = (0, _.useRef)(null), n = (0, _.useRef)(ie(e.seed)), r = (0, _.useRef)({ ...n.current.start }), i = (0, _.useRef)([{ ...n.current.start }]), a = (0, _.useRef)("ready"), o = (0, _.useRef)(!0), s = (0, _.useRef)(!1), c = (0, _.useRef)(TIME_LIMIT), l = (0, _.useRef)(null), u = (0, _.useRef)(!1), d = (0, _.useRef)(TIME_LIMIT), f = (0, _.useRef)(null), p = (0, _.useRef)(null), m = (0, _.useRef)(e.nextDestination), h = (0, _.useRef)(null), g = (0, _.useRef)(null), v = (0, _.useRef)(() => {}), y = (0, _.useRef)(() => {}), b = (0, _.useRef)(() => {}), x = (0, _.useRef)(() => {}), ee = (0, _.useRef)(() => {}), S = (0, _.useRef)(() => {}), [C, te] = (0, _.useState)("ready"), [ne, re] = (0, _.useState)(TIME_LIMIT), [w, ae] = (0, _.useState)(0), [se, le] = (0, _.useState)(null), [E, ve] = (0, _.useState)(!1), [ye, xe] = (0, _.useState)(!1), [De, Oe] = (0, _.useState)(!0), [ke, Ae] = (0, _.useState)("请阅读玩法说明，点击或按空格开始。"), A = (0, _.useCallback)(() => {
 		let e = n.current;
 		return {
 			seed: e.seed,
@@ -776,7 +776,7 @@ function De() {
 		let t = !!e;
 		s.current = t, xe(t);
 	}, []), Pe = (0, _.useCallback)(() => {
-		!o.current || a.current !== "ready" || (a.current = "playing", l.current = performance.now(), c.current = TIME_LIMIT, re(TIME_LIMIT), te("playing"), Ae("计时开始，请按住屏幕沿管道持续拖动。"), je(440, .1), he("PIPE_MAZE_START", A()));
+		!o.current || a.current !== "ready" || (a.current = "playing", l.current = performance.now(), c.current = TIME_LIMIT, re(TIME_LIMIT), te("playing"), Ae("计时开始，请用方向键或按住画面拖动沿管道前进。"), je(440, .1), he("PIPE_MAZE_START", A()));
 	}, [A, je]);
 	v.current = Pe;
 	let Fe = (0, _.useCallback)(() => {
@@ -875,7 +875,7 @@ function De() {
 		let t = ie(e.seed ?? Date.now());
 		n.current = t, r.current = { ...t.start }, i.current = [{ ...t.start }], f.current = null, p.current = null, l.current = null, c.current = TIME_LIMIT, d.current = TIME_LIMIT, u.current = !1;
 		let o = e.start === !0 ? "playing" : "ready";
-		a.current = o, o === "playing" && (l.current = performance.now()), te(o), re(TIME_LIMIT), ae(0), le(null), ve(!1), Ae(o === "playing" ? "地图已回到起点，计时开始。" : "请阅读玩法说明，点击空白处开始。"), queueMicrotask(() => he("PIPE_MAZE_RESET", A()));
+		a.current = o, o === "playing" && (l.current = performance.now()), te(o), re(TIME_LIMIT), ae(0), le(null), ve(!1), Ae(o === "playing" ? "地图已回到起点，计时开始。" : "请阅读玩法说明，点击或按空格开始。"), queueMicrotask(() => he("PIPE_MAZE_RESET", A()));
 	}, [A]);
 	x.current = Ve, (0, _.useEffect)(() => {
 		let e = t.current.getContext("2d"), s = 0, d = TIME_LIMIT;
@@ -926,6 +926,10 @@ function De() {
 				event.preventDefault(), Pe();
 				return;
 			}
+			if (a.current === "timeout" && (event.key === " " || event.key === "Enter")) {
+				event.preventDefault(), Re();
+				return;
+			}
 			// 集成版的 WASD 已由主互动空间统一转发；组件再次处理会让一次
 			// keydown 沿两条路径各移动一步。独立版仍由组件直接处理。
 			t[key] && !e.embedded && (event.preventDefault(), Be(t[key])), key === "r" && Ie(), key === "m" && Ne(!s.current);
@@ -936,6 +940,7 @@ function De() {
 		Ie,
 		Ne,
 		Pe,
+		Re,
 		e.embedded
 	]);
 	let He = C === "playing" && ne <= 7;
@@ -958,7 +963,7 @@ function De() {
 					}),
 					/* @__PURE__ */ (0, T.jsxs)("div", {
 						className: "pipe-play-rule",
-						children: [/* @__PURE__ */ (0, T.jsx)("h1", { children: "按住屏幕拖动前进" }), /* @__PURE__ */ (0, T.jsx)("p", { children: "让路线跟随手指，25秒内找到出口" })]
+						children: [/* @__PURE__ */ (0, T.jsx)("h1", { children: "方向键或拖动前进" }), /* @__PURE__ */ (0, T.jsx)("p", { children: "十秒内沿管道找到出口" })]
 					}),
 					/* @__PURE__ */ (0, T.jsx)("button", {
 						type: "button",
@@ -1016,7 +1021,7 @@ function De() {
 				onLostPointerCapture: () => {
 					f.current = null;
 				},
-				"aria-label": "地下水管迷宫区域，按住屏幕沿管道持续拖动",
+				"aria-label": "地下水管迷宫区域，使用方向键或拖动画面移动",
 				children: /* @__PURE__ */ (0, T.jsxs)("div", {
 					className: "pipe-maze-frame",
 					children: [
@@ -1039,7 +1044,7 @@ function De() {
 				className: "pipe-game-footer",
 				children: [
 					/* @__PURE__ */ (0, T.jsx)("span", {}),
-					/* @__PURE__ */ (0, T.jsx)("p", { children: "按住屏幕沿管道持续拖动 · 绘制离开路线" }),
+					/* @__PURE__ */ (0, T.jsx)("p", { children: "方向键或拖动前进 · 绘制离开路线" }),
 					/* @__PURE__ */ (0, T.jsx)("span", {})
 				]
 			}),
