@@ -13,7 +13,7 @@ export function loadGame(storage) {
   const record = read(storage, GAME_KEY);
   if (!record) return null;
   const game = restoreGame(record);
-  const location = record.location;
+  const location = record.scene === game.scene ? record.location : null;
   return { game, location: location && Number.isFinite(location.x) && Number.isFinite(location.z) ? location : null };
 }
 

@@ -7,9 +7,11 @@ export const isAlternate = game => did(game, 'riskInspection');
 export const isLate = game => did(game, 'restYears') || did(game, 'sideYears');
 export const heroId = game => game.ending === 'one' || (game.ending === 'three' && did(game, 'threeBoat')) ? 'red' : 'andy';
 
-export function createGame() {
+function initialState() {
   return { step: 'watchTv', events: [], items: [], evidence: [], observed: [], ending: null, finished: null, scene: 'livingRoom' };
 }
+
+export function createGame() { return settle(initialState()).game; }
 
 export function resolveEnding(game) {
   if (game.evidence.length === 5 || (game.evidence.length >= 4 && game.observed.length >= 2)) return 'two';
@@ -22,7 +24,7 @@ export function getActions(game, scene) {
   const primary = getTask(game);
   if (primary?.scene === scene) result.push(primary);
   if (game.items.includes('hammer') && !did(game, 'hideHammer') && !isAlternate(game) && ['cell', 'yard'].includes(scene)) {
-    result.push({ id: 'riskInspection', scene, target: scene === 'cell' ? 'bed' : 'guard', label: '带着未藏好的石锤接受检查', lines: ['石锤没有藏好。继续接受检查，会被没收并进入另一条准备路线。'], next: 'sideReprimand', autoScene: 'yard', consume: ['hammer'] });
+    result.push({ id: 'riskInspection', scene, target: scene === 'cell' ? 'bed' : 'guard', label: '风险选择：不藏石锤，接受检查', confirmLabel: '确认接受检查，石锤将被没收', lines: ['石锤还没藏好。现在接受检查，石锤会被没收，安迪会被送进禁闭室。', '可以返回，先完成藏锤任务；也可以选择这条备用路线。'], next: 'sideReprimand', autoScene: 'yard', consume: ['hammer'] });
   }
   if (did(game, 'repairRadio') || did(game, 'sideBrooks')) {
     for (const [id, [place, name, label, lines]] of Object.entries(EVIDENCE)) {
@@ -37,7 +39,7 @@ export function getActions(game, scene) {
   return result;
 }
 
-export function advance(game, id, scene) {
+function applyAction(game, id, scene) {
   const action = getActions(game, scene).find(item => item.id === id);
   if (!action || did(game, id)) throw new Error('当前任务尚不允许这个操作。');
   const next = structuredClone(game); next.events.push(id); next.scene = scene;
@@ -58,6 +60,23 @@ export function advance(game, id, scene) {
   return { game: next, action };
 }
 
+// 自动事件仍逐项记入存档，但只展示合并后的场景和下一项有意义的操作。
+function settle(game) {
+  const automatic = [];
+  while (getTask(game)?.automatic) {
+    const action = getTask(game);
+    if (automatic.length >= TASK_BY_ID.size) throw new Error('自动剧情发生循环。');
+    game = applyAction(game, action.id, action.scene).game;
+    automatic.push(action);
+  }
+  return { game, automatic };
+}
+
+export function advance(game, id, scene) {
+  const result = applyAction(game, id, scene);
+  return { ...result, ...settle(result.game) };
+}
+
 export function travelRule(game, from, to) {
   if (game.finished) return '这段旅程已经结束，可在菜单重新开始或查看场景。';
   if (!SCENE_BY_ID.get(from)?.links.includes(to)) return '这两个地点没有直接通路。';
@@ -71,7 +90,7 @@ export function travelRule(game, from, to) {
   if (from === 'dig' && to === 'pipe' && !did(game, 'finalDig')) return '通道还没有贯通。';
   if (from === 'pipe' && to === 'pipeNetwork' && !did(game, 'smashPipe')) return '先借雷声敲开管道。';
   if (from === 'pipeNetwork' && to === 'rain' && step !== 'pipeExit') return '还没到离开管网的时候。';
-  if (to === 'library' && !did(game, 'meetBrooks') && !alternate) return '先到院子与老布交谈。';
+  if (to === 'library' && !did(game, 'meetBrooks') && !alternate) return '先帮院子里的瑞德修好收音机，图书馆入口就会开放。';
   if (to === 'office' && !did(game, 'drawMap') && !['sideSearch', 'sideHide', 'sideRecover'].includes(step)) return '现在还没有进入办公室的机会。';
   if (to === 'solitary' && !['sideStone', 'sideWait'].includes(step)) return '禁闭室的铁门从外面锁着。';
   if (from === 'solitary' && !did(game, 'sideWait')) return '铁门还没有打开。';
@@ -104,18 +123,19 @@ export function enterScene(game, to) {
 // 只持久化合法事件序列，恢复时重新推导道具、分支与任务，避免半更新存档造成软锁。
 export function restoreGame(record) {
   if (!record || record.version !== 1 || !Array.isArray(record.events) || record.events.length > 100) throw new Error('游戏记录格式不正确。');
-  let game = createGame();
+  // 先按旧顺序逐项重放，再合并当前的自动剧情，兼容优化前停在中间步骤的记录。
+  let game = initialState();
   for (const id of record.events) {
     if (typeof id !== 'string') throw new Error('任务事件格式不正确。');
     const source = TASK_BY_ID.get(id)?.scene || (id === 'riskInspection' ? 'cell' : id.startsWith('evidence:') ? EVIDENCE[id.slice(9)]?.[0] : id.startsWith('observe:') ? 'yard' : null);
     if (!source) throw new Error('记录含未知任务。');
-    game = advance(game, id, source).game;
+    game = applyAction(game, id, source).game;
   }
   if (!SCENE_BY_ID.has(record.scene)) throw new Error('记录含未知场景。');
   // 允许保存于已到达的正常区域；任务中的自动转场仍由已重放的事件决定。
   if (!sceneAccessible(game, record.scene)) throw new Error('记录中的场景尚未解锁。');
   game.scene = record.scene;
-  return game;
+  return settle(game).game;
 }
 
 export function sceneAccessible(game, target) {

@@ -8,6 +8,7 @@ import { createWorld, disposeWorld } from '../src/world.js';
 import { canStand } from '../src/movement.js';
 import { GAME_KEY, saveGame, loadGame, savePreview } from '../src/save.js';
 import { entryPosition } from '../src/navigation.js';
+import { guidanceFor } from '../src/guidance.js';
 
 function walk(game, target) {
   for (let count = 0; game.scene !== target; count++) {
@@ -24,14 +25,20 @@ function act(game, id = getTask(game).id) {
   const result = advance(game, id, game.scene).game;
   assert.deepEqual(game, before, '状态更新不得改写旧快照');
   assert.deepEqual(restoreGame({ version: 1, events: result.events, scene: result.scene }), result, '每个检查点应能恢复一致的任务和道具');
+  const guide = guidanceFor(result);
+  assert.ok(guide.title && guide.purpose, '任务应说明目标和目的');
+  if (!result.finished) {
+    assert.equal(getTask(result).automatic, false, '自动过程不能再要求玩家逐次确认');
+    assert.ok(guide.target && guide.place && guide.action.includes('空格'), result.step + ' 应有可达目标、位置和明确操作');
+  }
   return result;
 }
 function play({ evidence = [], observed = false, alternate = false } = {}) {
   let game = createGame(), collected = false, branched = false;
   for (let count = 0; !game.finished; count++) {
     assert.ok(count < 80, '剧情未能结束');
-    if (alternate && !branched && game.step === 'meetBrooks') { game = act(game, 'riskInspection'); branched = true; }
-    if (!collected && game.step === (alternate ? 'sideRest' : 'hideHammer')) {
+    if (alternate && !branched && game.step === 'sortBooks') { game = act(game, 'riskInspection'); branched = true; }
+    if (!collected && game.step === (alternate ? 'sideSearch' : 'hideHammer')) {
       for (const id of evidence) game = act(game, 'evidence:' + id);
       if (observed) { game = act(game, 'observe:nightTruck'); game = act(game, 'observe:dates'); }
       collected = true;
@@ -63,8 +70,37 @@ test('任务前置条件不可跳过，未知或重复事件不能恢复为有�
   assert.throws(() => restoreGame({ version: 1, events: ['watchTv', 'watchTv'], scene: 'yard' }));
   assert.throws(() => restoreGame({ version: 1, events: ['unknown'], scene: 'cell' }));
   assert.throws(() => restoreGame({ version: 1, events: [], scene: 'beach' }));
-  game = advance(game, 'watchTv', 'livingRoom').game;
-  assert.equal(getActions(game, 'yard')[0].id, 'arrival');
+  assert.equal(getActions(game, 'yard')[0].id, 'meetRed');
+});
+
+test('开场直接给出找瑞德的目标，图书馆和领物无需重复交谈', () => {
+  let game = createGame();
+  assert.equal(game.scene, 'cell'); assert.equal(game.step, 'meetRed');
+  assert.equal(guidanceFor(game).target, 'exit:cellCorridor');
+  assert.match(guidanceFor(game).place, /安迪的牢房 → 监区走廊 → 院子与监狱大门/);
+  game = act(game); game = act(game);
+  assert.equal(game.step, 'sortBooks'); assert.equal(travelRule(game, 'yard', 'library'), null);
+  assert.equal(guidanceFor(game).target, 'exit:library');
+  game = act(game);
+  assert.equal(game.step, 'hideHammer'); assert.ok(game.items.includes('bible'));
+  game = act(game);
+  assert.equal(game.step, 'askPoster'); assert.ok(game.events.includes('inspection'));
+  for (const id of ['askPoster', 'hangPoster', 'firstDig', 'dumpSoil1']) game = act(game, id);
+  assert.equal(game.step, 'drawMap'); assert.equal(game.scene, 'cell');
+  assert.ok(!game.items.includes('soil')); assert.ok(game.events.includes('restYears'));
+});
+
+test('旧存档停在醒来或找老布时，保留进度并自动衔接新流程', () => {
+  const opening = { version: 1, events: ['watchTv', 'arrival'], scene: 'operatingRoom', location: { x: 1, z: 5 } };
+  const storage = { getItem: () => JSON.stringify(opening) };
+  const restored = loadGame(storage);
+  assert.equal(restored.game.step, 'meetRed'); assert.equal(restored.game.scene, 'cell');
+  assert.equal(restored.location, null, '跨场景衔接不能沿用旧房间的位置');
+  const library = { version: 1, events: ['watchTv', 'arrival', 'wakeMedical', 'wakeCell', 'meetRed', 'repairRadio'], scene: 'yard', location: { x: 3, z: -2 } };
+  const saved = loadGame({ getItem: () => JSON.stringify(library) });
+  assert.equal(saved.game.step, 'sortBooks'); assert.ok(saved.game.items.includes('hammer'));
+  assert.equal(travelRule(saved.game, 'yard', 'library'), null);
+  assert.deepEqual(saved.location, library.location, '仍在原场景时保留玩家位置');
 });
 test('场景查看记录不会覆盖正式游戏的事件、场景与位置', () => {
   const values = new Map(), storage = { getItem: key => values.get(key) || null, setItem: (key, value) => values.set(key, value) };

@@ -6,7 +6,7 @@ import { Dialogue } from './dialogue.js';
 import { createGame, getTask, getActions, advance, enterScene, travelRule, heroId, did } from './story.js';
 import { ITEM_NAMES } from './story-data.js';
 import { loadGame, saveGame, backupGame, loadPreview, savePreview } from './save.js';
-import { nextDoor } from './routes.js';
+import { guidanceFor } from './guidance.js';
 
 const $ = id => document.getElementById(id);
 const atlas = $('atlas'), menu = $('menu');
@@ -45,10 +45,12 @@ function perform(action) {
   dialogue.task(action, () => {
     try {
       const previousScene = game.scene;
-      game = advance(game, action.id, sceneId).game;
+      const result = advance(game, action.id, sceneId);
+      game = result.game;
       if (game.scene !== previousScene || view.heroId !== heroId(game)) renderScene(game.scene);
       else { refresh(); saveCurrent(); }
-      if (action.result) notify(action.result);
+      const message = result.automatic.findLast(item => item.result)?.result || action.result;
+      if (message) notify(message);
       if (game.finished) {
         dialogue.open('结局 · ' + game.finished, action.lines, [
           { label: '返回游戏菜单', run: openMenu },
@@ -65,7 +67,7 @@ function travel(target) {
   try {
     game = enterScene(game, target);
     renderScene(game.scene, { from });
-  } catch (error) { dialogue.open('暂时不能进入', [error.message]); view.pause(); }
+  } catch (error) { dialogue.open('这条路暂未开放', [error.message, guidanceFor(game).action]); view.pause(); }
 }
 
 function refresh() {
@@ -76,17 +78,20 @@ function refresh() {
   $('build-note').textContent = mode === 'game' ? '剧情贯通版 · 简化交互与基础模型' : '自由查看十九处空间与待替换资产';
   $('quest').hidden = mode !== 'game';
   const interactions = [], rules = {};
-  let goal = null, hidden = [];
+  let goal = null, goalLabel = '', hidden = [];
   for (const portal of view.world.portals) {
     rules[portal.id] = mode === 'game' ? travelRule(game, sceneId, portal.id) : null;
     interactions.push({ target: 'exit:' + portal.id, label: (rules[portal.id] ? '查看入口 · ' : '前往 ') + portal.name, run: () => travel(portal.id), range: 2.2 });
   }
   if (mode === 'game') {
     const task = getTask(game);
-    $('quest-title').textContent = game.finished ? '旅程结束 · ' + game.finished : task.label;
-    $('quest-place').textContent = game.finished ? '可返回菜单或自由查看场景' : (task.scene === sceneId ? '就在这个场景 · 靠近金色标记' : '前往 ' + SCENE_BY_ID.get(task.scene).name);
+    const guide = guidanceFor(game);
+    $('quest-title').textContent = guide.title;
+    $('quest-purpose').textContent = '目的：' + guide.purpose;
+    $('quest-place').textContent = guide.place;
+    $('quest-action').textContent = guide.action;
     $('inventory').textContent = '随身物品：' + (game.items.map(id => ITEM_NAMES[id]).join('、') || '暂无');
-    $('evidence-count').textContent = '直接线索 ' + game.evidence.length + '/5 · 旁听记录 ' + game.observed.length + '/2';
+    $('evidence-count').textContent = '可选调查（影响结局）：线索 ' + game.evidence.length + '/5 · 旁听 ' + game.observed.length + '/2';
     const grouped = new Map();
     for (const action of getActions(game, sceneId)) {
       if (!grouped.has(action.target)) grouped.set(action.target, []);
@@ -95,10 +100,10 @@ function refresh() {
     for (const [target, actions] of grouped) {
       interactions.unshift({ target, priority: actions.some(action => action.id === task?.id) ? 2 : 1, label: actions.length > 1 ? '交谈与调查' : actions[0].label, run: () => {
         if (actions.length === 1) perform(actions[0]);
-        else { view.pause(); dialogue.open('选择交谈内容', ['可以推进当前任务，也可以继续追问线索。'], actions.map(action => ({ label: action.label, run: () => perform(action) }))); }
+        else { view.pause(); dialogue.open('选择交谈内容', ['选择“主线”推进故事。“可选线索”会影响结局，可以自行决定是否调查。'], actions.map(action => ({ label: (action.id === task?.id ? '主线：' : action.evidence || action.observed ? '可选线索：' : '') + action.label, primary: action.id === task?.id, run: () => perform(action) }))); }
       } });
     }
-    if (task && !game.finished) goal = task.scene === sceneId ? task.target : 'exit:' + nextDoor(game, task.scene);
+    goal = guide.target; goalLabel = guide.marker;
     if (sceneId === 'cell') {
       if (!game.items.includes('hammer') || did(game, 'hideHammer')) hidden.push('hammer');
       if (!game.items.includes('bible')) hidden.push('bible');
@@ -110,7 +115,7 @@ function refresh() {
       run: () => dialogue.open(anchor.userData.label, ['此处为独立的场景查看。人物和道具可逐件替换为正式模型，正式游戏进度保持不变。'])
     });
   }
-  view.configure({ interactions, goal, portalRules: rules, hidden });
+  view.configure({ interactions, goal, goalLabel, portalRules: rules, hidden });
 }
 
 function openAtlas() {
@@ -134,7 +139,7 @@ function resume() {
 }
 function startNew() {
   store(() => backupGame(storage)); game = createGame(); gameLocation = null; mode = 'game'; menu.close();
-  renderScene(game.scene); notify('靠近电视并互动，开始这段故事。');
+  renderScene(game.scene); notify('入狱的第一天：先出牢房，穿过监区走廊，到院子找瑞德。');
 }
 function buildAtlas() {
   for (const chapter of CHAPTERS) {

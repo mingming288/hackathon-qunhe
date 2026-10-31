@@ -17,9 +17,10 @@ dialog{border:1px solid #89917c66;border-radius:5px;background:var(--paper);colo
 @media(pointer:coarse){.touch-controls{display:grid}.controls>span:not(.build-note){display:none}.build-note{margin-left:0}.interaction{bottom:76px}}
 @media(max-width:700px){.masthead{padding:18px}.brand strong{font-size:19px}.brand div>span{font-size:8px}.brand-mark{font-size:22px;padding:5px}.top-actions{gap:5px}.top-actions button{font-size:10px;padding:10px}.top-actions span{margin-left:5px;font-size:9px}#camera-reset{display:none}.scene-caption{left:20px;bottom:90px;max-width:240px}.scene-caption p{font-size:10px;max-width:220px}.scene-status{font-size:8px;margin-top:12px}.scene-caption h1{font-size:27px}.controls{padding:20px;font-size:9px;gap:12px}.controls .build-note{display:none}.scene-grid{grid-template-columns:repeat(2,1fr)}#atlas{padding:23px 20px}.scene-grid button{padding:12px;grid-template-columns:18px 1fr;gap:6px}.scene-grid small{font-size:9px}.scene-grid strong{font-size:11px}.interaction{font-size:10px;max-width:90vw;padding:12px 15px}.touch-controls{right:17px;bottom:25px}.notice{top:83px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
-.quest-panel{position:fixed;top:108px;right:30px;width:min(320px,35vw);padding:18px 21px;background:#f5efdfdf;border-top:2px solid #b89c62;backdrop-filter:blur(8px);pointer-events:none;z-index:3}
+.quest-panel{position:fixed;top:108px;right:30px;width:min(355px,35vw);max-height:calc(100dvh - 180px);overflow:auto;padding:18px 21px;background:#f5efdfef;border-top:2px solid #b89c62;backdrop-filter:blur(8px);pointer-events:none;z-index:3}
 .quest-panel h2{font:500 16px/1.6 "PingFang SC","Microsoft YaHei",sans-serif;letter-spacing:0;margin:9px 0}
-.quest-panel p{font-size:11px;line-height:1.7;color:#647168;margin:6px 0}
+.quest-panel p{font-size:12px;line-height:1.8;color:#526255;margin:8px 0}
+#quest-purpose{font-size:11px;color:#748071}#quest-action{padding:9px 10px;background:#e2d5ac66;border-left:2px solid #b89c62;color:#344e3d}
 #inventory{padding-top:10px;border-top:1px solid #a4ae9640}#evidence-count{font-size:10px}
 .goal-label{background:#d9b975f0;border-color:#9e7f42;color:#3f4e42;font-weight:600}
 #menu{width:min(470px,90vw);padding:38px 42px}
