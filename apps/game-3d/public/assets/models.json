@@ -24,6 +24,7 @@
     "solitary:mat": { "url": "/assets/models/solitary-mat.glb", "normalize": false },
     "solitary:stone": { "url": "/assets/models/solitary-inscribed-stone.glb", "normalize": false },
     "yard-architecture": { "url": "/assets/models/yard-rebuilt.glb", "normalize": false },
+    "yard:soilSpot": { "url": "/assets/models/rubble.glb", "height": 0.6 },
     "yard:bench": { "url": "/assets/models/yard-bench.glb", "normalize": false },
     "yard:radio": { "url": "/assets/models/yard-radio.glb", "normalize": false },
     "operatingRoom-architecture": { "url": "/assets/models/operatingroom-shell.glb", "normalize": false },
