@@ -140,3 +140,22 @@ test('无动作的骨骼人物可共享待机动作，且不继承其他人物�
   assert.ok(Math.abs(posed.quaternion.z) > .5, '共享动作驱动关节旋转');
   assert.equal(load.mock.calls.filter(call => call.arguments[0].endsWith('shared-idle.glb')).length, 1);
 });
+
+test('共享待机动作加载失败时保留人物模型，并在重新进入时重试', async context => {
+  const source = new THREE.Group(); source.add(new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1)));
+  let attempts = 0;
+  context.mock.method(GLTFLoader.prototype, 'loadAsync', async url => {
+    if (url.endsWith('retry-shared-idle.glb')) {
+      if (++attempts === 1) throw new Error('待机动作失败');
+      return { scene: new THREE.Group(), animations: [new THREE.AnimationClip('idle', 1, [])] };
+    }
+    return { scene: source, animations: [] };
+  });
+  const target = anchor(), entry = { url: '/assets/models/actor-idle-retry.glb', idleUrl: '/assets/models/retry-shared-idle.glb' };
+  await assert.rejects(replaceAsset(target, entry), /待机动作失败/);
+  assert.equal(target.userData.placeholder.visible, false);
+  assert.equal(target.children.length, 2, '人物已显示，无需退回基础形象');
+  assert.ok(await replaceAsset(target, entry));
+  assert.equal(attempts, 2);
+  assert.equal(target.children.length, 2);
+});

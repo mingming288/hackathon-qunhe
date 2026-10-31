@@ -99,3 +99,25 @@ test('替换模型限定本应用路径，并拒绝不合法尺寸', () => {
   }
   assert.throws(() => validateModelEntry({ url: '/assets/models/a.glb', height: -1 }));
 });
+
+test('各场景中的主线互动目标可以从出生点走近', async () => {
+  const { TASKS } = await import('../src/story-data.js');
+  for (const config of SCENES) {
+    const world = createWorld(config), step = .5, queue = [[...config.spawn]], visited = new Set(['0:0']);
+    for (let i = 0; i < queue.length; i++) {
+      const [x, z] = queue[i];
+      for (const [dx, dz] of [[step, 0], [-step, 0], [0, step], [0, -step]]) {
+        const nx = x + dx, nz = z + dz;
+        const key = Math.round((nx - config.spawn[0]) / step) + ':' + Math.round((nz - config.spawn[1]) / step);
+        if (!visited.has(key) && canStand(nx, nz, config.size, world.colliders)) { visited.add(key); queue.push([nx, nz]); }
+      }
+    }
+    for (const task of TASKS.filter(task => task.scene === config.id && !task.automatic && !task.target.startsWith('exit:'))) {
+      // 砂浆裂缝由运行时挂在海报位置生成。
+      const target = world.anchors.find(anchor => anchor.userData.assetKey === (task.target === 'wallClue' ? 'poster' : task.target));
+      assert.ok(target, `${task.id} 缺少互动目标`);
+      assert.ok(queue.some(([x, z]) => Math.hypot(x - target.position.x, z - target.position.z - (task.target === 'wallClue' ? .28 : 0)) < 2.7), `${task.id} 无法走近`);
+    }
+    disposeWorld(world);
+  }
+});
