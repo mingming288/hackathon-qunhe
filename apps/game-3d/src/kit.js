@@ -44,6 +44,35 @@ function shelf(group) {
   }
 }
 
+function curtain(group) {
+  const width = 2.65, height = 3.45, segments = 64, rows = 10;
+  const positions = [], uvs = [], indices = [];
+  for (let row = 0; row <= rows; row++) {
+    const v = row / rows, y = .08 + v * height;
+    for (let column = 0; column <= segments; column++) {
+      const u = column / segments, x = (u - .5) * width;
+      const fold = Math.sin(u * Math.PI * 16) * (.065 + .025 * (1 - v));
+      positions.push(x, y, fold); uvs.push(u, v);
+      if (row && column) {
+        const a = (row - 1) * (segments + 1) + column - 1, b = a + segments + 1;
+        indices.push(a, a + 1, b, a + 1, b + 1, b);
+      }
+    }
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+  geometry.setIndex(indices); geometry.computeVertexNormals();
+  const fabric = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ color: '#625849', roughness: 1, side: THREE.DoubleSide }));
+  fabric.castShadow = fabric.receiveShadow = true; group.add(fabric);
+  const rod = new THREE.Mesh(new THREE.CylinderGeometry(.055, .055, 3, 16), new THREE.MeshStandardMaterial({ color: '#66543a', metalness: .6, roughness: .55 }));
+  rod.rotation.z = Math.PI / 2; rod.position.set(0, 3.63, 0); rod.castShadow = true; group.add(rod);
+  for (let i = 0; i < 9; i++) {
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(.085, .012, 6, 12), new THREE.MeshStandardMaterial({ color: '#8a7149', metalness: .6, roughness: .55 }));
+    ring.position.set(-1.2 + i * .3, 3.58, 0); ring.rotation.y = Math.PI / 2; group.add(ring);
+  }
+}
+
 function bookStack(group) {
   const covers = ['#51413a', '#756049', '#495a53', '#774e3c'];
   for (let i = 0; i < covers.length; i++) {
@@ -102,8 +131,7 @@ export function makeProp(kind) {
     box(visual, evidence ? 2.95 : 1.6, 2.38, .03, 0, 1.75, .08, kind === 'poster' ? '#b98d70' : '#d9cdab');
     for (let i = 0; i < 4; i++) box(visual, .55, .65, .02, (i % 2 - .5) * .75, 1.2 + Math.floor(i / 2) * .9, .11, ['#9fae9d', '#d7b97a'][i % 2]);
   } else if (kind === 'curtain') {
-    for (let i = 0; i < 8; i++) box(visual, .34, 3.6, .2 + i % 2 * .15, (i - 3.5) * .32, 1.8, 0, i % 2 ? '#777e79' : '#8b9387');
-    box(visual, 3, .12, .15, 0, 3.7, 0, COLORS.gold);
+    curtain(visual);
   } else if (kind === 'safe') {
     box(visual, 1.8, 1.9, 1.3, 0, .95, 0, '#66747a');
     box(visual, 1.6, 1.7, .12, 0, .95, .71, '#8c9997');
