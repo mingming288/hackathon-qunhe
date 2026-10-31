@@ -1,0 +1,219 @@
+{
+  "schema": "beyond-walls.model-results/v1",
+  "batch": "branch-endings-shells-v1",
+  "generatedAt": "2026-10-31T08:45:53.146448+00:00",
+  "sourceGenerationComplete": true,
+  "sourceModels": 9,
+  "fileChecksPassed": 9,
+  "visualChecksPerformed": 9,
+  "userAppearanceApprovalRequired": true,
+  "appearanceApproved": false,
+  "gameIntegrationStatus": "not_started",
+  "styleCriteria": "整体按旧式监狱题材的漫画风格审阅：厚重石墙、旧水泥、锈铁门窗、冷灰灰绿、低饱和与旧化质感；保留原剧情结局地点。",
+  "estimatedCreditsCommitted": 117,
+  "settledCredits": "not_available",
+  "retriesSubmitted": 0,
+  "items": [
+    {
+      "id": "solitary-architecture",
+      "name": "禁闭室 · 环境主体",
+      "taskId": "4522495",
+      "region": "cn",
+      "providerStatus": 3,
+      "artifact": "assets/solitary-architecture-a1/glb.glb",
+      "sha256": "424288b0fe83ccdfafc22b2ea7ec71d9d5bb6902c257e7a2c3bc4f2e0b4908f5",
+      "bytes": 9524640,
+      "targetFaces": 50000,
+      "measuredTriangles": 47963,
+      "fileValidated": true,
+      "previewLoaded": true,
+      "appearanceApproved": false,
+      "gameIntegrated": false,
+      "observations": [
+        "可见厚石墙、铁门、铁窗和房间地面。",
+        "屋顶敞开，表面为灰绿与赭黄的漫画式石材。"
+      ],
+      "limitations": [
+        "原始比例与入口朝向仍需按游戏尺寸校准。"
+      ]
+    },
+    {
+      "id": "operatingRoom-architecture",
+      "name": "异常支线 · 手术室 · 环境主体",
+      "taskId": "4522493",
+      "region": "cn",
+      "providerStatus": 3,
+      "artifact": "assets/operatingRoom-architecture-a1/glb.glb",
+      "sha256": "68d7da26bee5e692af91e11295051c4a45f7dd59ce99d2fb5a4585950376ad9b",
+      "bytes": 8374000,
+      "targetFaces": 60000,
+      "measuredTriangles": 58658,
+      "fileValidated": true,
+      "previewLoaded": true,
+      "appearanceApproved": false,
+      "gameIntegrated": false,
+      "observations": [
+        "空房间主体，有地砖、灰绿墙面、瓷砖墙裙与两个门口。",
+        "未将手术台、设备车和人物焊接到房间内。"
+      ],
+      "limitations": [
+        "当前为敞开的墙角式房间展示，实际门洞坐标和房间围合需接入时校准。"
+      ]
+    },
+    {
+      "id": "oak-architecture",
+      "name": "石墙尽头的橡树 · 环境主体",
+      "taskId": "4522549",
+      "region": "cn",
+      "providerStatus": 3,
+      "artifact": "assets/oak-architecture-a1/glb.glb",
+      "sha256": "f8479721a3c636faec30b9aba9dd14f033e7d03e9dc954951710c51dc7dba198",
+      "bytes": 8007340,
+      "targetFaces": 60000,
+      "measuredTriangles": 59834,
+      "fileValidated": true,
+      "previewLoaded": true,
+      "appearanceApproved": false,
+      "gameIntegrated": false,
+      "observations": [
+        "有地形、旧石墙与平缓土路，树木、铁盒和人物保持独立。"
+      ],
+      "limitations": [
+        "地形体块和石墙比例尚未按游戏米制尺寸校准。"
+      ]
+    },
+    {
+      "id": "road-architecture",
+      "name": "公路与边境小镇 · 环境主体",
+      "taskId": "4522623",
+      "region": "cn",
+      "providerStatus": 3,
+      "artifact": "assets/road-architecture-a1/glb.glb",
+      "sha256": "cb1a35453f743b89fdc91234b19578b47d0f199ed753799d19fa278932265f16",
+      "bytes": 9733480,
+      "targetFaces": 80000,
+      "measuredTriangles": 78795,
+      "fileValidated": true,
+      "previewLoaded": true,
+      "appearanceApproved": false,
+      "gameIntegrated": false,
+      "observations": [
+        "可见连续车道与两侧建筑外观。"
+      ],
+      "limitations": [
+        "材质和圆钝体块偏明亮、摆件化；前景白色体块用途需复核。"
+      ]
+    },
+    {
+      "id": "beach-architecture",
+      "name": "海滩与修船区 · 环境主体",
+      "taskId": "4522657",
+      "region": "cn",
+      "providerStatus": 3,
+      "artifact": "assets/beach-architecture-a1/glb.glb",
+      "sha256": "9879aa0d282639fb9b3198f8200bac1c469980743ec9518d35a90b5dd0e8d6cf",
+      "bytes": 8729684,
+      "targetFaces": 60000,
+      "measuredTriangles": 59262,
+      "fileValidated": true,
+      "previewLoaded": true,
+      "appearanceApproved": false,
+      "gameIntegrated": false,
+      "observations": [
+        "有沙地、岸线与修船区的视觉元素。"
+      ],
+      "limitations": [
+        "服务返回了额外工作棚和陈设，并与地形融合；不符合本批只做地形、道具分离的约定，需要拆分或重做。",
+        "色彩偏暖且摆件化，需按监狱题材整体材质风格重新确认。"
+      ]
+    },
+    {
+      "id": "supermarket-architecture",
+      "name": "瑞德工作的超市 · 环境主体",
+      "taskId": "4522706",
+      "region": "cn",
+      "providerStatus": 3,
+      "artifact": "assets/supermarket-architecture-a1/glb.glb",
+      "sha256": "a7f2b38b2cea06ed90359884935bd316140d3289ff3f8791e27d1968d25ffcc0",
+      "bytes": 9159056,
+      "targetFaces": 60000,
+      "measuredTriangles": 58703,
+      "fileValidated": true,
+      "previewLoaded": true,
+      "appearanceApproved": false,
+      "gameIntegrated": false,
+      "observations": [
+        "空商店主体，具备地面、玻璃门窗与墙体；未包含货架与商品。"
+      ],
+      "limitations": [
+        "黄边和明亮墙面仍需根据统一监狱漫画风格旧化。"
+      ]
+    },
+    {
+      "id": "bank-architecture",
+      "name": "新身份 · 银行柜台 · 环境主体",
+      "taskId": "4522730",
+      "region": "cn",
+      "providerStatus": 3,
+      "artifact": "assets/bank-architecture-a1/glb.glb",
+      "sha256": "289643332cb96091b9ae7fb4fe71918260b40184458c44e71b390a207330d0a1",
+      "bytes": 9395432,
+      "targetFaces": 60000,
+      "measuredTriangles": 59518,
+      "fileValidated": true,
+      "previewLoaded": true,
+      "appearanceApproved": false,
+      "gameIntegrated": false,
+      "observations": [
+        "可见柱式墙体、窗洞、门口和室内地面，柜台与人物未融合进主体。"
+      ],
+      "limitations": [
+        "开口、比例与游戏入口坐标尚未校准，旧化程度待用户确认。"
+      ]
+    },
+    {
+      "id": "evidence-architecture",
+      "name": "名单、证据与寄出的信 · 环境主体",
+      "taskId": "4522773",
+      "region": "cn",
+      "providerStatus": 3,
+      "artifact": "assets/evidence-architecture-a1/glb.glb",
+      "sha256": "9b75b53ea7ba97d7296d2817bc7db31fd2e592255e7dac117d4290ab0d8aa052",
+      "bytes": 9842696,
+      "targetFaces": 50000,
+      "measuredTriangles": 48450,
+      "fileValidated": true,
+      "previewLoaded": true,
+      "appearanceApproved": false,
+      "gameIntegrated": false,
+      "observations": [
+        "可见旧办公室房间空壳、地面、窗户和门口；未融合书桌、证据板与文件。"
+      ],
+      "limitations": [
+        "房间围合、门洞和镜头视野需接入时核对。"
+      ]
+    },
+    {
+      "id": "medicalExterior-architecture",
+      "name": "追查与抓捕现场 · 环境主体",
+      "taskId": "4522774",
+      "region": "cn",
+      "providerStatus": 3,
+      "artifact": "assets/medicalExterior-architecture-a1/glb.glb",
+      "sha256": "c7671a3682daa45f3d020171c8c3ec7c21e656130418cc792c289f4f9b5f51ea",
+      "bytes": 9284188,
+      "targetFaces": 80000,
+      "measuredTriangles": 77977,
+      "fileValidated": true,
+      "previewLoaded": true,
+      "appearanceApproved": false,
+      "gameIntegrated": false,
+      "observations": [
+        "有医疗机构楼块、外围矮墙、入口和开放院地；未生成警车和人物。"
+      ],
+      "limitations": [
+        "黄色楼块和圆钝轮廓偏明亮、摆件化，监狱机构的厚重、锈蚀与旧化感不足。"
+      ]
+    }
+  ]
+}
