@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-31T16:01:05.072Z",
+  "generatedAt": "2026-10-31T16:08:16.943Z",
   "notes": [
     "只读统计当前清单和模型文件，配置成功不代表视觉验收通过。",
     "场景统计包含配置的全部道具，含剧情隐藏物件；不包含程序基础几何和主角，也不是每帧实测面数。",
@@ -10,16 +10,16 @@
   "summary": {
     "configuredSlots": 22,
     "uniqueFiles": 22,
-    "totalBytes": 315973368,
-    "totalFileTriangles": 3790957
+    "totalBytes": 272218204,
+    "totalFileTriangles": 2995789
   },
   "entries": {
     "cell-architecture": {
-      "url": "/assets/models/cell-shell.glb",
+      "url": "/assets/models/cell-rebuilt.glb",
       "normalize": false
     },
     "library-architecture": {
-      "url": "/assets/models/library-shell.glb",
+      "url": "/assets/models/library-rebuilt.glb",
       "normalize": false
     },
     "solitary-architecture": {
@@ -27,7 +27,7 @@
       "normalize": false
     },
     "yard-architecture": {
-      "url": "/assets/models/yard-shell.glb",
+      "url": "/assets/models/yard-rebuilt.glb",
       "normalize": false
     },
     "operatingRoom-architecture": {
@@ -104,56 +104,96 @@
     }
   },
   "files": {
-    "/assets/models/cell-shell.glb": {
-      "bytes": 20288360,
-      "sha256": "099cf5642ed5d9d428926a4f9e1fe60a53771bd463e8813e7770fbb8d1636103",
-      "triangles": 298873,
-      "meshInstances": 1,
-      "primitiveInstances": 1,
+    "/assets/models/cell-rebuilt.glb": {
+      "bytes": 5458780,
+      "sha256": "52748be5b0a357bdaa67b887336e386226500cfc3c3df76a1273ac2a52ad7abb",
+      "triangles": 180,
+      "meshInstances": 15,
+      "primitiveInstances": 15,
       "bounds": {
         "min": [
-          -8.412452697753906,
-          -0.16254541277885437,
-          -7.72920036315918
+          -6.400000095367432,
+          -0.23999999463558197,
+          -6.449999809265137
         ],
         "max": [
-          7.287847518920898,
-          4.043208122253418,
-          7.730421543121338
+          6.400000095367432,
+          4,
+          6.449999809265137
         ],
         "size": [
-          15.700300216674805,
-          4.205753535032272,
-          15.459621906280518
+          12.800000190734863,
+          4.239999994635582,
+          12.899999618530273
         ]
       },
       "materials": [
         {
-          "name": "Material_0",
+          "name": "磨损石板地面",
           "baseColor": true,
-          "normal": false,
+          "normal": true,
           "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        },
+        {
+          "name": "旧石块墙面",
+          "baseColor": true,
+          "normal": true,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        },
+        {
+          "name": "旧铁",
+          "baseColor": false,
+          "normal": false,
+          "metallicRoughness": false,
           "occlusion": false,
           "unlit": false
         }
       ],
       "textures": [
         {
-          "name": "Image_0",
+          "name": "monastery_stone_floor_nor_gl",
+          "mimeType": "image/jpeg",
+          "bytes": 1063115,
+          "dimensions": null
+        },
+        {
+          "name": "monastery_stone_floor_Diffuse",
+          "mimeType": "image/jpeg",
+          "bytes": 766525,
+          "dimensions": null
+        },
+        {
+          "name": "monastery_stone_floor_Rough",
           "mimeType": "image/png",
-          "bytes": 6830400,
+          "bytes": 897527,
           "dimensions": [
-            2048,
-            2048
+            1024,
+            1024
           ]
         },
         {
-          "name": "Image_1",
+          "name": "stone_block_wall_nor_gl",
+          "mimeType": "image/jpeg",
+          "bytes": 1233958,
+          "dimensions": null
+        },
+        {
+          "name": "stone_block_wall_Diffuse",
+          "mimeType": "image/jpeg",
+          "bytes": 610046,
+          "dimensions": null
+        },
+        {
+          "name": "stone_block_wall_Rough",
           "mimeType": "image/png",
-          "bytes": 3392036,
+          "bytes": 863087,
           "dimensions": [
-            2048,
-            2048
+            1024,
+            1024
           ]
         }
       ],
@@ -161,34 +201,42 @@
       "externalResources": 0,
       "warnings": []
     },
-    "/assets/models/library-shell.glb": {
-      "bytes": 19193576,
-      "sha256": "3b9cef2839d6a71ca496395efd39ed2d79979f4697fa36c5814fa324d59ec88e",
-      "triangles": 285588,
-      "meshInstances": 1,
-      "primitiveInstances": 1,
+    "/assets/models/library-rebuilt.glb": {
+      "bytes": 5446268,
+      "sha256": "db9e63fefa5688209e1c6af18ebd6508e7b885b314a12ddba4b5d5e72cce8321",
+      "triangles": 84,
+      "meshInstances": 7,
+      "primitiveInstances": 7,
       "bounds": {
         "min": [
-          -15.359575271606445,
-          -0.1712317317724228,
-          -13.588887214660645
+          -11,
+          -0.23999999463558197,
+          -10.25
         ],
         "max": [
-          13.731524467468262,
-          4.098412036895752,
-          14.239051818847656
+          11,
+          4.000000089406967,
+          10.25
         ],
         "size": [
-          29.091099739074707,
-          4.269643768668175,
-          27.8279390335083
+          22,
+          4.240000084042549,
+          20.5
         ]
       },
       "materials": [
         {
-          "name": "Material_0",
+          "name": "磨损石板地面",
           "baseColor": true,
-          "normal": false,
+          "normal": true,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        },
+        {
+          "name": "旧石块墙面",
+          "baseColor": true,
+          "normal": true,
           "metallicRoughness": true,
           "occlusion": false,
           "unlit": false
@@ -196,21 +244,45 @@
       ],
       "textures": [
         {
-          "name": "Image_0",
+          "name": "monastery_stone_floor_nor_gl",
+          "mimeType": "image/jpeg",
+          "bytes": 1063115,
+          "dimensions": null
+        },
+        {
+          "name": "monastery_stone_floor_Diffuse",
+          "mimeType": "image/jpeg",
+          "bytes": 766525,
+          "dimensions": null
+        },
+        {
+          "name": "monastery_stone_floor_Rough",
           "mimeType": "image/png",
-          "bytes": 6828836,
+          "bytes": 897527,
           "dimensions": [
-            2048,
-            2048
+            1024,
+            1024
           ]
         },
         {
-          "name": "Image_1",
+          "name": "stone_block_wall_nor_gl",
+          "mimeType": "image/jpeg",
+          "bytes": 1233958,
+          "dimensions": null
+        },
+        {
+          "name": "stone_block_wall_Diffuse",
+          "mimeType": "image/jpeg",
+          "bytes": 610046,
+          "dimensions": null
+        },
+        {
+          "name": "stone_block_wall_Rough",
           "mimeType": "image/png",
-          "bytes": 2056920,
+          "bytes": 863087,
           "dimensions": [
-            2048,
-            2048
+            1024,
+            1024
           ]
         }
       ],
@@ -309,73 +381,88 @@
       "externalResources": 0,
       "warnings": []
     },
-    "/assets/models/yard-shell.glb": {
-      "bytes": 20631708,
-      "sha256": "e7ac3da7a430dda76b27bc1ab3403dedee6fd4c04e31e67ccdbd2cd60696c5e5",
-      "triangles": 211115,
-      "meshInstances": 2,
-      "primitiveInstances": 2,
+    "/assets/models/yard-rebuilt.glb": {
+      "bytes": 5453432,
+      "sha256": "999bf2d162867641edc9daefd8e309a26612769ba01c9120bac358a518a972d0",
+      "triangles": 144,
+      "meshInstances": 12,
+      "primitiveInstances": 12,
       "bounds": {
         "min": [
-          -19.452693939208984,
-          -0.6204541325569153,
-          -18.542354583740234
+          -20.30000001192093,
+          -0.23999999463558197,
+          -19.30000001192093
         ],
         "max": [
-          19.212553024291992,
-          8.904273986816406,
-          18.57380485534668
+          20.30000001192093,
+          9.250000387430191,
+          19
         ],
         "size": [
-          38.66524696350098,
-          9.524728119373322,
-          37.116159439086914
+          40.60000002384186,
+          9.490000382065773,
+          38.30000001192093
         ]
       },
       "materials": [
         {
-          "name": "Material_0",
+          "name": "磨损石板地面",
           "baseColor": true,
-          "normal": false,
+          "normal": true,
           "metallicRoughness": true,
           "occlusion": false,
           "unlit": false
         },
         {
-          "name": "共用旧石地面-本地补面",
+          "name": "旧石块墙面",
           "baseColor": true,
-          "normal": false,
-          "metallicRoughness": false,
+          "normal": true,
+          "metallicRoughness": true,
           "occlusion": false,
           "unlit": false
         }
       ],
       "textures": [
         {
-          "name": "Image_0",
+          "name": "monastery_stone_floor_nor_gl",
+          "mimeType": "image/jpeg",
+          "bytes": 1063115,
+          "dimensions": null
+        },
+        {
+          "name": "monastery_stone_floor_Diffuse",
+          "mimeType": "image/jpeg",
+          "bytes": 766525,
+          "dimensions": null
+        },
+        {
+          "name": "monastery_stone_floor_Rough",
           "mimeType": "image/png",
-          "bytes": 6678664,
+          "bytes": 897527,
           "dimensions": [
-            2048,
-            2048
+            1024,
+            1024
           ]
         },
         {
-          "name": "Image_1",
-          "mimeType": "image/png",
-          "bytes": 1106316,
-          "dimensions": [
-            2048,
-            2048
-          ]
+          "name": "stone_block_wall_nor_gl",
+          "mimeType": "image/jpeg",
+          "bytes": 1233958,
+          "dimensions": null
         },
         {
-          "name": "石材表面参考",
+          "name": "stone_block_wall_Diffuse",
+          "mimeType": "image/jpeg",
+          "bytes": 610046,
+          "dimensions": null
+        },
+        {
+          "name": "stone_block_wall_Rough",
           "mimeType": "image/png",
-          "bytes": 4741123,
+          "bytes": 863087,
           "dimensions": [
-            1254,
-            1254
+            1024,
+            1024
           ]
         }
       ],
@@ -1632,12 +1719,12 @@
             0,
             0
           ],
-          "source": "/assets/models/cell-shell.glb",
-          "triangles": 298873,
+          "source": "/assets/models/cell-rebuilt.glb",
+          "triangles": 180,
           "localSizeAfterNormalization": [
-            15.700300216674805,
-            4.205753535032272,
-            15.459621906280518
+            12.800000190734863,
+            4.239999994635582,
+            12.899999618530273
           ]
         },
         {
@@ -1725,8 +1812,8 @@
           "source": null
         }
       ],
-      "configuredFileBytes": 73767228,
-      "configuredInstanceTriangles": 966108
+      "configuredFileBytes": 58937648,
+      "configuredInstanceTriangles": 667415
     },
     {
       "id": "cellCorridor",
@@ -1782,12 +1869,12 @@
             0,
             0
           ],
-          "source": "/assets/models/yard-shell.glb",
-          "triangles": 211115,
+          "source": "/assets/models/yard-rebuilt.glb",
+          "triangles": 144,
           "localSizeAfterNormalization": [
-            38.66524696350098,
-            9.524728119373322,
-            37.116159439086914
+            40.60000002384186,
+            9.490000382065773,
+            38.30000001192093
           ]
         },
         {
@@ -1933,8 +2020,8 @@
           "source": null
         }
       ],
-      "configuredFileBytes": 61910424,
-      "configuredInstanceTriangles": 777603
+      "configuredFileBytes": 46732148,
+      "configuredInstanceTriangles": 566632
     },
     {
       "id": "library",
@@ -1952,12 +2039,12 @@
             0,
             0
           ],
-          "source": "/assets/models/library-shell.glb",
-          "triangles": 285588,
+          "source": "/assets/models/library-rebuilt.glb",
+          "triangles": 84,
           "localSizeAfterNormalization": [
-            29.091099739074707,
-            4.269643768668175,
-            27.8279390335083
+            22,
+            4.240000084042549,
+            20.5
           ]
         },
         {
@@ -2077,8 +2164,8 @@
           "source": null
         }
       ],
-      "configuredFileBytes": 52260084,
-      "configuredInstanceTriangles": 2018254
+      "configuredFileBytes": 38512776,
+      "configuredInstanceTriangles": 1732750
     },
     {
       "id": "office",

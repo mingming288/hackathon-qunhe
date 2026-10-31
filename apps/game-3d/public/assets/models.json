@@ -1,10 +1,10 @@
 {
   "version": 1,
   "models": {
-    "cell-architecture": { "url": "/assets/models/cell-shell.glb", "normalize": false },
-    "library-architecture": { "url": "/assets/models/library-shell.glb", "normalize": false },
+    "cell-architecture": { "url": "/assets/models/cell-rebuilt.glb", "normalize": false },
+    "library-architecture": { "url": "/assets/models/library-rebuilt.glb", "normalize": false },
     "solitary-architecture": { "url": "/assets/models/solitary-shell.glb", "normalize": false },
-    "yard-architecture": { "url": "/assets/models/yard-shell.glb", "normalize": false },
+    "yard-architecture": { "url": "/assets/models/yard-rebuilt.glb", "normalize": false },
     "operatingRoom-architecture": { "url": "/assets/models/operatingroom-shell.glb", "normalize": false },
     "evidence-architecture": { "url": "/assets/models/evidence-shell.glb", "normalize": false },
     "supermarket-architecture": { "url": "/assets/models/supermarket-shell.glb", "normalize": false },
