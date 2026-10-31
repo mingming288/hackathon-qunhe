@@ -22,12 +22,19 @@ export const PORTALS = {
 };
 
 // 院子与走廊的出口相对，跨越时对视角和人物朝向做相同的坐标变换。
-export function transitionOrientation(from, to, yaw, facing) {
+export function transitionOrientation(from, to, yaw, facing, entry = null) {
   if (from === 'pipeNetwork' && to === 'rain') return { yaw: Math.PI, facing: 0 };
   if (from === 'cell' && to === 'cellCorridor') return { yaw: yaw - Math.PI / 2, facing: facing - Math.PI / 2 };
   if (from === 'cellCorridor' && to === 'cell') return { yaw: yaw + Math.PI / 2, facing: facing + Math.PI / 2 };
   if ((from === 'cellCorridor' && to === 'yard') || (from === 'yard' && to === 'cellCorridor')) {
     return { yaw: yaw + Math.PI, facing: facing + Math.PI };
+  }
+  if (entry?.portal && entry?.position) {
+    const dx = entry.portal.x - entry.position.x, dz = entry.portal.z - entry.position.z;
+    if (Math.hypot(dx, dz) > .01) {
+      const entryYaw = Math.atan2(dx, dz);
+      return { yaw: entryYaw, facing: entryYaw + Math.PI };
+    }
   }
   return { yaw: 0, facing: Math.PI };
 }
