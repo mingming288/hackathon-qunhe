@@ -8,6 +8,8 @@ export const did = (game, action) => game.events.includes(action);
 export function officeHiddenProps(game) {
   const hidden = [did(game, 'openSafe') ? 'embroidery' : 'safe'];
   if (did(game, 'meetWarden') || did(game, 'sideHide')) hidden.push('warden');
+  // 主线账本藏在柜中；备用路线的桌面记录在取走后消失。
+  if (!did(game, 'riskInspection') || did(game, 'sideRecover')) hidden.push('ledger');
   return hidden;
 }
 export const oakHiddenProps = game => !did(game, 'oneOak') || did(game, 'oneBox') ? ['box'] : [];
