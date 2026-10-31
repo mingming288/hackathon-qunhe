@@ -250,6 +250,26 @@ test("超市保留原版三单、错误清洁袋判定及顾客推进，资源�
   assert.ok(routed.includes("player_bus_w.webp"));
 });
 
+test("拿着商品时重叠的货架和购物袋优先执行装袋", () => {
+  const source = readOriginal("shared/ending-definitions.js");
+  const context = { performance: { now: () => 0 }, showMessage() {}, updateHud() {} };
+  vm.runInNewContext(
+    originalBlock(source, "class CollisionMap {", "class AndyEndingSequence {") +
+      "\nthis.RedSupermarketGame=RedSupermarketGame;",
+    context,
+  );
+  const game = new context.RedSupermarketGame();
+  game.bagging.index = 3;
+  game.bagging.pick();
+  game.player.x = 310;
+  game.player.y = 185;
+  game.completeOrder = () => {};
+  assert.equal(game.canInteract(), true);
+  game.interact();
+  assert.equal(game.bagging.index, 4);
+  assert.equal(game.bagging.held, null);
+});
+
 test("组件完成事件和任务对应，准备、失败或其他关卡事件不能推进剧情", () => {
   for (const spec of Object.values(ORIGINAL_GAMES).filter((s) => s.event)) {
     assert.equal(

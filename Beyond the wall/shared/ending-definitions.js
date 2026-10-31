@@ -956,7 +956,7 @@
                   const currentSpot=currentItem?productSpots[currentItem.name]:null;
                   const nearProduct=!!currentSpot&&Math.hypot(this.player.x-currentSpot.x,this.player.y-currentSpot.y)<46;
                   const nearBag=Math.hypot(this.player.x-230,this.player.y-218)<48||Math.hypot(this.player.x-315,this.player.y-218)<48;
-                  return nearProduct||nearBag;
+                  return this.bagging.held ? nearBag : nearProduct;
                 }
                 return false;
               }
@@ -1028,7 +1028,7 @@
                 const p=this.player;
                 const currentItem=this.bagging.current();
                 const currentSpot=currentItem?productSpots[currentItem.name]:null;
-                if (currentSpot&&Math.hypot(p.x-currentSpot.x,p.y-currentSpot.y)<46) {
+                if (!this.bagging.held&&currentSpot&&Math.hypot(p.x-currentSpot.x,p.y-currentSpot.y)<46) {
                   if (this.bagging.pick()) { showMessage(`拿起：${this.bagging.held.name}`,900); updateHud(); }
                   else showMessage(this.bagging.held?"手里已经拿着商品。":"这件商品已经拿走了。");
                   return;
@@ -1044,7 +1044,7 @@
                   updateHud();
                   return;
                 }
-                showMessage(currentItem?`靠近发光轮廓最亮的“${currentItem.name}”后按空格或轻点画面。`:"靠近购物袋或经理后按空格或轻点画面。");
+                showMessage(this.bagging.held?"拿着商品靠近对应的购物袋后按空格或轻点画面。":currentItem?`靠近发光轮廓最亮的“${currentItem.name}”后按空格或轻点画面。`:"靠近购物袋或经理后按空格或轻点画面。");
               }
               completeOrder() {
                 const finished=this.bagging.order;
