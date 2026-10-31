@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { ThirdPersonController } from '../src/controller.js';
 import { createWorld, disposeWorld } from '../src/world.js';
 import { SCENE_BY_ID } from '../src/scenes.js';
+import { canStand } from '../src/movement.js';
 
 test('牢房出生镜头留在前墙内，且角色仍能靠近门口', () => {
   const world = createWorld(SCENE_BY_ID.get('cell'));
@@ -18,6 +19,20 @@ test('牢房出生镜头留在前墙内，且角色仍能靠近门口', () => {
   assert.ok(camera.position.z < 6, '镜头应位于前墙内侧');
   assert.ok(camera.position.z > player.position.z, '镜头应留在角色背后');
   assert.ok(!world.colliders.some(collider => collider.z === 6.2 && collider.w === 12.4), '镜头避让不能阻挡角色');
+  disposeWorld(world);
+});
+
+test('靠近牢房出口的镜头不会被最小距离推入前墙', () => {
+  const world = createWorld(SCENE_BY_ID.get('cell'));
+  const player = new THREE.Group(); player.position.set(-3.8, 0, 5.3);
+  const camera = new THREE.PerspectiveCamera(); camera.position.set(-3.8, 4, 12);
+  const controller = Object.assign(Object.create(ThirdPersonController.prototype), {
+    camera, player, yaw: 0, pitch: .4, distance: 7, keys: new Set(), enabled: () => true,
+  });
+  controller.update(.016, world);
+  assert.ok(camera.position.z < 5.95, '镜头应留在实际墙体前');
+  assert.ok(canStand(-3.8, 5.4, world.config.size, world.colliders), '牢门仍可通过');
+  assert.equal(canStand(0, 6, world.config.size, world.colliders), false, '不能走入前墙');
   disposeWorld(world);
 });
 

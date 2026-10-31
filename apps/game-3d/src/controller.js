@@ -71,9 +71,8 @@ export class ThirdPersonController {
         new THREE.Vector3(collider.x - collider.w / 2 - .2, 0, collider.z - collider.d / 2 - .2),
         new THREE.Vector3(collider.x + collider.w / 2 + .2, collider.h + .15, collider.z + collider.d / 2 + .2)
       );
-      // 管网的窄通道允许镜头更靠近人物，避免最小距离把镜头推到隔墙另一侧。
-      const minimum = world.config.id === 'pipeNetwork' ? .25 : 1.3;
-      if (ray.intersectBox(bounds, hit)) distance = Math.min(distance, Math.max(minimum, hit.distanceTo(target) - .2));
+      // 靠近墙面时镜头可以收近，不能用固定距离把镜头推过墙体。
+      if (ray.intersectBox(bounds, hit)) distance = Math.min(distance, Math.max(.25, hit.distanceTo(target) - .2));
     }
     const desiredPosition = target.clone().addScaledVector(offset, distance);
     // 避墙时立即收近，离开遮挡后平滑拉远；保持角色外部的第三人称位置。

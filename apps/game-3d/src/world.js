@@ -103,6 +103,9 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     obstacle(12.4, 4, .5, 0, -6.2);
     obstacle(.5, 4, 12.4, -6.1, 0);
     obstacle(.5, 4, 12.4, 6.1, 0);
+    // 前墙只在牢门处留通路；阻止角色穿入实体墙，镜头单独避让门楣。
+    for (const [x, w] of [[-5.55, 1.3], [2.1, 8.2]])
+      world.colliders.push({ x, z: 6.2, w, d: .5, h: 4, camera: false });
   } else if (config.id === 'solitary') {
     obstacle(8.4, 4, .6, 0, -4.3);
     obstacle(.6, 4, 9, -3.45, 0);
