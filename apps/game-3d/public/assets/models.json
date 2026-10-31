@@ -1,6 +1,8 @@
 {
   "version": 1,
   "models": {
+    "pipe-architecture": { "url": "/assets/models/pipe-room-rebuilt.glb", "normalize": false },
+    "pipe:pipeTarget": { "url": "/assets/models/pipe-target-rebuilt.glb", "normalize": false },
     "dig-architecture": { "url": "/assets/models/dig-rebuilt.glb", "normalize": false },
     "office-architecture": { "url": "/assets/models/office-rebuilt.glb", "normalize": false },
     "office:desk": { "url": "/assets/models/desk.glb", "height": 1.3 },

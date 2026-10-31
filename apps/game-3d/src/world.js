@@ -160,6 +160,15 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
       }
       for (let i = 0; i < 9; i++) box(shell, .8, .5 + i % 3 * .2, .8, (i % 2 ? -1 : 1) * (width / 2 - 1), .25, -depth / 2 + 2 + i * 2, '#958267');
     }
+    if (config.id === 'pipe') {
+      for (const x of [-6.8, 6.8]) {
+        const light = new THREE.PointLight('#edb06a', 22, 14, 2);
+        light.position.set(x, 2.7, -4.5); root.add(light);
+        const lamp = new THREE.Mesh(new THREE.BoxGeometry(.24, .45, .25),
+          new THREE.MeshStandardMaterial({ color: '#eed2a1', emissive: '#d98c3f', emissiveIntensity: 1 }));
+        lamp.position.copy(light.position); root.add(lamp);
+      }
+    }
   } else if (config.kind === 'field') {
     // 与已校准的石墙模型对应，保留两端绕行空间。
     world.colliders.push({ x: 0, z: -10, w: 30, d: 1.2, h: 2.2, camera: false });
