@@ -13,6 +13,7 @@ import { EarlyPlay } from './early-play.js';
 import { SceneLoadGate } from './scene-load-gate.js';
 import { fadeBeforeTravel } from './scene-transition.js';
 import { RainAmbience } from './rain-ambience.js';
+import { evidenceReview } from './evidence-review.js';
 import rainUrl from '../../../Beyond the wall/音效/四秒雨声.opus';
 
 const $ = id => document.getElementById(id);
@@ -62,7 +63,7 @@ function renderScene(id, options = {}) {
 function perform(action) {
   view.pause();
   if (earlyPlay.perform(action)) return;
-  dialogue.task(action, () => completeAction(action));
+  dialogue.task(action.id === 'twoCompare' ? { ...action, lines: evidenceReview(game) } : action, () => completeAction(action));
 }
 
 function completeAction(action) {

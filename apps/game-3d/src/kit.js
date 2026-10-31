@@ -9,6 +9,7 @@ import { createOakTree } from './oak-tree.js';
 import { createOakKeepsake } from './oak-keepsakes.js';
 import { createRoadBus } from './road-bus.js';
 import { createPrisonGate } from './prison-gate.js';
+import { createEvidenceBoard } from './evidence-board.js';
 
 export const COLORS = { ink: '#34313e', stone: '#9da5a1', trim: '#ddd2b8', wood: '#947558', steel: '#657781', gold: '#d6ac69' };
 export const CHARACTER_NAMES = { andy: '安迪', red: '瑞德', brooks: '老布', guard: '狱警', warden: '典狱长', manager: '超市经理', clerk: '银行职员', tommy: '汤米', haywood: '海伍德', floyd: '弗洛伊德' };
@@ -123,10 +124,10 @@ export function makeProp(kind, { sceneId, landmark = false } = {}) {
     box(visual, 2.8, .65, .8, 0, .33, 0, COLORS.wood);
     box(visual, 2.4, 1.65, .55, 0, 1.5, 0, '#444c53');
     box(visual, 2.05, 1.27, .04, 0, 1.53, .3, '#b3c9c6');
-  } else if (['poster', 'embroidery', 'evidenceBoard'].includes(kind)) {
-    const evidence = kind === 'evidenceBoard';
-    box(visual, evidence ? 3.2 : 1.8, 2.6, .13, 0, 1.75, 0, COLORS.wood);
-    box(visual, evidence ? 2.95 : 1.6, 2.38, .03, 0, 1.75, .08, kind === 'poster' ? '#b98d70' : '#d9cdab');
+  } else if (kind === 'evidenceBoard') createEvidenceBoard(visual);
+  else if (['poster', 'embroidery'].includes(kind)) {
+    box(visual, 1.8, 2.6, .13, 0, 1.75, 0, COLORS.wood);
+    box(visual, 1.6, 2.38, .03, 0, 1.75, .08, kind === 'poster' ? '#b98d70' : '#d9cdab');
     for (let i = 0; i < 4; i++) box(visual, .55, .65, .02, (i % 2 - .5) * .75, 1.2 + Math.floor(i / 2) * .9, .11, ['#9fae9d', '#d7b97a'][i % 2]);
   } else if (kind === 'curtain') {
     curtain(visual);
