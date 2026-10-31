@@ -15,7 +15,7 @@
     "medicalExterior-architecture": { "url": "/assets/models/medicalexterior-shell.glb", "normalize": false },
     "yard-library-exterior": { "url": "/assets/models/library-exterior.glb", "height": 6.2 },
     "yard-office-exterior": { "url": "/assets/models/office-exterior.glb", "height": 8.6 },
-    "cellCorridor-architecture": { "url": "/assets/models/cell-corridor.glb", "normalize": false },
+    "cellCorridor-architecture": { "url": "/assets/models/corridor-rebuilt.glb", "normalize": false },
     "cell:bed": { "url": "/assets/models/bed.glb", "height": 1.5 },
     "cell:desk": { "url": "/assets/models/desk.glb", "height": 1.3 },
     "cell:chair": { "url": "/assets/models/chair.glb", "height": 1.7 },

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-31T14:34:26.979Z",
+  "generatedAt": "2026-10-31T16:01:05.072Z",
   "notes": [
     "只读统计当前清单和模型文件，配置成功不代表视觉验收通过。",
     "场景统计包含配置的全部道具，含剧情隐藏物件；不包含程序基础几何和主角，也不是每帧实测面数。",
@@ -10,7 +10,7 @@
   "summary": {
     "configuredSlots": 22,
     "uniqueFiles": 22,
-    "totalBytes": 319984844,
+    "totalBytes": 315973368,
     "totalFileTriangles": 3790957
   },
   "entries": {
@@ -71,7 +71,7 @@
       "height": 8.6
     },
     "cellCorridor-architecture": {
-      "url": "/assets/models/cell-corridor.glb",
+      "url": "/assets/models/corridor-rebuilt.glb",
       "normalize": false
     },
     "cell:bed": {
@@ -953,64 +953,88 @@
       "externalResources": 0,
       "warnings": []
     },
-    "/assets/models/cell-corridor.glb": {
-      "bytes": 9488096,
-      "sha256": "8d33b85d1f2515f4bd26e13bddc631b05a4b1fece2758a43113aadefc44a7e9e",
+    "/assets/models/corridor-rebuilt.glb": {
+      "bytes": 5476620,
+      "sha256": "4f145ed1b87f51cf6c2b77f5e2d5cc99add49df80e091475793eca846ce6c2bf",
       "triangles": 324,
       "meshInstances": 27,
       "primitiveInstances": 27,
       "bounds": {
         "min": [
           -6.400000095367432,
-          -0.2666666795810064,
+          -0.23999999463558197,
           -14.400000393390656
         ],
         "max": [
           6.400000095367432,
-          4.0000002125898995,
+          4.000000089406967,
           14.399999618530273
         ],
         "size": [
           12.800000190734863,
-          4.266666892170906,
+          4.240000084042549,
           28.80000001192093
         ]
       },
       "materials": [
         {
-          "name": "石板地面",
+          "name": "磨损石板地面",
           "baseColor": true,
-          "normal": false,
-          "metallicRoughness": false,
+          "normal": true,
+          "metallicRoughness": true,
           "occlusion": false,
           "unlit": false
         },
         {
-          "name": "旧石墙",
+          "name": "旧石块墙面",
           "baseColor": true,
-          "normal": false,
-          "metallicRoughness": false,
+          "normal": true,
+          "metallicRoughness": true,
           "occlusion": false,
           "unlit": false
         }
       ],
       "textures": [
         {
-          "name": "floor-basecolor",
+          "name": "monastery_stone_floor_nor_gl",
+          "mimeType": "image/jpeg",
+          "bytes": 1063115,
+          "dimensions": null
+        },
+        {
+          "name": "monastery_stone_floor_Diffuse",
+          "mimeType": "image/jpeg",
+          "bytes": 766525,
+          "dimensions": null
+        },
+        {
+          "name": "monastery_stone_floor_Rough",
           "mimeType": "image/png",
-          "bytes": 4680575,
+          "bytes": 897527,
           "dimensions": [
-            1536,
-            1536
+            1024,
+            1024
           ]
         },
         {
-          "name": "stone-basecolor",
+          "name": "stone_block_wall_nor_gl",
+          "mimeType": "image/jpeg",
+          "bytes": 1233958,
+          "dimensions": null
+        },
+        {
+          "name": "stone_block_wall_Diffuse",
+          "mimeType": "image/jpeg",
+          "bytes": 610046,
+          "dimensions": null
+        },
+        {
+          "name": "stone_block_wall_Rough",
           "mimeType": "image/png",
-          "bytes": 4764936,
+          "bytes": 863087,
           "dimensions": [
-            1536,
-            1536
+            1024,
+            1024
           ]
         }
       ],
@@ -1720,11 +1744,11 @@
             0,
             0
           ],
-          "source": "/assets/models/cell-corridor.glb",
+          "source": "/assets/models/corridor-rebuilt.glb",
           "triangles": 324,
           "localSizeAfterNormalization": [
             12.800000190734863,
-            4.266666892170906,
+            4.240000084042549,
             28.80000001192093
           ]
         },
@@ -1739,7 +1763,7 @@
           "source": null
         }
       ],
-      "configuredFileBytes": 9488096,
+      "configuredFileBytes": 5476620,
       "configuredInstanceTriangles": 324
     },
     {
