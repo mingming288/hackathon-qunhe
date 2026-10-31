@@ -1,6 +1,11 @@
 {
   "version": 1,
   "models": {
+    "livingRoom-architecture": { "url": "/assets/models/living-room-rebuilt.glb", "normalize": false },
+    "livingRoom:sofa": { "url": "/assets/models/living-sofa-rebuilt.glb", "normalize": false },
+    "livingRoom:television": { "url": "/assets/models/living-tv-rebuilt.glb", "normalize": false },
+    "livingRoom:table": { "url": "/assets/models/living-coffee-table.glb", "normalize": false },
+    "livingRoom:lamp": { "url": "/assets/models/living-floor-lamp.glb", "normalize": false },
     "rain-architecture": { "url": "/assets/models/rain-exterior-rebuilt.glb", "normalize": false },
     "rain:drain": { "url": "/assets/models/rain-drain-rebuilt.glb", "normalize": false },
     "pipeNetwork-architecture": { "url": "/assets/models/pipe-network-rebuilt.glb", "normalize": false },

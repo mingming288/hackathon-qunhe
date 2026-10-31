@@ -116,7 +116,11 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     obstacle(sideWidth, 2.1, .4, -(width + 4) / 4, depth / 2);
     obstacle(sideWidth, 2.1, .4, (width + 4) / 4, depth / 2);
     windowFrame(0, -depth / 2 + .25);
-    if (config.id === 'livingRoom') box(shell, 5.2, .035, 3.5, 0, .025, -.8, '#b5aa8c');
+    if (config.id === 'livingRoom') {
+      box(shell, 5.2, .035, 3.5, 0, .025, -.8, '#b5aa8c');
+      const light = new THREE.PointLight('#e9b26b', 28, 14, 2);
+      light.position.set(4, 2.8, -3); root.add(light);
+    }
     if (config.id === 'supermarket') {
       for (let x = -10; x <= 10; x += 2) box(shell, .03, .015, depth - 1, x, .02, 0, '#c4cabb', false);
     }
