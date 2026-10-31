@@ -21,6 +21,10 @@ export function mountStore(root, { onComplete, phase }) {
   action.className = "original-store-action";
   action.type = "button";
   panel.append(action);
+  const keyboardHint = document.createElement("div");
+  keyboardHint.className = "sorting-keyboard-hint";
+  keyboardHint.textContent = "键盘：1—4 选择商品，5—8 放入第 1—4 层，回车确认";
+  get("sortingGame").append(keyboardHint);
   // 接入层只提供输入、画布和生命周期，商品、碰撞、三单装袋和请示流程均来自原版。
   const rules = createStoreRules({
     phase,
@@ -45,7 +49,7 @@ export function mountStore(root, { onComplete, phase }) {
     },
   });
   style.textContent +=
-    "\n.original-store-action{position:absolute;right:18px;bottom:20px;z-index:20;border:2px solid #8d886c;background:#28291f;color:#f1e4bd;padding:15px 25px;font:18px sans-serif}.original-store-action.ready{border-color:#f6df88;background:#53583c}.controls{pointer-events:none}.game-hud{white-space:pre-line}";
+    "\n.original-store-action{position:absolute;right:18px;bottom:20px;z-index:20;border:2px solid #8d886c;background:#28291f;color:#f1e4bd;padding:15px 25px;font:18px sans-serif}.original-store-action.ready{border-color:#f6df88;background:#53583c}.controls{pointer-events:none}.game-hud{white-space:pre-line}.sorting-keyboard-hint{position:absolute;top:6%;left:50%;transform:translateX(-50%);color:#f4e6c9;background:#241914;padding:6px 12px;white-space:nowrap;font:14px sans-serif}";
   const listen = (obj, type, fn) => {
     obj.addEventListener(type, fn);
     cleanups.push(() => obj.removeEventListener(type, fn));
@@ -55,6 +59,20 @@ export function mountStore(root, { onComplete, phase }) {
       e.key
     ] || e.key.toLowerCase();
   listen(root, "keydown", (e) => {
+    if (get("sortingGame").classList.contains("show")) {
+      const number = Number(e.key);
+      if (Number.isInteger(number) && number >= 1 && number <= 8) {
+        e.preventDefault();
+        const target = number <= 4
+          ? get("sortingGame").querySelector(`.sort-product[data-item-id="${["flour", "can", "bread", "eggs"][number - 1]}"]`)
+          : get("bagSlots").querySelector(`[data-level="${number - 5}"]`);
+        target?.click();
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        get("confirmBag").click();
+      }
+      return;
+    }
     const k = key(e);
     if (!["w", "a", "s", "d", " "].includes(k)) return;
     e.preventDefault();
