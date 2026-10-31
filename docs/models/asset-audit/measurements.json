@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-31T16:30:30.600Z",
+  "generatedAt": "2026-10-31T16:47:24.022Z",
   "notes": [
     "只读统计当前清单和模型文件，配置成功不代表视觉验收通过。",
     "场景统计包含配置的全部道具，含剧情隐藏物件；不包含程序基础几何和主角，也不是每帧实测面数。",
@@ -8,12 +8,16 @@
     "尺寸为默认场景静止姿态包围盒；缺少边界或存在骨骼时见单项警告。贴图尺寸仅解析内嵌的便携式网络图形格式。"
   ],
   "summary": {
-    "configuredSlots": 25,
-    "uniqueFiles": 23,
-    "totalBytes": 277526508,
-    "totalFileTriangles": 2995993
+    "configuredSlots": 32,
+    "uniqueFiles": 30,
+    "totalBytes": 395095164,
+    "totalFileTriangles": 3531035
   },
   "entries": {
+    "dig-architecture": {
+      "url": "/assets/models/dig-rebuilt.glb",
+      "normalize": false
+    },
     "office-architecture": {
       "url": "/assets/models/office-rebuilt.glb",
       "normalize": false
@@ -113,9 +117,132 @@
     "rubble": {
       "url": "/assets/models/rubble.glb",
       "height": 0.6
+    },
+    "andy": {
+      "url": "/assets/models/andy-idle.glb",
+      "height": 2.5,
+      "rotationY": 0,
+      "walkUrl": "/assets/models/andy-walk.glb"
+    },
+    "red": {
+      "url": "/assets/models/red-idle-walk.glb",
+      "height": 2.5,
+      "rotationY": 0,
+      "walkAnimation": 1
+    },
+    "brooks": {
+      "url": "/assets/models/brooks-idle-walk.glb",
+      "height": 2.35,
+      "rotationY": 0,
+      "walkAnimation": 1
+    },
+    "warden": {
+      "url": "/assets/models/norton-idle-walk.glb",
+      "height": 2.55,
+      "rotationY": 0,
+      "walkAnimation": 1
+    },
+    "tommy": {
+      "url": "/assets/models/tommy.glb",
+      "height": 2.45,
+      "rotationY": 0
+    },
+    "guard": {
+      "url": "/assets/models/hadley.glb",
+      "height": 2.55,
+      "rotationY": 0
     }
   },
   "files": {
+    "/assets/models/dig-rebuilt.glb": {
+      "bytes": 6333240,
+      "sha256": "8033a7b5f196e3bbcb9e00af809985d8e659d608656a82cee29980b3f6ee9266",
+      "triangles": 1176,
+      "meshInstances": 98,
+      "primitiveInstances": 98,
+      "bounds": {
+        "min": [
+          -7.300000190734863,
+          -0.2800000011920929,
+          -12.25
+        ],
+        "max": [
+          7.300000190734863,
+          3.2629151804038425,
+          12.25
+        ],
+        "size": [
+          14.600000381469727,
+          3.5429151815959354,
+          24.5
+        ]
+      },
+      "materials": [
+        {
+          "name": "粗糙岩土",
+          "baseColor": true,
+          "normal": true,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        },
+        {
+          "name": "旧木支撑",
+          "baseColor": true,
+          "normal": true,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "rocky_trail_nor_gl",
+          "mimeType": "image/jpeg",
+          "bytes": 1398291,
+          "dimensions": null
+        },
+        {
+          "name": "rocky_trail_Diffuse",
+          "mimeType": "image/jpeg",
+          "bytes": 1076180,
+          "dimensions": null
+        },
+        {
+          "name": "rocky_trail_Rough",
+          "mimeType": "image/png",
+          "bytes": 1130579,
+          "dimensions": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "wood_table_worn_nor_gl",
+          "mimeType": "image/jpeg",
+          "bytes": 747433,
+          "dimensions": null
+        },
+        {
+          "name": "wood_table_worn_Diffuse",
+          "mimeType": "image/jpeg",
+          "bytes": 761543,
+          "dimensions": null
+        },
+        {
+          "name": "wood_table_worn_Rough",
+          "mimeType": "image/png",
+          "bytes": 1065035,
+          "dimensions": [
+            1024,
+            1024
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
     "/assets/models/office-rebuilt.glb": {
       "bytes": 5308304,
       "sha256": "943ea4c5b7e2388c53c4ce3c9a3d07081b34f2134d6fa986d0fc950ab1624756",
@@ -1739,6 +1866,369 @@
       "animations": [],
       "externalResources": 0,
       "warnings": []
+    },
+    "/assets/models/andy-idle.glb": {
+      "bytes": 25071176,
+      "sha256": "b6cd8b1fb17623a3216c9198919f8c083caf3ea5aee5b3cf2233570b620f70d8",
+      "triangles": 145916,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -0.4733927547931671,
+          -0.875,
+          -0.2430460900068283
+        ],
+        "max": [
+          0.4733927547931671,
+          0.875,
+          0.2430460900068283
+        ],
+        "size": [
+          0.9467855095863342,
+          1.75,
+          0.4860921800136566
+        ]
+      },
+      "materials": [
+        {
+          "name": "Designer_Logic_PBR",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 4238040,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 2350276,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [
+        "animation_1"
+      ],
+      "externalResources": 0,
+      "warnings": [
+        "有骨骼，边界未计算蒙皮与动画变形"
+      ]
+    },
+    "/assets/models/red-idle-walk.glb": {
+      "bytes": 20927200,
+      "sha256": "6240f235fb28290d04aed0fe2433c1613f0f2c913c501bcca030d714ccb68090",
+      "triangles": 99974,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -0.6999228596687317,
+          -0.875,
+          -0.20809276401996613
+        ],
+        "max": [
+          0.6999228596687317,
+          0.875,
+          0.20809276401996613
+        ],
+        "size": [
+          1.3998457193374634,
+          1.75,
+          0.41618552803993225
+        ]
+      },
+      "materials": [
+        {
+          "name": "Designer_Logic_PBR",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 3807228,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 2120012,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [
+        "animation_1",
+        "animation_2"
+      ],
+      "externalResources": 0,
+      "warnings": [
+        "有骨骼，边界未计算蒙皮与动画变形"
+      ]
+    },
+    "/assets/models/brooks-idle-walk.glb": {
+      "bytes": 20333080,
+      "sha256": "234048d6b98637a72ec5851c6b2048b75d04caf0aca307d9cf285427f844a0fa",
+      "triangles": 98126,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -0.6275138854980469,
+          -0.875,
+          -0.1978214979171753
+        ],
+        "max": [
+          0.6275138854980469,
+          0.875,
+          0.1978214979171753
+        ],
+        "size": [
+          1.2550277709960938,
+          1.75,
+          0.3956429958343506
+        ]
+      },
+      "materials": [
+        {
+          "name": "Designer_Logic_PBR",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 3742820,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 1969544,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [
+        "animation_1",
+        "animation_2"
+      ],
+      "externalResources": 0,
+      "warnings": [
+        "有骨骼，边界未计算蒙皮与动画变形"
+      ]
+    },
+    "/assets/models/norton-idle-walk.glb": {
+      "bytes": 21000552,
+      "sha256": "41bab2e592320c9b1a750145dd82d2db4807d892a21f3ec24aab0d22ad74f013",
+      "triangles": 92740,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -0.8999999761581421,
+          -1.0711508989334106,
+          -0.24266202747821808
+        ],
+        "max": [
+          0.8999999761581421,
+          1.0711508989334106,
+          0.24266202747821808
+        ],
+        "size": [
+          1.7999999523162842,
+          2.1423017978668213,
+          0.48532405495643616
+        ]
+      },
+      "materials": [
+        {
+          "name": "Designer_Logic_PBR",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 3471788,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 2533492,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [
+        "animation_1",
+        "animation_2"
+      ],
+      "externalResources": 0,
+      "warnings": [
+        "有骨骼，边界未计算蒙皮与动画变形"
+      ]
+    },
+    "/assets/models/tommy.glb": {
+      "bytes": 15273940,
+      "sha256": "06e5fb8e7a6e3419cc6588c4ac60ae5c7a01d7618f12303754b6d35e94d382ec",
+      "triangles": 48066,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -0.12167315185070038,
+          -0.1599999964237213,
+          -0.03902645409107208
+        ],
+        "max": [
+          0.12167315185070038,
+          0.1599999964237213,
+          0.03902645409107208
+        ],
+        "size": [
+          0.24334630370140076,
+          0.3199999928474426,
+          0.07805290818214417
+        ]
+      },
+      "materials": [
+        {
+          "name": "Designer_Logic_PBR",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 3529952,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 1998308,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": [
+        "有骨骼，边界未计算蒙皮与动画变形"
+      ]
+    },
+    "/assets/models/hadley.glb": {
+      "bytes": 8629468,
+      "sha256": "1bb54736724ae3fb6601745ee9854d0415b7e62752f394b18482d2405be7a39f",
+      "triangles": 49044,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -0.049172040075063705,
+          -0.07500000298023224,
+          -0.02455810271203518
+        ],
+        "max": [
+          0.049172040075063705,
+          0.07500000298023224,
+          0.02455810271203518
+        ],
+        "size": [
+          0.09834408015012741,
+          0.15000000596046448,
+          0.04911620542407036
+        ]
+      },
+      "materials": [
+        {
+          "name": "Designer_Logic_PBR",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 3577204,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 2706152,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
     }
   },
   "scenes": [
@@ -1948,11 +2438,17 @@
             0,
             -6
           ],
-          "source": null
+          "source": "/assets/models/hadley.glb",
+          "triangles": 49044,
+          "localSizeAfterNormalization": [
+            1.6718492961188436,
+            2.55,
+            0.8349754590302523
+          ]
         }
       ],
-      "configuredFileBytes": 5476620,
-      "configuredInstanceTriangles": 324
+      "configuredFileBytes": 14106088,
+      "configuredInstanceTriangles": 49368
     },
     {
       "id": "yard",
@@ -2018,7 +2514,13 @@
             0,
             -3
           ],
-          "source": null
+          "source": "/assets/models/red-idle-walk.glb",
+          "triangles": 99974,
+          "localSizeAfterNormalization": [
+            1.9997795990535192,
+            2.5,
+            0.5945507543427604
+          ]
         },
         {
           "id": "brooks",
@@ -2028,7 +2530,13 @@
             0,
             1
           ],
-          "source": null
+          "source": "/assets/models/brooks-idle-walk.glb",
+          "triangles": 98126,
+          "localSizeAfterNormalization": [
+            1.685323006766183,
+            2.35,
+            0.5312920229775565
+          ]
         },
         {
           "id": "guard",
@@ -2038,7 +2546,13 @@
             0,
             -8.5
           ],
-          "source": null
+          "source": "/assets/models/hadley.glb",
+          "triangles": 49044,
+          "localSizeAfterNormalization": [
+            1.6718492961188436,
+            2.55,
+            0.8349754590302523
+          ]
         },
         {
           "id": "bench",
@@ -2078,7 +2592,13 @@
             0,
             -7
           ],
-          "source": null
+          "source": "/assets/models/norton-idle-walk.glb",
+          "triangles": 92740,
+          "localSizeAfterNormalization": [
+            2.142555209997479,
+            2.55,
+            0.577685338905666
+          ]
         },
         {
           "id": "tommy",
@@ -2088,7 +2608,13 @@
             0,
             2
           ],
-          "source": null
+          "source": "/assets/models/tommy.glb",
+          "triangles": 48066,
+          "localSizeAfterNormalization": [
+            1.863120179357831,
+            2.45,
+            0.5975925916267766
+          ]
         },
         {
           "id": "haywood",
@@ -2121,8 +2647,8 @@
           "source": null
         }
       ],
-      "configuredFileBytes": 46732148,
-      "configuredInstanceTriangles": 566632
+      "configuredFileBytes": 132896388,
+      "configuredInstanceTriangles": 954582
     },
     {
       "id": "library",
@@ -2262,11 +2788,17 @@
             0,
             4
           ],
-          "source": null
+          "source": "/assets/models/brooks-idle-walk.glb",
+          "triangles": 98126,
+          "localSizeAfterNormalization": [
+            1.685323006766183,
+            2.35,
+            0.5312920229775565
+          ]
         }
       ],
-      "configuredFileBytes": 38512776,
-      "configuredInstanceTriangles": 1732750
+      "configuredFileBytes": 58845856,
+      "configuredInstanceTriangles": 1830876
     },
     {
       "id": "office",
@@ -2362,7 +2894,13 @@
             0,
             -4
           ],
-          "source": null
+          "source": "/assets/models/norton-idle-walk.glb",
+          "triangles": 92740,
+          "localSizeAfterNormalization": [
+            2.142555209997479,
+            2.55,
+            0.577685338905666
+          ]
         },
         {
           "id": "ledger",
@@ -2375,8 +2913,8 @@
           "source": null
         }
       ],
-      "configuredFileBytes": 28622888,
-      "configuredInstanceTriangles": 301844
+      "configuredFileBytes": 49623440,
+      "configuredInstanceTriangles": 394584
     },
     {
       "id": "solitary",
@@ -2442,7 +2980,13 @@
             0,
             0
           ],
-          "source": null
+          "source": "/assets/models/dig-rebuilt.glb",
+          "triangles": 1176,
+          "localSizeAfterNormalization": [
+            14.600000381469727,
+            3.5429151815959354,
+            24.5
+          ]
         },
         {
           "id": "rubble",
@@ -2493,8 +3037,8 @@
           ]
         }
       ],
-      "configuredFileBytes": 39157360,
-      "configuredInstanceTriangles": 876803
+      "configuredFileBytes": 45490600,
+      "configuredInstanceTriangles": 877979
     },
     {
       "id": "pipe",
@@ -2994,7 +3538,13 @@
             0,
             2
           ],
-          "source": null
+          "source": "/assets/models/red-idle-walk.glb",
+          "triangles": 99974,
+          "localSizeAfterNormalization": [
+            1.9997795990535192,
+            2.5,
+            0.5945507543427604
+          ]
         },
         {
           "id": "toolbox",
@@ -3007,8 +3557,8 @@
           "source": null
         }
       ],
-      "configuredFileBytes": 7539236,
-      "configuredInstanceTriangles": 33251
+      "configuredFileBytes": 28466436,
+      "configuredInstanceTriangles": 133225
     },
     {
       "id": "supermarket",
@@ -3306,7 +3856,13 @@
             0,
             -3
           ],
-          "source": null
+          "source": "/assets/models/norton-idle-walk.glb",
+          "triangles": 92740,
+          "localSizeAfterNormalization": [
+            2.142555209997479,
+            2.55,
+            0.577685338905666
+          ]
         },
         {
           "id": "guard",
@@ -3316,11 +3872,17 @@
             0,
             -2
           ],
-          "source": null
+          "source": "/assets/models/hadley.glb",
+          "triangles": 49044,
+          "localSizeAfterNormalization": [
+            1.6718492961188436,
+            2.55,
+            0.8349754590302523
+          ]
         }
       ],
-      "configuredFileBytes": 9513028,
-      "configuredInstanceTriangles": 77977
+      "configuredFileBytes": 39143048,
+      "configuredInstanceTriangles": 219761
     }
   ],
   "errors": []

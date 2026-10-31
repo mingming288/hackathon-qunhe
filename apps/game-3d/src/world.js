@@ -146,6 +146,13 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
       for (const x of [-9, 0, 9]) box(shell, .8, .04, depth - 3, x, .03, 0, '#8ba6a0', false);
     }
     if (config.id === 'dig') {
+      for (const z of [-7, 1, 8]) {
+        const light = new THREE.PointLight('#e9aa62', 10, 9, 2);
+        light.position.set(5.8, 2.55, z); root.add(light);
+        const lantern = new THREE.Mesh(new THREE.BoxGeometry(.28, .45, .28),
+          new THREE.MeshStandardMaterial({ color: '#e7b06c', emissive: '#d68138', emissiveIntensity: .8 }));
+        lantern.position.copy(light.position); root.add(lantern);
+      }
       for (let i = 0; i < 9; i++) box(shell, .8, .5 + i % 3 * .2, .8, (i % 2 ? -1 : 1) * (width / 2 - 1), .25, -depth / 2 + 2 + i * 2, '#958267');
     }
   } else if (config.kind === 'field') {
