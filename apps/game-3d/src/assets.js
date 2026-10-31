@@ -39,10 +39,10 @@ export async function readModelCatalog() {
 
 export async function replaceAsset(anchor, entry, isCurrent = () => true) {
   validateModelEntry(entry);
-  if (anchor.userData.replaced) return anchor.userData.mixer || null;
+  if (anchor.userData.replaced) return anchor.userData.loadAnimation?.() ?? anchor.userData.mixer ?? null;
   const gltf = await loadModel(entry.url);
   if (!anchor.parent || !isCurrent()) return null; // 切换场景后，不再把旧的异步结果放入场景。
-  if (anchor.userData.replaced) return anchor.userData.mixer || null;
+  if (anchor.userData.replaced) return anchor.userData.loadAnimation?.() ?? anchor.userData.mixer ?? null;
   const model = clone(gltf.scene);
   // 正式模型与基础几何使用同一套光照；三维文件不会保存引擎的阴影开关。
   model.traverse(node => {
@@ -77,25 +77,34 @@ export async function replaceAsset(anchor, entry, isCurrent = () => true) {
   anchor.userData.mixer = mixer;
   if (mixer) mixer.clipAction(gltf.animations[0]).play();
   if (mixer && (entry.walkUrl || Number.isInteger(entry.walkAnimation))) {
-    let walking = gltf;
-    if (entry.walkUrl) {
-      validateModelEntry({ url: entry.walkUrl });
-      walking = await loadModel(entry.walkUrl);
-    }
-    const idle = mixer.clipAction(gltf.animations[0]);
-    const clip = walking.animations[entry.walkAnimation ?? 0];
-    const walk = clip && mixer.clipAction(clip);
-    if (walk) {
-      let moving = false;
-      mixer.setMoving = value => {
-        if (moving === value) return;
-        moving = value;
-        const next = value ? walk : idle;
-        const previous = value ? idle : walk;
-        previous.fadeOut(.2);
-        next.reset().fadeIn(.2).play();
-      };
-    }
+    let pending;
+    anchor.userData.loadAnimation = () => {
+      if (mixer.setMoving) return Promise.resolve(mixer);
+      if (pending) return pending;
+      pending = (async () => {
+        let walking = gltf;
+        if (entry.walkUrl) {
+          validateModelEntry({ url: entry.walkUrl });
+          walking = await loadModel(entry.walkUrl);
+        }
+        const idle = mixer.clipAction(gltf.animations[0]);
+        const clip = walking.animations[entry.walkAnimation ?? 0];
+        if (!clip) throw new Error('人物行走动作不存在。');
+        const walk = mixer.clipAction(clip);
+        let moving = false;
+        mixer.setMoving = value => {
+          if (moving === value) return;
+          moving = value;
+          const next = value ? walk : idle;
+          const previous = value ? idle : walk;
+          previous.fadeOut(.2);
+          next.reset().fadeIn(.2).play();
+        };
+        return mixer;
+      })().catch(error => { pending = null; throw error; });
+      return pending;
+    };
+    return anchor.userData.loadAnimation();
   }
   anchor.userData.mixer = mixer;
   return mixer;

@@ -82,7 +82,11 @@ export class WorldView {
       if (character && !anchor.userData.replaced) anchor.userData.placeholder.visible = false;
       const pending = replaceAsset(anchor, entry, () => version === this.version).then(mixer => {
         if (version === this.version) { if (mixer) this.mixers.push(mixer); this.stage?.sync(); }
-      }).catch(() => { if (version === this.version) { if (!anchor.userData.replaced) anchor.userData.placeholder.visible = true; this.notify('部分正式模型未载入，保留基础模型继续游戏。'); } });
+      }).catch(() => { if (version === this.version) {
+        if (anchor.userData.mixer) this.mixers.push(anchor.userData.mixer);
+        if (!anchor.userData.replaced) anchor.userData.placeholder.visible = true;
+        this.notify(anchor.userData.replaced ? '人物动作未载入，可继续游戏，重新进入场景后会重试。' : '部分正式模型未载入，保留基础模型继续游戏。');
+      } });
       loading.push(pending); if (character) characters.push(pending);
     }
     this.canvas.focus();

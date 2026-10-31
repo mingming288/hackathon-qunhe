@@ -84,11 +84,12 @@ test('人物行走动画仍在加载时切换场景，可以复用已创建的�
   const target = anchor(), entry = { url: '/assets/models/idle-pending.glb', walkUrl: '/assets/models/walk-pending.glb' };
   const first = replaceAsset(target, entry);
   await new Promise(resolve => setImmediate(resolve));
-  const reused = await replaceAsset(target, entry);
-  assert.ok(reused, '行走动画未完成时待机混合器仍可被新场景使用');
+  const reused = replaceAsset(target, entry);
+  assert.ok(target.userData.mixer, '行走动画未完成时已保留待机混合器');
   finishWalk({ scene: source, animations: [walk] });
-  assert.equal(await first, reused);
-  assert.equal(typeof reused.setMoving, 'function');
+  assert.equal(await first, await reused);
+  const mixer = await reused;
+  assert.equal(typeof mixer.setMoving, 'function');
 });
 
 test('多个角色共用行走动作时只加载一次', async context => {
@@ -101,4 +102,22 @@ test('多个角色共用行走动作时只加载一次', async context => {
     replaceAsset(anchor(), { url: '/assets/models/cache-idle-b.glb', walkUrl: '/assets/models/shared-walk.glb' })
   ]);
   assert.equal(load.mock.calls.filter(call => call.arguments[0].endsWith('shared-walk.glb')).length, 1);
+});
+
+
+test('行走动作加载失败时保留待机并允许重新进入场景后重试', async context => {
+  const source = new THREE.Group(); source.add(new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1)));
+  let attempts = 0;
+  context.mock.method(GLTFLoader.prototype, 'loadAsync', async url => {
+    if (url.endsWith('walk-retry.glb') && ++attempts === 1) throw new Error('动作加载失败');
+    return { scene: source, animations: [new THREE.AnimationClip('animation', 1, [])] };
+  });
+  const target = anchor(), entry = { url: '/assets/models/idle-retry.glb', walkUrl: '/assets/models/walk-retry.glb' };
+  await assert.rejects(replaceAsset(target, entry), /动作加载失败/);
+  assert.ok(target.userData.mixer, '失败后仍保留待机混合器');
+  assert.equal(target.userData.placeholder.visible, false);
+  const mixer = await replaceAsset(target, entry);
+  assert.equal(attempts, 2);
+  assert.equal(typeof mixer.setMoving, 'function');
+  assert.equal(target.children.length, 2, '重试不重复添加人物');
 });
