@@ -4,6 +4,7 @@ import { SCENE_BY_ID } from './scenes.js';
 import { PORTALS } from './navigation.js';
 import { addYardBuildings } from './yard-buildings.js';
 import { YARD_BUILDINGS } from './yard-layout.js';
+import { addCorridorDetails } from './corridor-details.js';
 
 const TONES = {
   warm: ['#39352d', '#686459', '#857d6c'], dark: ['#292f2e', '#555d59', '#777970'],
@@ -64,6 +65,7 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
   }
 
   if (config.kind === 'corridor') {
+    addCorridorDetails(root);
     // 与双侧门洞模型共用墙体尺寸，入口只保留墙垛碰撞。
     const centers = [-11.2, -5.6, 0, 5.6, 11.2];
     for (const x of [-6.1, 6.1]) {
