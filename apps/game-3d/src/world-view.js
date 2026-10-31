@@ -15,10 +15,10 @@ export class WorldView {
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75)); this.renderer.setSize(innerWidth, innerHeight);
     this.renderer.shadowMap.enabled = true; this.renderer.shadowMap.type = THREE.PCFShadowMap;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace; this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.2;
+    this.renderer.toneMappingExposure = .95;
     this.scene = new THREE.Scene(); this.camera = new THREE.PerspectiveCamera(48, innerWidth / innerHeight, .1, 130);
-    this.scene.add(new THREE.HemisphereLight('#f9efda', '#7c8982', 2.3));
-    const sun = new THREE.DirectionalLight('#fff2d2', 3.2); sun.position.set(-15, 24, 12); sun.castShadow = true;
+    this.scene.add(new THREE.HemisphereLight('#ded9c7', '#4d5852', 1.8));
+    const sun = new THREE.DirectionalLight('#e5d5ad', 2.4); sun.position.set(-15, 24, 12); sun.castShadow = true;
     sun.shadow.mapSize.set(2048, 2048);
     Object.assign(sun.shadow.camera, { left: -30, right: 30, top: 30, bottom: -30 }); sun.shadow.normalBias = .035;
     this.scene.add(sun); this.setHero('andy');

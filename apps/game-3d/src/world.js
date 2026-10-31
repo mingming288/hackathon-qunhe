@@ -6,10 +6,10 @@ import { addYardBuildings } from './yard-buildings.js';
 import { YARD_BUILDINGS } from './yard-layout.js';
 
 const TONES = {
-  warm: ['#d4c8ad', '#a9a18d', '#eee3c9'], dark: ['#a3ada5', '#6f7e7c', '#cccbb6'],
-  earth: ['#beab8b', '#8f806a', '#d6c4a4'], night: ['#7c9398', '#5b737c', '#b0c5c7'],
-  field: ['#d9d9b4', '#a0ae83', '#f0e7c8'], coast: ['#e4d9b4', '#c9ba91', '#f8ebc9'],
-  clinical: ['#cbd7d0', '#99aaa5', '#edf0d8'], default: ['#c9cbb5', '#929e96', '#e7dfc8']
+  warm: ['#39352d', '#686459', '#857d6c'], dark: ['#292f2e', '#555d59', '#777970'],
+  earth: ['#3b362e', '#6e6352', '#8b7c66'], night: ['#263238', '#46595e', '#71807d'],
+  field: ['#4c4c3e', '#737865', '#a19a7c'], coast: ['#665f4e', '#93876c', '#b1a384'],
+  clinical: ['#353e3b', '#697670', '#9a9e8d'], default: ['#303531', '#626b63', '#8a8d7c']
 };
 
 export function createWorld(config, { includeCharacters = true, includeHelpers = true } = {}) {
@@ -21,7 +21,7 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
   const [width, depth] = config.size;
   box(shell, width + 1, .35, depth + 1, 0, -.2, 0, floorColor);
   if (includeHelpers) {
-    const grid = new THREE.GridHelper(Math.max(width, depth), Math.round(Math.max(width, depth)), '#aca991', '#c2bca4');
+    const grid = new THREE.GridHelper(Math.max(width, depth), Math.round(Math.max(width, depth)), '#676d60', '#77796b');
     grid.position.y = .005; grid.material.transparent = true; grid.material.opacity = .18; shell.add(grid);
   }
 
