@@ -10,6 +10,7 @@ import { GAME_KEY, saveGame, loadGame, savePreview } from '../src/save.js';
 import { entryPosition } from '../src/navigation.js';
 import { guidanceFor } from '../src/guidance.js';
 import { EarlyWorld } from '../src/early-world.js';
+import { completionTasks } from '../src/original-games/registry.js';
 import * as THREE from 'three';
 
 function walk(game, target) {
@@ -54,6 +55,24 @@ test('标准准备路线能按原结局规则贯通三个结局', () => {
   const one = play({ evidence: ['red'] }); assert.equal(one.finished, '相逢的海滩'); assert.equal(one.scene, 'beach');
   const two = play({ evidence: Object.keys(EVIDENCE) }); assert.equal(two.finished, '高墙下的名单'); assert.equal(two.scene, 'evidence');
   const three = play(); assert.equal(three.finished, '形同陌路'); assert.equal(three.scene, 'supermarket');
+});
+test('超市小游戏结束事件依次推进剩余任务，存档可恢复结局', () => {
+  let game = createGame();
+  while (game.step !== 'threeCollect') game = act(game);
+  const checkpoint = structuredClone(game);
+  for (const start of ['threeCollect', 'threeBag', 'threeAsk', 'threeDecide']) {
+    let state = checkpoint;
+    while (state.step !== start) state = act(state);
+    const before = state.events.length;
+    for (const id of completionTasks(start)) {
+      assert.equal(state.step, id);
+      assert.ok(getActions(state, 'supermarket').some(action => action.id === id));
+      state = advance(state, id, 'supermarket').game;
+    }
+    assert.equal(state.finished, '形同陌路');
+    assert.equal(state.events.length - before, completionTasks(start).length);
+    assert.deepEqual(restoreGame({ version: 2, events: state.events, scene: state.scene }), state);
+  }
 });
 test('切换瑞德后随身栏不显示安迪的工具，故事记录仍保留', () => {
   const andy = { ending: 'three', events: [], items: ['hammer', 'poster', 'map', 'ledger'] };
