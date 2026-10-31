@@ -10,6 +10,7 @@ export function officeHiddenProps(game) {
   if (did(game, 'meetWarden') || did(game, 'sideHide')) hidden.push('warden');
   return hidden;
 }
+export const oakHiddenProps = game => !did(game, 'oneOak') || did(game, 'oneBox') ? ['box'] : [];
 export const getTask = game => TASK_BY_ID.get(game.step);
 export const isAlternate = game => did(game, 'riskInspection');
 export const isLate = game => did(game, 'restYears') || did(game, 'sideYears');
