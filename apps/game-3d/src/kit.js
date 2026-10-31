@@ -44,6 +44,20 @@ function shelf(group) {
   }
 }
 
+function bookStack(group) {
+  const covers = ['#51413a', '#756049', '#495a53', '#774e3c'];
+  for (let i = 0; i < covers.length; i++) {
+    const book = new THREE.Group();
+    book.position.set((i % 2) * .035, i * .16, (i % 3 - 1) * .025);
+    book.rotation.y = (i - 1.5) * .075; group.add(book);
+    const width = .78 - i * .025, depth = .96 - i * .025;
+    box(book, width, .105, depth, 0, .08, 0, '#c5b89a', false);
+    for (const y of [.015, .145]) box(book, width + .04, .025, depth + .04, 0, y, 0, covers[i], false);
+    box(book, .045, .13, depth + .04, -width / 2, .08, 0, covers[i], false);
+    for (const z of [-.25, .25]) box(book, .048, .14, .025, -width / 2, .08, z, '#a98d5d', false);
+  }
+}
+
 function vehicle(group, kind) {
   const bus = kind === 'bus'; const police = kind === 'policeCar';
   const width = bus ? 2.8 : 2.4, length = bus ? 7 : 4.8;
@@ -100,9 +114,9 @@ export function makeProp(kind) {
   } else if (kind === 'radio') {
     box(visual, 1.1, .7, .45, 0, .35, 0, COLORS.wood); box(visual, .5, .4, .03, -.17, .4, .24, '#536064');
     for (const x of [.2, .4]) { const knob = cylinder(visual, .07, .06, x, .24, .27, COLORS.gold); knob.rotation.x = Math.PI / 2; }
-  } else if (['bible', 'ledger', 'books', 'letter'].includes(kind)) {
-    const count = kind === 'books' ? 4 : 1;
-    for (let i = 0; i < count; i++) box(visual, .75, kind === 'letter' ? .02 : .14, .95, i * .05, .08 + i * .15, 0, kind === 'bible' ? '#4d5663' : kind === 'ledger' ? '#8c6d56' : '#c9bb92');
+  } else if (kind === 'books') bookStack(visual);
+  else if (['bible', 'ledger', 'letter'].includes(kind)) {
+    box(visual, .75, kind === 'letter' ? .02 : .14, .95, 0, .08, 0, kind === 'bible' ? '#4d5663' : kind === 'ledger' ? '#8c6d56' : '#c9bb92');
   } else if (kind === 'hammer') {
     box(visual, .1, .6, .1, 0, .35, 0, COLORS.wood); box(visual, .5, .18, .17, 0, .65, 0, COLORS.steel);
   } else if (['stone', 'rubble'].includes(kind)) {
