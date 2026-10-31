@@ -75,8 +75,8 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     if (includeHelpers) addCorridorYardVista(world);
     if (includeHelpers) {
       addCellVista(world);
-      // 角色仍可走到门前，镜头则不能穿过门楣和相邻场景。
-      world.cameraColliders.push({ x: 6.1, z: 0, w: .6, d: 2.2, h: 10, camera: true });
+      // 镜头不能翻过侧墙或穿出门洞；角色仍可走近各个入口。
+      for (const x of [-6.1, 6.1]) world.cameraColliders.push({ x, z: 0, w: .6, d: 28, h: 10, camera: true });
     }
     // 与双侧门洞模型共用墙体尺寸，入口只保留墙垛碰撞。
     const centers = [-11.2, -5.6, 0, 5.6, 11.2];
