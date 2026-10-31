@@ -5,6 +5,7 @@ import { PORTALS } from './navigation.js';
 import { addYardBuildings } from './yard-buildings.js';
 import { YARD_BUILDINGS } from './yard-layout.js';
 import { addCorridorDetails } from './corridor-details.js';
+import { addSceneSurroundings } from './scene-surroundings.js';
 
 const TONES = {
   warm: ['#39352d', '#686459', '#857d6c'], dark: ['#292f2e', '#555d59', '#777970'],
@@ -20,6 +21,7 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
   const [background, wallColor, floorColor] = TONES[config.tone] || TONES.default;
   const world = { root, config, colliders: [], anchors: [architecture], portals: [], animations: [], background, fog: background };
   const [width, depth] = config.size;
+  if (includeHelpers) addSceneSurroundings(world);
   box(shell, width + 1, .35, depth + 1, 0, -.2, 0, floorColor);
   if (includeHelpers) {
     const grid = new THREE.GridHelper(Math.max(width, depth), Math.round(Math.max(width, depth)), '#676d60', '#77796b');

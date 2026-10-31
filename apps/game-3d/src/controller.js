@@ -65,7 +65,7 @@ export class ThirdPersonController {
     const ray = new THREE.Ray(target, offset);
     let distance = this.distance;
     const hit = new THREE.Vector3();
-    for (const collider of world.colliders) {
+    for (const collider of [...world.colliders, ...(world.cameraColliders || [])]) {
       if (!collider.camera) continue;
       const bounds = new THREE.Box3(
         new THREE.Vector3(collider.x - collider.w / 2 - .2, 0, collider.z - collider.d / 2 - .2),
