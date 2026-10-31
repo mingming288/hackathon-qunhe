@@ -31,7 +31,7 @@ function act(game, id = getTask(game).id) {
   assert.ok(guide.title && guide.purpose, '任务应说明目标和目的');
   if (!result.finished) {
     assert.equal(getTask(result).automatic, false, '自动过程不能再要求玩家逐次确认');
-    assert.ok(guide.target && guide.place && guide.action.includes('空格'), result.step + ' 应有可达目标、位置和明确操作');
+    assert.ok(guide.target && guide.place && (guide.action.includes('空格') || guide.action.includes('自动进入')), result.step + ' 应有可达目标、位置和明确操作');
   }
   return result;
 }

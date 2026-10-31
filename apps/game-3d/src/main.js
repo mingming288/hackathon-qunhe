@@ -45,11 +45,11 @@ function renderScene(id, options = {}) {
   document.querySelectorAll('[data-scene]').forEach(button => button.classList.toggle('active', button.dataset.scene === id));
   $('fade').classList.add('show');
   const crossing = (options.from === 'cellCorridor' && ['yard', 'cell'].includes(id)) || (['yard', 'cell'].includes(options.from) && id === 'cellCorridor') || (options.from === 'pipeNetwork' && id === 'rain');
-  if (crossing && mode === 'game') {
+  if (mode === 'game') {
     let finished = false;
     const finish = () => { if (!finished) { finished = true; if (sceneRevision === revision) $('fade').classList.remove('show'); } };
-    const timeout = setTimeout(finish, 5000);
-    ready.then(() => { clearTimeout(timeout); setTimeout(finish, 180); });
+    const timeout = setTimeout(finish, 8000);
+    (crossing ? ready : ready.characters).then(() => { clearTimeout(timeout); setTimeout(finish, 180); });
   } else setTimeout(() => { if (sceneRevision === revision) $('fade').classList.remove('show'); }, 180);
   refresh(); saveCurrent();
 }
@@ -99,8 +99,8 @@ function refresh() {
   const interactions = [], rules = {};
   let goal = null, goalLabel = '', hidden = [];
   for (const portal of view.world.portals) {
-    rules[portal.id] = mode === 'game' ? travelRule(game, sceneId, portal.id) : null;
-    interactions.push({ target: 'exit:' + portal.id, label: (rules[portal.id] ? '查看入口 · ' : '前往 ') + portal.name, run: () => travel(portal.id), range: 2.2 });
+    rules[portal.id] = mode === 'game' ? (earlyPlay.inspectionActive ? '检查还没结束，请先站回床边等待。' : travelRule(game, sceneId, portal.id)) : null;
+    if (rules[portal.id]) interactions.push({ target: 'exit:' + portal.id, label: '查看入口 · ' + portal.name, run: () => travel(portal.id), range: 2.2 });
   }
   if (mode === 'game') {
     const task = getTask(game);
@@ -113,7 +113,7 @@ function refresh() {
     $('evidence-count').textContent = '可选调查（影响结局）：线索 ' + game.evidence.length + '/5 · 旁听 ' + game.observed.length + '/2';
     const grouped = new Map();
     for (const action of getActions(game, sceneId)) {
-      if (action.onArrival) continue;
+      if (action.onArrival || action.target.startsWith('exit:')) continue;
       if (!grouped.has(action.target)) grouped.set(action.target, []);
       grouped.get(action.target).push(action);
     }
@@ -170,7 +170,7 @@ function buildAtlas() {
 async function start() {
   buildAtlas();
   view = new WorldView({
-    canvas: $('world'), labelRoot: $('floating-labels'), interactButton: $('interact'), notify, onAutosave: saveCurrent,
+    canvas: $('world'), labelRoot: $('floating-labels'), interactButton: $('interact'), notify, onAutosave: saveCurrent, onAutoTravel: travel,
     enabled: () => mode !== 'menu' && !atlas.open && !dialogue.dialog.open && !menu.open && !earlyPlay?.busy
   });
   earlyPlay = new EarlyPlay({ view, getGame: () => game, notify,

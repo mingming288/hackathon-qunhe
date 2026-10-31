@@ -41,4 +41,7 @@ button:disabled{cursor:default;opacity:.4;transform:none}
 .challenge-hint{flex-basis:100%;font-size:12px;color:#e0bc72!important}
 #fade{position:fixed;inset:0;pointer-events:none;background:#11130f;opacity:0;transition:opacity .3s;z-index:8}
 #fade.show{opacity:1;transition:none}
+#fade::after{content:'场景载入中…';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#e9d7ad;font-size:15px;letter-spacing:.12em;opacity:0}
+#fade.show::after{animation:loading-hint .3s .7s forwards}
+@keyframes loading-hint{to{opacity:1}}
 @media(max-width:700px){.quest-panel{top:85px;right:14px;width:230px;padding:12px}.quest-panel h2{font-size:12px}.quest-panel p{font-size:10px}.top-actions{max-width:65vw;flex-wrap:wrap;justify-content:flex-end}.scene-caption{max-width:210px;padding:15px}.scene-caption h1{font-size:23px}#menu{padding:28px}#menu h2{font-size:36px}}

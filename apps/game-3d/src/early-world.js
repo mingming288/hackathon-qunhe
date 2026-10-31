@@ -1,5 +1,7 @@
 import * as THREE from 'three';
-import { createActor } from './actor.js';
+import { makeProp } from './kit.js';
+import { replaceAsset } from './assets.js';
+import { disposeWorld } from './world.js';
 import { canStand } from './movement.js';
 import { practiceComplete } from './practice-state.js';
 import { block, bookModel, lettering, disposePracticeObject } from './practice-geometry.js';
@@ -32,7 +34,16 @@ export class EarlyWorld {
         for (let i = 0; i < 4; i++) block(wall, .035, .2, .035, Math.sin(i * 2) * .08, 1.3 + i * .18, 0, '#626d59');
         lettering(wall, '松动的砂浆', 0, 2.2, .05, 1.6, .25);
       }
-      this.guard = createActor({ shirt: '#657d81', hair: '#5f5049' }); this.guard.visible = false; this.root.add(this.guard);
+      this.guard = makeProp('guard'); this.guard.visible = false; view.world.root.add(this.guard);
+      if (view.catalog?.guard) {
+        const stageWorld = view.world;
+        this.guard.userData.placeholder.visible = false;
+        replaceAsset(this.guard, view.catalog.guard, () => view.world === stageWorld && this.guard?.parent).then(mixer => {
+          if (mixer && view.world === stageWorld && this.guard?.parent) view.mixers.push(mixer);
+        }).catch(() => {
+          if (view.world === stageWorld && this.guard?.parent) { this.guard.userData.placeholder.visible = true; this.notify('检查狱警模型未载入，暂用基础形象。'); }
+        });
+      }
       this.door = view.world.portals.find(portal => portal.id === 'cellCorridor')?.object.position.clone() || new THREE.Vector3();
       this.checkPoint = this.nearDesk();
     }
@@ -113,6 +124,7 @@ export class EarlyWorld {
     const look = check.phase === 'search' ? this.desk.position : to;
     this.guard.rotation.y = Math.atan2(look.x - this.guard.position.x, look.z - this.guard.position.z);
     this.guard.userData.animate(elapsed, check.phase === 'search' ? 0 : .55);
+    this.guard.userData.mixer?.setMoving?.(check.phase !== 'search');
     this.update('inspection', { ...check, elapsed: time }, false);
     if (time < duration) return;
     if (check.phase === 'enter') { this.setInspection({ ...check, phase: 'search', elapsed: 0 }); this.notify('狱警正在查看桌上的书和物品。'); }
@@ -123,6 +135,7 @@ export class EarlyWorld {
     }
   }
   dispose() {
+    if (this.guard) { disposeWorld({ root: this.guard }); this.guard = null; }
     if (this.pipeDamage) disposePracticeObject(this.pipeDamage.root);
     disposePracticeObject(this.root);
   }

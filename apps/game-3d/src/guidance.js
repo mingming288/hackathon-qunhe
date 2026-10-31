@@ -23,7 +23,7 @@ const GUIDES = {
   swapLedger: ['操作刺绣后方的保险柜，用圣经换出账本。', '带走高墙内的关键记录。'],
   finalDig: ['返回海报后的通道，走到排水管入口，停留片刻自动进入。', '进入二十年准备已经贯通的排水通道。'],
   smashPipe: ['靠近排水管，只在雷声亮起时按住零点七秒，成功五次；静默时敲击会失败。', '利用雷声掩护，打开逃离通路。'],
-  pipeExit: ['沿管网找到金色标记的“高墙外的雨夜”出口，进入出口。', '离开地下管道。'],
+  pipeExit: ['沿管网走到金色标记的“高墙外的雨夜”出口，靠近后自动进入。', '离开地下管道。'],
   breathe: ['走到雨中的排水口金色标记处，完成逃离。', '此前收集的线索将决定接下来的故事。'],
   sideStone: ['调查禁闭室右后方地上的石板。读完后会自动等到开门。', '禁闭结束后，去图书馆找老布。'],
   sideBrooks: ['找到图书馆整理桌右侧的老布，问他怎样取回石锤。', '取得圣经和办公室巡视的消息。'],
@@ -60,7 +60,7 @@ export function guidanceFor(game) {
   return {
     title: task.label, purpose,
     place: here ? '目标就在这里：' + local : '路线：' + route.map(id => SCENE_BY_ID.get(id).name).join(' → '),
-    action: here ? '靠近金色标记，按空格或点击下方按钮互动。' : '现在先到金色标记“' + nextName + '”，靠近后按空格进入。到达目的地后：' + local,
+    action: here ? (task.target.startsWith('exit:') ? '走近金色标记后自动进入。' : '靠近金色标记，按空格或点击下方按钮互动。') : '现在走到金色标记“' + nextName + '”，靠近后自动进入。到达目的地后：' + local,
     target: here ? task.target : 'exit:' + route[1],
     marker: here ? task.label : '下一步：进入' + nextName
   };

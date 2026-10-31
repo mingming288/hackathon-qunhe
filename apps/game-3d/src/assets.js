@@ -72,6 +72,8 @@ export async function replaceAsset(anchor, entry, isCurrent = () => true) {
   anchor.add(model);
   anchor.userData.replaced = true;
   const mixer = gltf.animations.length ? new THREE.AnimationMixer(model) : null;
+  // 切换场景可能发生在行走动画下载期间；先保存混合器，避免新场景丢失待机动画。
+  anchor.userData.mixer = mixer;
   if (mixer) mixer.clipAction(gltf.animations[0]).play();
   if (mixer && (entry.walkUrl || Number.isInteger(entry.walkAnimation))) {
     let walking = gltf;

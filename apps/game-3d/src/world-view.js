@@ -5,10 +5,12 @@ import { createActor } from './actor.js';
 import { ThirdPersonController } from './controller.js';
 import { replaceAsset } from './assets.js';
 import { entryPosition, transitionOrientation } from './navigation.js';
+import { CHARACTER_NAMES } from './kit.js';
+import { AutoTravel } from './auto-travel.js';
 
 export class WorldView {
-  constructor({ canvas, labelRoot, interactButton, enabled, onAutosave, notify }) {
-    this.canvas = canvas; this.labelRoot = labelRoot; this.button = interactButton; this.notify = notify;
+  constructor({ canvas, labelRoot, interactButton, enabled, onAutosave, onAutoTravel = () => {}, notify }) {
+    this.canvas = canvas; this.labelRoot = labelRoot; this.button = interactButton; this.notify = notify; this.onAutoTravel = onAutoTravel;
     this.environmentOnly = false; this.enabled = enabled;
     this.labels = []; this.mixers = []; this.interactions = []; this.version = 0; this.onAutosave = onAutosave;
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
@@ -60,6 +62,7 @@ export class WorldView {
     this.setStage(null);
     if (this.world) disposeWorld(this.world);
     this.environmentOnly = environmentOnly;
+    this.catalog = catalog;
     this.setHero(character); this.version++; this.mixers = [];
     this.hero.visible = !environmentOnly;
     this.world = createWorld(config, { includeCharacters: !environmentOnly, includeHelpers: !environmentOnly });
@@ -67,19 +70,23 @@ export class WorldView {
     this.scene.background = new THREE.Color(this.world.background); this.scene.fog = new THREE.Fog(this.world.fog, 35, 95);
     const position = entryPosition(this.world, from, location);
     this.hero.position.set(position.x, 0, position.z); this.hero.rotation.y = orientation.facing;
+    this.autoTravel = new AutoTravel(position, this.world.portals);
     this.hero.scale.y = config.id === 'pipeNetwork' ? .72 : 1;
     this.resetCamera(orientation.yaw);
     this.interactions = []; this.current = null; this.button.hidden = true; this.goal = null;
     const version = this.version;
-    const loading = [];
+    const loading = [], characters = [];
     for (const anchor of [...this.world.anchors, ...(this.world.vistaAnchors || []), ...(environmentOnly ? [] : [this.hero])]) {
       const entry = catalog[config.id + ':' + anchor.userData.assetKey] || catalog[anchor.userData.assetKey]; if (!entry) continue;
-      loading.push(replaceAsset(anchor, entry, () => version === this.version).then(mixer => {
+      const character = anchor === this.hero || Object.hasOwn(CHARACTER_NAMES, anchor.userData.assetKey);
+      if (character && !anchor.userData.replaced) anchor.userData.placeholder.visible = false;
+      const pending = replaceAsset(anchor, entry, () => version === this.version).then(mixer => {
         if (version === this.version) { if (mixer) this.mixers.push(mixer); this.stage?.sync(); }
-      }).catch(() => { if (version === this.version) this.notify('部分正式模型未载入，保留基础模型继续游戏。'); }));
+      }).catch(() => { if (version === this.version) { if (!anchor.userData.replaced) anchor.userData.placeholder.visible = true; this.notify('部分正式模型未载入，保留基础模型继续游戏。'); } });
+      loading.push(pending); if (character) characters.push(pending);
     }
     this.canvas.focus();
-    return Promise.all(loading);
+    const ready = Promise.all(loading); ready.characters = Promise.all(characters); return ready;
   }
 
   anchor(target) {
@@ -90,6 +97,7 @@ export class WorldView {
   setStage(stage) { this.stage?.dispose(); this.stage = stage; }
 
   configure({ interactions, goal, goalLabel = '当前目标', portalRules = {}, hidden = [] }) {
+    this.portalRules = portalRules;
     this.interactions = interactions.map(item => ({ ...item, object: this.anchor(item.target) })).filter(item => item.object);
     this.world.anchors.forEach(anchor => { anchor.visible = !hidden.includes(anchor.userData.assetKey); });
     this.stage?.sync();
@@ -140,14 +148,21 @@ export class WorldView {
     const dt = Math.min((now - this.last) / 1000, .05); this.last = now; this.elapsed += dt;
     if (!this.world) return;
     this.orbit.enabled = this.environmentOnly && this.enabled();
+    let speed = 0;
     if (this.environmentOnly) this.orbit.update();
     else {
-      const speed = this.controls.update(dt, this.world);
+      speed = this.controls.update(dt, this.world);
       this.hero.userData.mixer?.setMoving?.(speed > .05);
       this.heroVisual.userData.animate(this.elapsed, speed / 3.3);
     }
     this.world.animations.forEach(anchor => anchor.userData.animate(this.elapsed, 0));
+    const version = this.version;
     this.stage?.updateFrame(dt, this.elapsed);
+    if (version !== this.version) return;
+    if (!this.environmentOnly) {
+      const next = this.autoTravel.next(this.hero.position, speed > .05, this.controls.enabled(), this.world.portals, this.portalRules);
+      if (next) { this.onAutoTravel(next); return; }
+    }
     this.mixers.forEach(mixer => mixer.update(dt));
     if (this.world.rain) {
       const positions = this.world.rain.geometry.attributes.position;

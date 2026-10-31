@@ -73,3 +73,20 @@ test('场景已切换时，仍有父节点的远景不会接入过期模型', as
   assert.equal(target.children.length, 1);
   assert.equal(target.userData.placeholder.visible, true);
 });
+
+test('人物行走动画仍在加载时切换场景，可以复用已创建的待机混合器', async context => {
+  const source = new THREE.Group(); source.add(new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1)));
+  const idle = new THREE.AnimationClip('idle', 1, []), walk = new THREE.AnimationClip('walk', 1, []);
+  let finishWalk;
+  context.mock.method(GLTFLoader.prototype, 'loadAsync', url => url.endsWith('walk-pending.glb')
+    ? new Promise(resolve => { finishWalk = resolve; })
+    : Promise.resolve({ scene: source, animations: [idle] }));
+  const target = anchor(), entry = { url: '/assets/models/idle-pending.glb', walkUrl: '/assets/models/walk-pending.glb' };
+  const first = replaceAsset(target, entry);
+  await new Promise(resolve => setImmediate(resolve));
+  const reused = await replaceAsset(target, entry);
+  assert.ok(reused, '行走动画未完成时待机混合器仍可被新场景使用');
+  finishWalk({ scene: source, animations: [walk] });
+  assert.equal(await first, reused);
+  assert.equal(typeof reused.setMoving, 'function');
+});

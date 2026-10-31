@@ -48,7 +48,7 @@ test('全部十九组场景可以构造，出生点安全，出入口可通过�
     const reached = new Set();
     for (let i = 0; i < queue.length; i++) {
       const [x, z] = queue[i];
-      world.portals.forEach(portal => { if (Math.hypot(portal.object.position.x - x, portal.object.position.z - z) < 1.5) reached.add(portal.id); });
+      world.portals.forEach(portal => { if (Math.hypot(portal.object.position.x - x, portal.object.position.z - z) < 1.2) reached.add(portal.id); });
       for (const [dx, dz] of [[step, 0], [-step, 0], [0, step], [0, -step]]) {
         const nx = x + dx, nz = z + dz;
         const key = Math.round((nx - config.spawn[0]) / step) + ':' + Math.round((nz - config.spawn[1]) / step);
