@@ -5,7 +5,7 @@ import { assetDetails, sceneAssetDetails, environmentDescription } from './asset
 import { readModelCatalog } from './assets.js';
 import { WorldView } from './world-view.js';
 import { Dialogue } from './dialogue.js';
-import { createGame, getTask, getActions, advance, enterScene, travelRule, heroId, did } from './story.js';
+import { createGame, getTask, getActions, advance, enterScene, travelRule, heroId, did, officeHiddenProps } from './story.js';
 import { ITEM_NAMES } from './story-data.js';
 import { loadGame, saveGame, backupGame, loadPreview, savePreview } from './save.js';
 import { guidanceFor } from './guidance.js';
@@ -115,6 +115,7 @@ function refresh() {
       } });
     }
     goal = guide.target; goalLabel = guide.marker;
+    if (sceneId === 'office') hidden.push(...officeHiddenProps(game));
     if (sceneId === 'cell') {
       if (!game.items.includes('hammer') || game.practice.hide.placed || did(game, 'hideHammer')) hidden.push('hammer');
       if (!game.items.includes('bible')) hidden.push('bible');

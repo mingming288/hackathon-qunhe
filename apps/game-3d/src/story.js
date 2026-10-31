@@ -3,6 +3,13 @@ import { SCENE_BY_ID } from './scenes.js';
 import { createPractice, completePractice, restorePractice } from './practice-state.js';
 
 export const did = (game, action) => game.events.includes(action);
+
+// 刺绣移开后才展示保险柜；典狱长离开后不再出现在办公室。
+export function officeHiddenProps(game) {
+  const hidden = [did(game, 'openSafe') ? 'embroidery' : 'safe'];
+  if (did(game, 'meetWarden') || did(game, 'sideHide')) hidden.push('warden');
+  return hidden;
+}
 export const getTask = game => TASK_BY_ID.get(game.step);
 export const isAlternate = game => did(game, 'riskInspection');
 export const isLate = game => did(game, 'restYears') || did(game, 'sideYears');

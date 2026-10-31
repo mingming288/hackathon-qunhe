@@ -88,7 +88,7 @@ export class WorldView {
     this.interactions = interactions.map(item => ({ ...item, object: this.anchor(item.target) })).filter(item => item.object);
     this.world.anchors.forEach(anchor => { anchor.visible = !hidden.includes(anchor.userData.assetKey); });
     this.stage?.sync();
-    this.world.colliders = [...this.baseColliders];
+    this.world.colliders = this.baseColliders.filter(collider => !hidden.includes(collider.assetKey));
     this.labelRoot.replaceChildren(); this.labels = [];
     if (this.environmentOnly) { this.goal = null; return; }
     this.goal = goal ? this.anchor(goal) : null;

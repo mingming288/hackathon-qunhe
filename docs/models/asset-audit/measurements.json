@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-31T16:08:16.943Z",
+  "generatedAt": "2026-10-31T16:30:30.600Z",
   "notes": [
     "只读统计当前清单和模型文件，配置成功不代表视觉验收通过。",
     "场景统计包含配置的全部道具，含剧情隐藏物件；不包含程序基础几何和主角，也不是每帧实测面数。",
@@ -8,12 +8,24 @@
     "尺寸为默认场景静止姿态包围盒；缺少边界或存在骨骼时见单项警告。贴图尺寸仅解析内嵌的便携式网络图形格式。"
   ],
   "summary": {
-    "configuredSlots": 22,
-    "uniqueFiles": 22,
-    "totalBytes": 272218204,
-    "totalFileTriangles": 2995789
+    "configuredSlots": 25,
+    "uniqueFiles": 23,
+    "totalBytes": 277526508,
+    "totalFileTriangles": 2995993
   },
   "entries": {
+    "office-architecture": {
+      "url": "/assets/models/office-rebuilt.glb",
+      "normalize": false
+    },
+    "office:desk": {
+      "url": "/assets/models/desk.glb",
+      "height": 1.3
+    },
+    "office:chair": {
+      "url": "/assets/models/chair.glb",
+      "height": 1.7
+    },
     "cell-architecture": {
       "url": "/assets/models/cell-rebuilt.glb",
       "normalize": false
@@ -104,6 +116,228 @@
     }
   },
   "files": {
+    "/assets/models/office-rebuilt.glb": {
+      "bytes": 5308304,
+      "sha256": "943ea4c5b7e2388c53c4ce3c9a3d07081b34f2134d6fa986d0fc950ab1624756",
+      "triangles": 204,
+      "meshInstances": 17,
+      "primitiveInstances": 17,
+      "bounds": {
+        "min": [
+          -10.000000193715096,
+          -0.23999999463558197,
+          -9.700000002980232
+        ],
+        "max": [
+          10.000000193715096,
+          4,
+          9.5
+        ],
+        "size": [
+          20.00000038743019,
+          4.239999994635582,
+          19.200000002980232
+        ]
+      },
+      "materials": [
+        {
+          "name": "磨损深色木材",
+          "baseColor": true,
+          "normal": true,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        },
+        {
+          "name": "旧石块墙面",
+          "baseColor": true,
+          "normal": true,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "wood_table_worn_nor_gl",
+          "mimeType": "image/jpeg",
+          "bytes": 747433,
+          "dimensions": null
+        },
+        {
+          "name": "wood_table_worn_Diffuse",
+          "mimeType": "image/jpeg",
+          "bytes": 761543,
+          "dimensions": null
+        },
+        {
+          "name": "wood_table_worn_Rough",
+          "mimeType": "image/png",
+          "bytes": 1065035,
+          "dimensions": [
+            1024,
+            1024
+          ]
+        },
+        {
+          "name": "stone_block_wall_nor_gl",
+          "mimeType": "image/jpeg",
+          "bytes": 1233958,
+          "dimensions": null
+        },
+        {
+          "name": "stone_block_wall_Diffuse",
+          "mimeType": "image/jpeg",
+          "bytes": 610046,
+          "dimensions": null
+        },
+        {
+          "name": "stone_block_wall_Rough",
+          "mimeType": "image/png",
+          "bytes": 863087,
+          "dimensions": [
+            1024,
+            1024
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/desk.glb": {
+      "bytes": 20471808,
+      "sha256": "849fe88c38b4b7e7147618e844fb3574181186ea820553dfdd54e397d9a0d9b7",
+      "triangles": 296340,
+      "meshInstances": 1,
+      "primitiveInstances": 1,
+      "bounds": {
+        "min": [
+          -0.5017666220664978,
+          -0.38782763481140137,
+          -0.3500818610191345
+        ],
+        "max": [
+          0.5012038946151733,
+          0.3873555064201355,
+          0.353024959564209
+        ],
+        "size": [
+          1.0029705166816711,
+          0.7751831412315369,
+          0.7031068205833435
+        ]
+      },
+      "materials": [
+        {
+          "name": "",
+          "baseColor": true,
+          "normal": false,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 6158504,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        },
+        {
+          "name": "",
+          "mimeType": "image/png",
+          "bytes": 5623176,
+          "dimensions": [
+            2048,
+            2048
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
+    "/assets/models/chair.glb": {
+      "bytes": 2842776,
+      "sha256": "da6c4e28eb787a7d9992f8f546ec50a3662c3f8c3029a4983fb94a8b3b59b4b0",
+      "triangles": 5300,
+      "meshInstances": 1,
+      "primitiveInstances": 3,
+      "bounds": {
+        "min": [
+          -0.2375275045633316,
+          -0.0006023198366165161,
+          -0.23899999260902405
+        ],
+        "max": [
+          0.2375275045633316,
+          0.954602375626564,
+          0.2370000034570694
+        ],
+        "size": [
+          0.4750550091266632,
+          0.9552046954631805,
+          0.47599999606609344
+        ]
+      },
+      "materials": [
+        {
+          "name": "实拍旧木材.001",
+          "baseColor": true,
+          "normal": true,
+          "metallicRoughness": true,
+          "occlusion": false,
+          "unlit": false
+        },
+        {
+          "name": "边缘磨露木质.001",
+          "baseColor": false,
+          "normal": false,
+          "metallicRoughness": false,
+          "occlusion": false,
+          "unlit": false
+        },
+        {
+          "name": "氧化钉头.001",
+          "baseColor": false,
+          "normal": false,
+          "metallicRoughness": false,
+          "occlusion": false,
+          "unlit": false
+        }
+      ],
+      "textures": [
+        {
+          "name": "wood_table_worn_nor_gl",
+          "mimeType": "image/jpeg",
+          "bytes": 747433,
+          "dimensions": null
+        },
+        {
+          "name": "wood_table_worn_Diffuse",
+          "mimeType": "image/jpeg",
+          "bytes": 761543,
+          "dimensions": null
+        },
+        {
+          "name": "wood_table_worn_Rough",
+          "mimeType": "image/png",
+          "bytes": 1065035,
+          "dimensions": [
+            1024,
+            1024
+          ]
+        }
+      ],
+      "animations": [],
+      "externalResources": 0,
+      "warnings": []
+    },
     "/assets/models/cell-rebuilt.glb": {
       "bytes": 5458780,
       "sha256": "52748be5b0a357bdaa67b887336e386226500cfc3c3df76a1273ac2a52ad7abb",
@@ -1278,139 +1512,6 @@
       "externalResources": 0,
       "warnings": []
     },
-    "/assets/models/desk.glb": {
-      "bytes": 20471808,
-      "sha256": "849fe88c38b4b7e7147618e844fb3574181186ea820553dfdd54e397d9a0d9b7",
-      "triangles": 296340,
-      "meshInstances": 1,
-      "primitiveInstances": 1,
-      "bounds": {
-        "min": [
-          -0.5017666220664978,
-          -0.38782763481140137,
-          -0.3500818610191345
-        ],
-        "max": [
-          0.5012038946151733,
-          0.3873555064201355,
-          0.353024959564209
-        ],
-        "size": [
-          1.0029705166816711,
-          0.7751831412315369,
-          0.7031068205833435
-        ]
-      },
-      "materials": [
-        {
-          "name": "",
-          "baseColor": true,
-          "normal": false,
-          "metallicRoughness": true,
-          "occlusion": false,
-          "unlit": false
-        }
-      ],
-      "textures": [
-        {
-          "name": "",
-          "mimeType": "image/png",
-          "bytes": 6158504,
-          "dimensions": [
-            2048,
-            2048
-          ]
-        },
-        {
-          "name": "",
-          "mimeType": "image/png",
-          "bytes": 5623176,
-          "dimensions": [
-            2048,
-            2048
-          ]
-        }
-      ],
-      "animations": [],
-      "externalResources": 0,
-      "warnings": []
-    },
-    "/assets/models/chair.glb": {
-      "bytes": 2842776,
-      "sha256": "da6c4e28eb787a7d9992f8f546ec50a3662c3f8c3029a4983fb94a8b3b59b4b0",
-      "triangles": 5300,
-      "meshInstances": 1,
-      "primitiveInstances": 3,
-      "bounds": {
-        "min": [
-          -0.2375275045633316,
-          -0.0006023198366165161,
-          -0.23899999260902405
-        ],
-        "max": [
-          0.2375275045633316,
-          0.954602375626564,
-          0.2370000034570694
-        ],
-        "size": [
-          0.4750550091266632,
-          0.9552046954631805,
-          0.47599999606609344
-        ]
-      },
-      "materials": [
-        {
-          "name": "实拍旧木材.001",
-          "baseColor": true,
-          "normal": true,
-          "metallicRoughness": true,
-          "occlusion": false,
-          "unlit": false
-        },
-        {
-          "name": "边缘磨露木质.001",
-          "baseColor": false,
-          "normal": false,
-          "metallicRoughness": false,
-          "occlusion": false,
-          "unlit": false
-        },
-        {
-          "name": "氧化钉头.001",
-          "baseColor": false,
-          "normal": false,
-          "metallicRoughness": false,
-          "occlusion": false,
-          "unlit": false
-        }
-      ],
-      "textures": [
-        {
-          "name": "wood_table_worn_nor_gl",
-          "mimeType": "image/jpeg",
-          "bytes": 747433,
-          "dimensions": null
-        },
-        {
-          "name": "wood_table_worn_Diffuse",
-          "mimeType": "image/jpeg",
-          "bytes": 761543,
-          "dimensions": null
-        },
-        {
-          "name": "wood_table_worn_Rough",
-          "mimeType": "image/png",
-          "bytes": 1065035,
-          "dimensions": [
-            1024,
-            1024
-          ]
-        }
-      ],
-      "animations": [],
-      "externalResources": 0,
-      "warnings": []
-    },
     "/assets/models/shelf.glb": {
       "bytes": 16166460,
       "sha256": "4418006469d64899961f4de95b15058496118b42cadbb86c1ca4abb5608d1b6b",
@@ -2183,7 +2284,13 @@
             0,
             0
           ],
-          "source": null
+          "source": "/assets/models/office-rebuilt.glb",
+          "triangles": 204,
+          "localSizeAfterNormalization": [
+            20.00000038743019,
+            4.239999994635582,
+            19.200000002980232
+          ]
         },
         {
           "id": "desk",
@@ -2193,7 +2300,13 @@
             0,
             -3
           ],
-          "source": null
+          "source": "/assets/models/desk.glb",
+          "triangles": 296340,
+          "localSizeAfterNormalization": [
+            1.6820046803581432,
+            1.3,
+            1.179126348524826
+          ]
         },
         {
           "id": "chair",
@@ -2203,7 +2316,13 @@
             0,
             -5
           ],
-          "source": null
+          "source": "/assets/models/chair.glb",
+          "triangles": 5300,
+          "localSizeAfterNormalization": [
+            0.8454664422725894,
+            1.7,
+            0.8471482574946684
+          ]
         },
         {
           "id": "safe",
@@ -2256,8 +2375,8 @@
           "source": null
         }
       ],
-      "configuredFileBytes": 0,
-      "configuredInstanceTriangles": 0
+      "configuredFileBytes": 28622888,
+      "configuredInstanceTriangles": 301844
     },
     {
       "id": "solitary",

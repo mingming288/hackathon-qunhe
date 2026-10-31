@@ -1,6 +1,9 @@
 {
   "version": 1,
   "models": {
+    "office-architecture": { "url": "/assets/models/office-rebuilt.glb", "normalize": false },
+    "office:desk": { "url": "/assets/models/desk.glb", "height": 1.3 },
+    "office:chair": { "url": "/assets/models/chair.glb", "height": 1.7 },
     "cell-architecture": { "url": "/assets/models/cell-rebuilt.glb", "normalize": false },
     "library-architecture": { "url": "/assets/models/library-rebuilt.glb", "normalize": false },
     "solitary-architecture": { "url": "/assets/models/solitary-shell.glb", "normalize": false },
