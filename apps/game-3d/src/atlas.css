@@ -3,6 +3,9 @@
 .atlas-tabs button { padding: 11px 19px; font-size: 13px; background: transparent; }
 .atlas-tabs button[aria-selected="true"] { background: #354a43; color: #fff6df; border-color: #354a43; }
 .atlas-summary { color: #6d796b; font-size: 12px; line-height: 1.8; margin: 16px 0 22px; }
+.atlas-filters { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 18px; }
+.atlas-filters button { padding: 8px 11px; font-size: 11px; background: transparent; }
+.atlas-filters button[aria-pressed="true"] { background: #d7dfcd; border-color: #7e9681; }
 .atlas-section { margin-top: 28px; }
 .atlas-section h3 { font-size: 12px; font-weight: 500; letter-spacing: .15em; color: #617367; border-bottom: 1px solid #87907842; padding-bottom: 12px; }
 .atlas-section-note { color: #75806f; font-size: 11px; line-height: 1.8; margin: 0 0 14px; }
