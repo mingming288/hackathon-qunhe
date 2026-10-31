@@ -17,3 +17,17 @@ test('医疗记录推车在原位置且有脚轮、抽屉和文件，玩家可�
   assert.ok(canStand(5, -2, world.config.size, world.colliders));
   disposeWorld(world);
 });
+
+test('手术台和手术灯替换为独立陈设，保留原有位置和通路', () => {
+  const world = createWorld(SCENE_BY_ID.get('operatingRoom'));
+  const table = world.anchors.find(anchor => anchor.userData.assetKey === 'operatingTable');
+  const lamp = world.anchors.find(anchor => anchor.userData.assetKey === 'lamp');
+  const size = new THREE.Box3().setFromObject(table).getSize(new THREE.Vector3());
+  assert.ok(size.x <= 2.2 && size.z <= 3.6);
+  assert.ok(table.userData.placeholder.children.length >= 20);
+  assert.ok(lamp.userData.placeholder.children.length >= 10);
+  assert.equal(assetState('operatingTable', {}, 'operatingRoom'), '已内置道具');
+  assert.equal(assetState('lamp', {}, 'operatingRoom'), '已内置道具');
+  assert.ok(canStand(0, 1, world.config.size, world.colliders));
+  disposeWorld(world);
+});

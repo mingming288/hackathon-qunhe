@@ -90,7 +90,7 @@ export function assetState(id, catalog, sceneId) {
   if (catalog[id] || (sceneId && catalog[sceneId + ':' + id])) return '已配置模型';
   if (id === 'medicalExterior-architecture') return '已内置建筑';
   if (sceneId === 'evidence' && ['desk', 'ledger', 'letter', 'postbox', 'evidenceBoard'].includes(id)) return '已内置道具';
-  if (sceneId === 'operatingRoom' && id === 'medicalCart') return '已内置道具';
+  if (sceneId === 'operatingRoom' && ['medicalCart', 'operatingTable', 'lamp'].includes(id)) return '已内置道具';
   if (!sceneId && Object.keys(catalog).some(key => key.endsWith(':' + id))) return '部分场景已配置';
   return '待接入模型';
 }
