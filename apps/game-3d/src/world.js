@@ -121,6 +121,8 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     obstacle(.5, 4, 24, -12.2, 0);
     obstacle(.5, 4, 24, 12.2, 0);
   } else if (config.kind === 'room') {
+    // 银行模型的入口上沿位于前墙附近，只约束镜头，不影响门口通行。
+    if (includeHelpers && config.id === 'bank') world.cameraColliders.push({ x: 0, z: 7.4, w: 21, d: .4, h: 10, camera: true });
     obstacle(width, 4, .4, 0, -depth / 2);
     obstacle(.4, 4, depth, -width / 2, 0); obstacle(.4, 4, depth, width / 2, 0);
     // 镜头侧保留中央开口，墙体仍有实体碰撞；后续可用同尺寸建筑模型替换。
@@ -165,7 +167,10 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     }
     if (config.kind === 'maze') {
       if (includeHelpers && config.id === 'pipeNetwork') addPipeRainVista(world);
-      [[-5, 4, 1, 15], [5, -4, 1, 15], [-9, -6, 7, 1], [9, 7, 7, 1], [0, -11, 9, 1]].forEach(([x, z, w, d]) => obstacle(w, 2.3, d, x, z, '#647b7c'));
+      [[-5, 4, 1, 15], [5, -4, 1, 15], [-9, -6, 7, 1], [9, 7, 7, 1], [0, -11, 9, 1]].forEach(([x, z, w, d]) => {
+        obstacle(w, 2.3, d, x, z, '#647b7c');
+        if (includeHelpers) world.cameraColliders.push({ x, z, w, d, h: 10, camera: true });
+      });
       for (const x of [-9, 0, 9]) box(shell, .8, .04, depth - 3, x, .03, 0, '#8ba6a0', false);
       for (const [x, z] of [[-5.7, 8], [4.3, 2], [5.7, -8]]) {
         const light = new THREE.PointLight('#dfa767', 22, 13, 2);

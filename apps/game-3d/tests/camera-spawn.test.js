@@ -54,3 +54,34 @@ test('从挖掘通道进入砸管处时，镜头不会越过入口门楣', async
   assert.ok(camera.position.z < 9, '镜头应留在入口门楣内侧');
   disposeWorld(world);
 });
+
+test('地下管网窄通道中的镜头不穿过迷宫隔墙', () => {
+  const world = createWorld(SCENE_BY_ID.get('pipeNetwork'));
+  for (const z of [4.3, 6.1]) {
+    const player = new THREE.Group(); player.position.set(6, 0, z);
+    const target = player.position.clone().add(new THREE.Vector3(0, 1.45, 0));
+    const camera = new THREE.PerspectiveCamera();
+    camera.position.copy(target).add(new THREE.Vector3(0, Math.sin(.4), Math.cos(.4)).multiplyScalar(7));
+    const controller = Object.assign(Object.create(ThirdPersonController.prototype), {
+      camera, player, yaw: 0, pitch: .4, distance: 7, keys: new Set(), enabled: () => true,
+    });
+    controller.update(.016, world);
+    assert.ok(camera.position.z < 6.5, `镜头穿入隔墙：${z}`);
+    assert.ok(camera.position.z > z, '镜头保持在人物背后');
+  }
+  disposeWorld(world);
+});
+
+test('银行剧情落点的镜头留在入口建筑内侧', () => {
+  const world = createWorld(SCENE_BY_ID.get('bank'));
+  const player = new THREE.Group(); player.position.set(...[world.config.spawn[0], 0, world.config.spawn[1]]);
+  const target = player.position.clone().add(new THREE.Vector3(0, 1.45, 0));
+  const camera = new THREE.PerspectiveCamera();
+  camera.position.copy(target).add(new THREE.Vector3(0, Math.sin(.4), Math.cos(.4)).multiplyScalar(7));
+  const controller = Object.assign(Object.create(ThirdPersonController.prototype), {
+    camera, player, yaw: 0, pitch: .4, distance: 7, keys: new Set(), enabled: () => true,
+  });
+  controller.update(.016, world);
+  assert.ok(camera.position.z < 7.4, '镜头不能穿过银行入口上沿');
+  disposeWorld(world);
+});
