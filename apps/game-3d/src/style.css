@@ -40,7 +40,7 @@ button:disabled{cursor:default;opacity:.4;transform:none}
 #challenge input{width:100%;accent-color:#c8a75c}#challenge output{font-size:12px;flex-basis:100%;color:#cfc3aa}
 .challenge-hint{flex-basis:100%;font-size:12px;color:#e0bc72!important}
 #fade{position:fixed;inset:0;pointer-events:none;background:#11130f;opacity:0;transition:opacity .3s;z-index:8}
-#fade.show{opacity:1;transition:none}
+#fade.show{opacity:1}
 #fade::after{content:'场景载入中…';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:#e9d7ad;font-size:15px;letter-spacing:.12em;opacity:0}
 #fade.show::after{animation:loading-hint .3s .7s forwards}
 @keyframes loading-hint{to{opacity:1}}

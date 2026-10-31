@@ -11,6 +11,7 @@ import { loadGame, saveGame, backupGame, loadPreview, savePreview } from './save
 import { guidanceFor } from './guidance.js';
 import { EarlyPlay } from './early-play.js';
 import { SceneLoadGate } from './scene-load-gate.js';
+import { fadeBeforeTravel } from './scene-transition.js';
 
 const $ = id => document.getElementById(id);
 const atlas = $('atlas'), menu = $('menu');
@@ -84,8 +85,11 @@ function travel(target) {
   if (earlyPlay.inspectionActive) { notify('检查还没结束，请先站回床边等待。'); return; }
   const from = game.scene;
   try {
-    game = enterScene(game, target);
-    renderScene(game.scene, { from });
+    const next = enterScene(game, target);
+    view.pause();
+    fadeBeforeTravel({ gate: sceneLoad, fade: $('fade'),
+      canTravel: () => mode === 'game' && game.scene === from && !menu.open && !atlas.open && !dialogue.dialog.open,
+      run: () => { game = next; renderScene(game.scene, { from }); } });
   } catch (error) { dialogue.open('这条路暂未开放', [error.message, guidanceFor(game).action]); view.pause(); }
 }
 
