@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "styleReference": "../branch-endings/references/solitary-design-sheet-v2.png",
+  "approvalRequiredBefore3D": true,
+  "items": [
+    {
+      "id": "cell",
+      "name": "安迪的牢房",
+      "file": "references/安迪的牢房-多视角建模设定图-v1.png",
+      "source": "/Users/lijiawei/.codex/generated_images/01a19067-7dc6-7d80-b195-1130a5f29458/exec-fb840a5c-a931-4c0d-8408-1d9eac9fede3.png",
+      "status": "待用户审核",
+      "modelGenerationStatus": "未开始",
+      "gameIntegrationStatus": "未开始",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2964189,
+      "sha256": "8dae8e12e1439250f0e45afd22811026293b186f4d053d3c05f5bcadc9334661"
+    },
+    {
+      "id": "cellCorridor",
+      "name": "监区走廊",
+      "file": "references/监区走廊-多视角建模设定图-v1.png",
+      "source": "/Users/lijiawei/.codex/generated_images/01a19067-7dc6-7d80-b195-1130a5f29458/exec-d7f1d693-768b-4144-aaf1-4002761f4666.png",
+      "status": "待用户审核",
+      "modelGenerationStatus": "未开始",
+      "gameIntegrationStatus": "未开始",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2941266,
+      "sha256": "4ef9b08e5573ae6471b941ae1fd7ac8049e857e1e9c399d78719dc48fb35645a"
+    },
+    {
+      "id": "yard",
+      "name": "院子与监狱大门",
+      "file": "references/院子与监狱大门-多视角建模设定图-v1.png",
+      "source": "/Users/lijiawei/.codex/generated_images/01a19067-7dc6-7d80-b195-1130a5f29458/exec-51701d8b-7405-4861-995a-03ea69e5f8ae.png",
+      "status": "待用户审核",
+      "modelGenerationStatus": "未开始",
+      "gameIntegrationStatus": "未开始",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 3179750,
+      "sha256": "1c6b94dc07ec0f21b54418f345e520b343a15052b026bc8b0a8307ac82061b53"
+    }
+  ],
+  "reviewFocus": [
+    "与已生成禁闭室的风格统一",
+    "牢房床左桌右与后墙海报位置",
+    "走廊连接牢房、院子和禁闭室",
+    "院子左图书馆、右办公楼、后大门、前走廊的关系",
+    "各视角的门窗、方向和资产结构一致性"
+  ],
+  "limitations": [
+    "设定板用于集中审阅，不等同于精确施工图或可直接导入的三维模型。",
+    "标注的13×13、13×29与40×38是当前游戏布局单位，不是米制建筑尺寸。",
+    "正式建模前需从确认稿整理单件资产参考图，并校核正交视图方向、门窗数量、尺寸、厚度和可操作部件。",
+    "牢房拆件示意未单独展开床，床需要作为独立资产制作。"
+  ]
+}

@@ -9,12 +9,14 @@ function perform(game, id, scene) {
   assert.ok(path, game.step + ' 无法抵达目标场景');
   for (const next of path.slice(1)) game = enterScene(game, next);
   game = advance(game, id, game.scene).game;
-  assert.deepEqual(restoreGame({ version: 1, events: game.events, scene: game.scene }), game);
+  assert.deepEqual(restoreGame({ version: 2, events: game.events, scene: game.scene }), game);
   return game;
 }
 
 test('石锤只能在完成瑞德的修理约定后取得，整理图书后才能开始藏锤', () => {
   let game = createGame();
+  assert.equal(game.step, 'inspectWall');
+  game = perform(game, 'inspectWall', 'cell');
   assert.equal(game.step, 'meetRed');
   assert.ok(!game.items.includes('hammer'));
   assert.throws(() => advance(game, 'repairRadio', 'yard'));
@@ -23,10 +25,14 @@ test('石锤只能在完成瑞德的修理约定后取得，整理图书后才�
   assert.ok(!game.items.includes('hammer'), '答应修理不等于已经得到石锤');
   assert.throws(() => advance(game, 'hideHammer', 'cell'));
   game = perform(game, 'repairRadio', 'yard');
+  assert.ok(!game.items.includes('hammer'));
+  game = perform(game, 'takeHammer', 'yard');
   assert.equal(game.items.filter(item => item === 'hammer').length, 1);
   assert.ok(!game.items.includes('bible'));
   assert.throws(() => advance(game, 'repairRadio', 'yard'));
   game = perform(game, 'sortBooks', 'library');
+  assert.ok(!game.items.includes('bible'));
+  game = perform(game, 'getBible', 'library');
   assert.equal(game.step, 'hideHammer');
   assert.ok(game.items.includes('hammer') && game.items.includes('bible'));
 });

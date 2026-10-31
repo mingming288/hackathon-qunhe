@@ -1,0 +1,35 @@
+export function createHideRules({
+  input: InputSystem,
+  onComplete,
+  drawAssetContainInBounds,
+  renderPanel,
+}) {
+  const CANVAS_WIDTH = 1280,
+    CANVAS_HEIGHT = 720;
+  const GameState = {
+    hammerHidePuzzle: {
+      active: true,
+      dragging: false,
+      dragX: 776,
+      dragY: 260,
+      dragOffsetX: 0,
+      dragOffsetY: 0,
+      statusMessage: "",
+    },
+  };
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+  const pointInRect = (p, r) =>
+    p.x >= r.x && p.x <= r.x + r.w && p.y >= r.y && p.y <= r.y + r.h;
+  /* 原版布局 */
+  function completeHammerHidePuzzle() {
+    if (!GameState.hammerHidePuzzle.active) return;
+    GameState.hammerHidePuzzle.active = false;
+    onComplete();
+  }
+  /* 原版函数 */
+  return {
+    update: handleHammerHidePuzzleInput,
+    draw: renderHammerHidePuzzle,
+    getState: () => ({ ...GameState.hammerHidePuzzle }),
+  };
+}

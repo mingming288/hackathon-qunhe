@@ -9,6 +9,8 @@ import { canStand } from '../src/movement.js';
 import { GAME_KEY, saveGame, loadGame, savePreview } from '../src/save.js';
 import { entryPosition } from '../src/navigation.js';
 import { guidanceFor } from '../src/guidance.js';
+import { EarlyWorld } from '../src/early-world.js';
+import * as THREE from 'three';
 
 function walk(game, target) {
   for (let count = 0; game.scene !== target; count++) {
@@ -24,7 +26,7 @@ function act(game, id = getTask(game).id) {
   const before = structuredClone(game);
   const result = advance(game, id, game.scene).game;
   assert.deepEqual(game, before, '状态更新不得改写旧快照');
-  assert.deepEqual(restoreGame({ version: 1, events: result.events, scene: result.scene }), result, '每个检查点应能恢复一致的任务和道具');
+  assert.deepEqual(restoreGame({ version: 2, events: result.events, scene: result.scene }), result, '每个检查点应能恢复一致的任务和道具');
   const guide = guidanceFor(result);
   assert.ok(guide.title && guide.purpose, '任务应说明目标和目的');
   if (!result.finished) {
@@ -70,19 +72,28 @@ test('任务前置条件不可跳过，未知或重复事件不能恢复为有�
   assert.throws(() => restoreGame({ version: 1, events: ['watchTv', 'watchTv'], scene: 'yard' }));
   assert.throws(() => restoreGame({ version: 1, events: ['unknown'], scene: 'cell' }));
   assert.throws(() => restoreGame({ version: 1, events: [], scene: 'beach' }));
-  assert.equal(getActions(game, 'yard')[0].id, 'meetRed');
+  assert.equal(getActions(game, 'cell')[0].id, 'inspectWall');
+  assert.equal(getActions(game, 'yard').length, 0);
 });
 
-test('开场直接给出找瑞德的目标，图书馆和领物无需重复交谈', () => {
+test('先观察墙面，修理后实际领取工具和圣经，藏锤后仍需要接受检查', () => {
   let game = createGame();
-  assert.equal(game.scene, 'cell'); assert.equal(game.step, 'meetRed');
+  assert.equal(game.scene, 'cell'); assert.equal(game.step, 'inspectWall');
+  game = act(game);
+  assert.equal(game.step, 'meetRed');
   assert.equal(guidanceFor(game).target, 'exit:cellCorridor');
   assert.match(guidanceFor(game).place, /安迪的牢房 → 监区走廊 → 院子与监狱大门/);
   game = act(game); game = act(game);
+  assert.equal(game.step, 'takeHammer'); assert.ok(!game.items.includes('hammer'));
+  game = act(game);
   assert.equal(game.step, 'sortBooks'); assert.equal(travelRule(game, 'yard', 'library'), null);
   assert.equal(guidanceFor(game).target, 'exit:library');
   game = act(game);
+  assert.equal(game.step, 'getBible'); assert.ok(!game.items.includes('bible'));
+  game = act(game);
   assert.equal(game.step, 'hideHammer'); assert.ok(game.items.includes('bible'));
+  game = act(game);
+  assert.equal(game.step, 'inspection');
   game = act(game);
   assert.equal(game.step, 'askPoster'); assert.ok(game.events.includes('inspection'));
   for (const id of ['askPoster', 'hangPoster', 'firstDig', 'dumpSoil1']) game = act(game, id);
@@ -113,7 +124,10 @@ test('场景查看记录不会覆盖正式游戏的事件、场景与位置', ()
 test('全部剧情目标具有可接近的三维实体，返回入口有安全落脚点', () => {
   const worlds = new Map();
   for (const config of SCENE_BY_ID.values()) {
-    const world = createWorld(config); worlds.set(config.id, world);
+    const world = createWorld(config);
+    const game = { ...createGame(), scene: config.id };
+    world.early = new EarlyWorld({ world, hero: new THREE.Group() }, { getGame: () => game });
+    worlds.set(config.id, world);
     for (const portal of world.portals) {
       const entry = entryPosition(world, portal.id);
       assert.ok(canStand(entry.x, entry.z, config.size, world.colliders), config.id + ' 返回入口不安全');
@@ -121,7 +135,7 @@ test('全部剧情目标具有可接近的三维实体，返回入口有安全�
   }
   for (const task of TASKS) {
     const world = worlds.get(task.scene);
-    const target = task.target.startsWith('exit:') ? world.portals.find(item => item.id === task.target.slice(5))?.object : world.anchors.find(item => item.userData.assetKey === task.target);
+    const target = task.target.startsWith('exit:') ? world.portals.find(item => item.id === task.target.slice(5))?.object : world.early.anchor(task.target) || world.anchors.find(item => item.userData.assetKey === task.target);
     assert.ok(target, task.id + ' 缺少对应的三维实体');
     let reachable = false;
     for (let angle = 0; angle < Math.PI * 2; angle += .2) {
@@ -130,5 +144,5 @@ test('全部剧情目标具有可接近的三维实体，返回入口有安全�
     }
     assert.ok(reachable, task.id + ' 没有可站立的交互位置');
   }
-  worlds.forEach(disposeWorld);
+  worlds.forEach(world => { world.early.dispose(); disposeWorld(world); });
 });

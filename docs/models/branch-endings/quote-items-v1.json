@@ -1,0 +1,191 @@
+{
+  "1": {
+    "endpoint": {
+      "method": "POST",
+      "path": "/lux3d/v1/generate/text-to-3d/task/create"
+    },
+    "parameters": {
+      "pathParameters": {},
+      "queryParameters": {},
+      "body": {
+        "prompt": "An empty solitary confinement cell architectural shell. Thick weathered stone block walls, narrow barred high window, recessed iron doorway with a visible light slit, worn stone floor. Keep the front wall and ceiling open as a third-person cutaway. No mat, inscription slab, furniture or loose props. Planning scale: approximately 10 metres wide by 12 metres deep, wall height about 4.0 metres. Ground is y=0. Front is positive z. Floor-plan access references: cellCorridor at floor-plan x=0, z=4.7. These are intended layout constraints; retain ample empty space at every access point. Unified stylized Western editorial cartoon game art, matching exaggerated hand-painted comic characters. Chunky readable geometry, beveled solid edges, muted dusty ochre, faded teal, gray-green, warm off-white and dark plum accents. Broad flat color masses and subtle painted wear; restrained serious mood. Physically thick surfaces and complete three-dimensional sides. No photorealism, anime cel characters, text, logo, printed labels, strong baked cast shadows, white studio pedestal or decorative frame.",
+        "version": "G1-Turbo",
+        "style": "cartoon",
+        "faceCount": 50000,
+        "outputFormat": [
+          "glb"
+        ],
+        "enablePbr": true,
+        "aiPredictSize": true
+      }
+    }
+  },
+  "2": {
+    "endpoint": {
+      "method": "POST",
+      "path": "/lux3d/v1/generate/text-to-3d/task/create"
+    },
+    "parameters": {
+      "pathParameters": {},
+      "queryParameters": {},
+      "body": {
+        "prompt": "An empty mid-century institutional operating room shell. Desaturated mint ceramic wall tiles, pale plaster upper walls, thick window recesses, worn but clean tile floor, two accessible door openings. Open front wall and no ceiling for a third-person cutaway. No operating table, trolley, medical equipment, lights, blood or people. Planning scale: approximately 18 metres wide by 18 metres deep, wall height about 4.5 metres. Ground is y=0. Front is positive z. Floor-plan access references: cell at floor-plan x=0, z=7.5; medicalExterior at floor-plan x=6.5, z=4. These are intended layout constraints; retain ample empty space at every access point. Unified stylized Western editorial cartoon game art, matching exaggerated hand-painted comic characters. Chunky readable geometry, beveled solid edges, muted dusty ochre, faded teal, gray-green, warm off-white and dark plum accents. Broad flat color masses and subtle painted wear; restrained serious mood. Physically thick surfaces and complete three-dimensional sides. No photorealism, anime cel characters, text, logo, printed labels, strong baked cast shadows, white studio pedestal or decorative frame.",
+        "version": "G1-Turbo",
+        "style": "cartoon",
+        "faceCount": 60000,
+        "outputFormat": [
+          "glb"
+        ],
+        "enablePbr": true,
+        "aiPredictSize": true
+      }
+    }
+  },
+  "3": {
+    "endpoint": {
+      "method": "POST",
+      "path": "/lux3d/v1/generate/text-to-3d/task/create"
+    },
+    "parameters": {
+      "pathParameters": {},
+      "queryParameters": {},
+      "body": {
+        "prompt": "A quiet rural field environment ground asset with gently undulating dry grass terrain, a long low weathered stone wall along the left side, and a broad level dirt walking path. Keep the central walking surface mostly level and unobstructed. No oak tree, marker stone, iron box, letter, vehicles, people, horizon image or sky dome. Planning scale: approximately 38 metres wide by 35 metres deep. Ground is y=0. Front is positive z. Floor-plan access references: road at floor-plan x=0, z=14; rain at floor-plan x=10, z=12. These are intended layout constraints; retain ample empty space at every access point. Unified stylized Western editorial cartoon game art, matching exaggerated hand-painted comic characters. Chunky readable geometry, beveled solid edges, muted dusty ochre, faded teal, gray-green, warm off-white and dark plum accents. Broad flat color masses and subtle painted wear; restrained serious mood. Physically thick surfaces and complete three-dimensional sides. No photorealism, anime cel characters, text, logo, printed labels, strong baked cast shadows, white studio pedestal or decorative frame.",
+        "version": "G1-Turbo",
+        "style": "cartoon",
+        "faceCount": 60000,
+        "outputFormat": [
+          "glb"
+        ],
+        "enablePbr": true,
+        "aiPredictSize": true
+      }
+    }
+  },
+  "4": {
+    "endpoint": {
+      "method": "POST",
+      "path": "/lux3d/v1/generate/text-to-3d/task/create"
+    },
+    "parameters": {
+      "pathParameters": {},
+      "queryParameters": {},
+      "body": {
+        "prompt": "A compact mid-century rural border-town street environment shell. A broad straight level asphalt road running front to back, faded lane lines, walkable roadside shoulders and a few closed low-rise storefront facades at the outer left and right edges. These distant exterior-only background buildings have no furnished interiors. Keep the center and road ends open. No vehicles, road signs, trees, people or sky. Planning scale: approximately 40 metres wide by 42 metres deep. Ground is y=0. Front is positive z. Floor-plan access references: oak at floor-plan x=-8, z=16; beach at floor-plan x=-8, z=-16; bank at floor-plan x=8, z=14. These are intended layout constraints; retain ample empty space at every access point. Unified stylized Western editorial cartoon game art, matching exaggerated hand-painted comic characters. Chunky readable geometry, beveled solid edges, muted dusty ochre, faded teal, gray-green, warm off-white and dark plum accents. Broad flat color masses and subtle painted wear; restrained serious mood. Physically thick surfaces and complete three-dimensional sides. No photorealism, anime cel characters, text, logo, printed labels, strong baked cast shadows, white studio pedestal or decorative frame.",
+        "version": "G1-Turbo",
+        "style": "cartoon",
+        "faceCount": 80000,
+        "outputFormat": [
+          "glb"
+        ],
+        "enablePbr": true,
+        "aiPredictSize": true
+      }
+    }
+  },
+  "5": {
+    "endpoint": {
+      "method": "POST",
+      "path": "/lux3d/v1/generate/text-to-3d/task/create"
+    },
+    "parameters": {
+      "pathParameters": {},
+      "queryParameters": {},
+      "body": {
+        "prompt": "A stylized sandy coastal boat-repair ground environment asset. Warm pale sand, a shallow shoreline toward the back, subtle sand ridges confined to edges and a broad flat dry work area in the center. Preserve open passages at the front and right side. No boat, tools, trees, buildings, people, ocean water mesh, sky dome or display pedestal. Planning scale: approximately 40 metres wide by 37 metres deep. Ground is y=0. Front is positive z. Floor-plan access references: road at floor-plan x=0, z=16; supermarket at floor-plan x=12, z=10. These are intended layout constraints; retain ample empty space at every access point. Unified stylized Western editorial cartoon game art, matching exaggerated hand-painted comic characters. Chunky readable geometry, beveled solid edges, muted dusty ochre, faded teal, gray-green, warm off-white and dark plum accents. Broad flat color masses and subtle painted wear; restrained serious mood. Physically thick surfaces and complete three-dimensional sides. No photorealism, anime cel characters, text, logo, printed labels, strong baked cast shadows, white studio pedestal or decorative frame.",
+        "version": "G1-Turbo",
+        "style": "cartoon",
+        "faceCount": 60000,
+        "outputFormat": [
+          "glb"
+        ],
+        "enablePbr": true,
+        "aiPredictSize": true
+      }
+    }
+  },
+  "6": {
+    "endpoint": {
+      "method": "POST",
+      "path": "/lux3d/v1/generate/text-to-3d/task/create"
+    },
+    "parameters": {
+      "pathParameters": {},
+      "queryParameters": {},
+      "body": {
+        "prompt": "An empty mid-century neighborhood supermarket architectural shell. Faded cream walls, muted checker tile floor, front shop windows with real thickness and two broad front entrance openings, modest ceiling-edge beams. Open front wall and no full ceiling for third-person gameplay visibility. No shelves, freezer, checkout counter, bags, products, signs, people or furniture. Planning scale: approximately 27 metres wide by 26 metres deep, wall height about 4.8 metres. Ground is y=0. Front is positive z. Floor-plan access references: beach at floor-plan x=0, z=11; road at floor-plan x=-9, z=10. These are intended layout constraints; retain ample empty space at every access point. Unified stylized Western editorial cartoon game art, matching exaggerated hand-painted comic characters. Chunky readable geometry, beveled solid edges, muted dusty ochre, faded teal, gray-green, warm off-white and dark plum accents. Broad flat color masses and subtle painted wear; restrained serious mood. Physically thick surfaces and complete three-dimensional sides. No photorealism, anime cel characters, text, logo, printed labels, strong baked cast shadows, white studio pedestal or decorative frame.",
+        "version": "G1-Turbo",
+        "style": "cartoon",
+        "faceCount": 60000,
+        "outputFormat": [
+          "glb"
+        ],
+        "enablePbr": true,
+        "aiPredictSize": true
+      }
+    }
+  },
+  "7": {
+    "endpoint": {
+      "method": "POST",
+      "path": "/lux3d/v1/generate/text-to-3d/task/create"
+    },
+    "parameters": {
+      "pathParameters": {},
+      "queryParameters": {},
+      "body": {
+        "prompt": "An empty small mid-century bank hall architectural shell. Restrained art-deco stone pilasters, warm worn limestone floor, tall framed windows and a wide front entrance, muted brass architectural trim. Keep a broad flat central floor. Open front wall and no ceiling for a third-person cutaway. No teller counters, ledgers, chairs, money, people, signs or loose props. Planning scale: approximately 22 metres wide by 19 metres deep, wall height about 5.0 metres. Ground is y=0. Front is positive z. Floor-plan access references: road at floor-plan x=0, z=8. These are intended layout constraints; retain ample empty space at every access point. Unified stylized Western editorial cartoon game art, matching exaggerated hand-painted comic characters. Chunky readable geometry, beveled solid edges, muted dusty ochre, faded teal, gray-green, warm off-white and dark plum accents. Broad flat color masses and subtle painted wear; restrained serious mood. Physically thick surfaces and complete three-dimensional sides. No photorealism, anime cel characters, text, logo, printed labels, strong baked cast shadows, white studio pedestal or decorative frame.",
+        "version": "G1-Turbo",
+        "style": "cartoon",
+        "faceCount": 60000,
+        "outputFormat": [
+          "glb"
+        ],
+        "enablePbr": true,
+        "aiPredictSize": true
+      }
+    }
+  },
+  "8": {
+    "endpoint": {
+      "method": "POST",
+      "path": "/lux3d/v1/generate/text-to-3d/task/create"
+    },
+    "parameters": {
+      "pathParameters": {},
+      "queryParameters": {},
+      "body": {
+        "prompt": "An empty modest mid-century evidence-sorting office shell. Warm faded plaster, wooden lower wall panels, worn timber floor, recessed rear windows and two accessible exits toward the front. Open front wall and no ceiling for a third-person cutaway. Keep the center clear. No desk, documents, pin board, ledger, letter, postbox, furniture or people. Planning scale: approximately 18 metres wide by 17 metres deep, wall height about 4.2 metres. Ground is y=0. Front is positive z. Floor-plan access references: medicalExterior at floor-plan x=0, z=7; rain at floor-plan x=-6, z=4. These are intended layout constraints; retain ample empty space at every access point. Unified stylized Western editorial cartoon game art, matching exaggerated hand-painted comic characters. Chunky readable geometry, beveled solid edges, muted dusty ochre, faded teal, gray-green, warm off-white and dark plum accents. Broad flat color masses and subtle painted wear; restrained serious mood. Physically thick surfaces and complete three-dimensional sides. No photorealism, anime cel characters, text, logo, printed labels, strong baked cast shadows, white studio pedestal or decorative frame.",
+        "version": "G1-Turbo",
+        "style": "cartoon",
+        "faceCount": 50000,
+        "outputFormat": [
+          "glb"
+        ],
+        "enablePbr": true,
+        "aiPredictSize": true
+      }
+    }
+  },
+  "9": {
+    "endpoint": {
+      "method": "POST",
+      "path": "/lux3d/v1/generate/text-to-3d/task/create"
+    },
+    "parameters": {
+      "pathParameters": {},
+      "queryParameters": {},
+      "body": {
+        "prompt": "A mid-century institutional medical facility exterior environment shell with an empty level courtyard. A modest two-story desaturated gray-green clinical facade at the back, a clearly accessible central entry, side perimeter walls and short low boundary fencing. Leave the front and a central walking route unobstructed. Exterior-only architecture, no furnished interior. No police car, medical devices, props, people, trees or sky. Planning scale: approximately 38 metres wide by 34 metres deep. Ground is y=0. Front is positive z. Floor-plan access references: evidence at floor-plan x=0, z=14.6; operatingRoom at floor-plan x=0, z=-14.5. These are intended layout constraints; retain ample empty space at every access point. Unified stylized Western editorial cartoon game art, matching exaggerated hand-painted comic characters. Chunky readable geometry, beveled solid edges, muted dusty ochre, faded teal, gray-green, warm off-white and dark plum accents. Broad flat color masses and subtle painted wear; restrained serious mood. Physically thick surfaces and complete three-dimensional sides. No photorealism, anime cel characters, text, logo, printed labels, strong baked cast shadows, white studio pedestal or decorative frame.",
+        "version": "G1-Turbo",
+        "style": "cartoon",
+        "faceCount": 80000,
+        "outputFormat": [
+          "glb"
+        ],
+        "enablePbr": true,
+        "aiPredictSize": true
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "tool": "内置图像生成工具",
+  "jobs": [
+    {
+      "id": "scene-rain",
+      "file": "references/scene-rain-高墙外的雨夜-v2.png",
+      "referenced_image_paths": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/scene-rain-高墙外的雨夜-v1.png"
+      ],
+      "prompt": "用途：游戏场景设定板定点修正。输入图1是唯一编辑目标。保留原图所有版式、标题、石墙、雨夜天空、湿地、岩石、灯光、材质、视角、构图和其他物件。只改一件事：排水口必须是畅通的出口，把各面板里挡在排水口中央的整片铁栅移除，或者拆开靠在墙边，中央洞口始终留出可爬出的开放通道。大整体图、正背面、俯视、拆件和排水口特写全部同步，铁栅不能换成新的堵塞物。通道内是空的暗色石砌涵洞，水流依旧由洞口流出，保持原有宽度高度。不要改变游戏其他设计，不画人物，保留中文和页脚“审阅稿 · 尺寸待校准”。编辑结果仍为完整横向设定板。"
+    },
+    {
+      "id": "scene-office",
+      "file": "references/scene-office-典狱长办公室-v2.png",
+      "referenced_image_paths": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/scene-office-典狱长办公室-v1.png",
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-embroidery-遮挡保险柜的刺绣-v1.png",
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-curtain-可藏身的厚窗帘-v1.png"
+      ],
+      "prompt": "用途：游戏场景设定板定点修正。输入图1是编辑目标，图2仅供遮挡保险柜的木框刺绣外形参考，图3仅供灰绿厚窗帘的颜色材质参考。保留图1的完整版式、标题、房间轮廓、石墙、地板、桌椅、入口、柜子、照明和整体画风。只同步修正两处资产一致性：1，所有红棕色窗帘改成图3的褪色深灰绿厚布，位置、尺寸、褶皱、藏身空间保持。2，左后侧的金色徽章长布幔和并排落地保险柜改成图2的方形旧木框山水刺绣挂画；保险柜嵌在此画后方的墙内，默认由木框挂画完全遮住，绝不能与画并排摆放。整体图、正面、俯视、拆件保持同一处左后墙安装位置，挂画可向侧面掀开。原保险柜细节区显示掀开木框挂画露出嵌墙柜门的状态，柜门与旋钮仍可独立。右后侧灰绿窗帘保留可藏身空地。标题和中文版式不变，无人物。页脚“审阅稿 · 尺寸待校准”。不改其余家具和房间设计。"
+    },
+    {
+      "id": "scene-oak",
+      "file": "references/scene-oak-石墙尽头的橡树田野-v2.png",
+      "referenced_image_paths": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/scene-oak-石墙尽头的橡树田野-v1.png",
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-markerStone-橡树下的深色标记石-v1.png"
+      ],
+      "prompt": "用途：游戏场景设定板定点修正。输入图1是编辑目标，图2仅供自然扁石外形与材质参考。只替换图1里树根旁的标记石：由直立有十字刻痕的石头改成图2一样的自然乌黑灰色扁平石，贴地放置、不规则天然边缘、略平底面，所有面都无刻字、无符号、无十字。它遮住树根旁地下铁盒的取物位置，属于能被掀起的小石盖。全图整体、四方向视图、俯视、拆件、树根特写和标记石特写同步这一变更。完全保留原图的橡树、田野、石墙、路径、铁盒、信件、光照、色彩、材质和中文版式。不要增加人物、建筑或其他物件。保留横向完整设定板、中文标题及页脚“审阅稿 · 尺寸待校准”。"
+    },
+    {
+      "id": "scene-operatingRoom",
+      "file": "references/scene-operatingRoom-异常支线手术室-v1.png",
+      "prompt": "用途：空置室内环境设计，游戏三维建模参考设定板。请画一间无人使用的旧式诊疗房间，展示房间与设备的外观结构。灰绿色旧墙裙、浅灰地砖、素白上墙、老式木门、小高窗，柔和日光；中央一张空置可调节检查台，完整干净的深灰皮垫与金属底座；右后方小型金属设备推车；左侧独立老式照明灯。复古朴素的灰绿、灰石、深木色材质，略有使用磨损，清晰三维游戏环境设定效果。横向设定板：左上大整体室内透视，右上四个方向立面，左下俯视平面显示从门到检查台和设备车的步行通路，中下墙体、地板、检查台、灯、设备推车的独立拆件，右下皮垫、金属轮、旧瓷砖、灯罩细节。仅设计空房间与家具，设备均为静态摆放。背景淡灰，中文短标签，标题“旧式医疗房间｜建模设定稿”，页脚“审阅稿 · 尺寸待校准”。不要生成剧情画面或人物。"
+    }
+  ]
+}

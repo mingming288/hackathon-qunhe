@@ -1,0 +1,499 @@
+{
+  "schema": "beyond-walls.model-batch/v1",
+  "batch": "branch-endings-shells-v1",
+  "region": "cn",
+  "approvalMode": "batch",
+  "approvalStatus": "pending_batch_approval",
+  "generationStarted": false,
+  "styleZh": "统一美式夸张漫画游戏风格，体块清楚、实体厚度、圆钝倒角；旧赭黄、灰绿、褪色蓝绿、暖米白与暗紫点缀，块面明暗及轻微手绘磨损。不生成角色、文字标识、写实光影、展示底座或装饰边框。",
+  "scope": "九组分支与结局环境主体。家具、道具与人物分离，源模型生成后校准门洞和地面，再逐步接入游戏。",
+  "items": [
+    {
+      "sequence": "1",
+      "id": "solitary-architecture",
+      "name": "禁闭室 · 环境主体",
+      "scenes": [
+        "solitary"
+      ],
+      "quantity": 1,
+      "operation": "text-to-3d",
+      "generationTier": "涡轮版",
+      "fourView": false,
+      "targetFaces": 50000,
+      "formats": [
+        "glb"
+      ],
+      "descriptionZh": "禁闭室空建筑壳：潮湿旧石墙、窄门缝、铁窗与地面，前侧和屋顶敞开。草席与字迹石板单独制作。",
+      "layout": {
+        "size": [
+          10,
+          12
+        ],
+        "wallHeight": 4.0,
+        "entrances": {
+          "cellCorridor": [
+            0,
+            4.7
+          ]
+        }
+      },
+      "separatePropKeys": [
+        "mat",
+        "stone"
+      ],
+      "requiresLayoutCalibration": true,
+      "parameters": {
+        "prompt": "An empty solitary confinement cell architectural shell. Thick weathered stone block walls, narrow barred high window, recessed iron doorway with a visible light slit, worn stone floor. Keep the front wall and ceiling open as a third-person cutaway. No mat, inscription slab, furniture or loose props. Planning scale: approximately 10 metres wide by 12 metres deep, wall height about 4.0 metres. Ground is y=0. Front is positive z. Floor-plan access references: cellCorridor at floor-plan x=0, z=4.7. These are intended layout constraints; retain ample empty space at every access point. Unified stylized Western editorial cartoon game art, matching exaggerated hand-painted comic characters. Chunky readable geometry, beveled solid edges, muted dusty ochre, faded teal, gray-green, warm off-white and dark plum accents. Broad flat color masses and subtle painted wear; restrained serious mood. Physically thick surfaces and complete three-dimensional sides. No photorealism, anime cel characters, text, logo, printed labels, strong baked cast shadows, white studio pedestal or decorative frame.",
+        "version": "G1-Turbo",
+        "style": "cartoon",
+        "faceCount": 50000,
+        "outputFormat": [
+          "glb"
+        ],
+        "enablePbr": true,
+        "aiPredictSize": true
+      },
+      "estimatedCredits": 13,
+      "status": "awaiting_approval"
+    },
+    {
+      "sequence": "2",
+      "id": "operatingRoom-architecture",
+      "name": "异常支线 · 手术室 · 环境主体",
+      "scenes": [
+        "operatingRoom"
+      ],
+      "quantity": 1,
+      "operation": "text-to-3d",
+      "generationTier": "涡轮版",
+      "fourView": false,
+      "targetFaces": 60000,
+      "formats": [
+        "glb"
+      ],
+      "descriptionZh": "手术室空建筑壳：灰绿瓷砖、冷色墙面和门洞，保留可通行地面。手术台、设备车和灯具单独制作。",
+      "layout": {
+        "size": [
+          18,
+          18
+        ],
+        "wallHeight": 4.5,
+        "entrances": {
+          "cell": [
+            0,
+            7.5
+          ],
+          "medicalExterior": [
+            6.5,
+            4
+          ]
+        }
+      },
+      "separatePropKeys": [
+        "operatingTable",
+        "medicalCart",
+        "lamp"
+      ],
+      "requiresLayoutCalibration": true,
+      "parameters": {
+        "prompt": "An empty mid-century institutional operating room shell. Desaturated mint ceramic wall tiles, pale plaster upper walls, thick window recesses, worn but clean tile floor, two accessible door openings. Open front wall and no ceiling for a third-person cutaway. No operating table, trolley, medical equipment, lights, blood or people. Planning scale: approximately 18 metres wide by 18 metres deep, wall height about 4.5 metres. Ground is y=0. Front is positive z. Floor-plan access references: cell at floor-plan x=0, z=7.5; medicalExterior at floor-plan x=6.5, z=4. These are intended layout constraints; retain ample empty space at every access point. Unified stylized Western editorial cartoon game art, matching exaggerated hand-painted comic characters. Chunky readable geometry, beveled solid edges, muted dusty ochre, faded teal, gray-green, warm off-white and dark plum accents. Broad flat color masses and subtle painted wear; restrained serious mood. Physically thick surfaces and complete three-dimensional sides. No photorealism, anime cel characters, text, logo, printed labels, strong baked cast shadows, white studio pedestal or decorative frame.",
+        "version": "G1-Turbo",
+        "style": "cartoon",
+        "faceCount": 60000,
+        "outputFormat": [
+          "glb"
+        ],
+        "enablePbr": true,
+        "aiPredictSize": true
+      },
+      "estimatedCredits": 13,
+      "status": "awaiting_approval"
+    },
+    {
+      "sequence": "3",
+      "id": "oak-architecture",
+      "name": "石墙尽头的橡树 · 环境主体",
+      "scenes": [
+        "oak"
+      ],
+      "quantity": 1,
+      "operation": "text-to-3d",
+      "generationTier": "涡轮版",
+      "fourView": false,
+      "targetFaces": 60000,
+      "formats": [
+        "glb"
+      ],
+      "descriptionZh": "橡树田野环境主体：缓坡草地、旧石墙和土路，橡树、深色石块、铁盒与信件单独制作。",
+      "layout": {
+        "size": [
+          38,
+          35
+        ],
+        "wallHeight": 0.0,
+        "entrances": {
+          "road": [
+            0,
+            14
+          ],
+          "rain": [
+            10,
+            12
+          ]
+        }
+      },
+      "separatePropKeys": [
+        "oak",
+        "stone",
+        "box"
+      ],
+      "requiresLayoutCalibration": true,
+      "parameters": {
+        "prompt": "A quiet rural field environment ground asset with gently undulating dry grass terrain, a long low weathered stone wall along the left side, and a broad level dirt walking path. Keep the central walking surface mostly level and unobstructed. No oak tree, marker stone, iron box, letter, vehicles, people, horizon image or sky dome. Planning scale: approximately 38 metres wide by 35 metres deep. Ground is y=0. Front is positive z. Floor-plan access references: road at floor-plan x=0, z=14; rain at floor-plan x=10, z=12. These are intended layout constraints; retain ample empty space at every access point. Unified stylized Western editorial cartoon game art, matching exaggerated hand-painted comic characters. Chunky readable geometry, beveled solid edges, muted dusty ochre, faded teal, gray-green, warm off-white and dark plum accents. Broad flat color masses and subtle painted wear; restrained serious mood. Physically thick surfaces and complete three-dimensional sides. No photorealism, anime cel characters, text, logo, printed labels, strong baked cast shadows, white studio pedestal or decorative frame.",
+        "version": "G1-Turbo",
+        "style": "cartoon",
+        "faceCount": 60000,
+        "outputFormat": [
+          "glb"
+        ],
+        "enablePbr": true,
+        "aiPredictSize": true
+      },
+      "estimatedCredits": 13,
+      "status": "awaiting_approval"
+    },
+    {
+      "sequence": "4",
+      "id": "road-architecture",
+      "name": "公路与边境小镇 · 环境主体",
+      "scenes": [
+        "road"
+      ],
+      "quantity": 1,
+      "operation": "text-to-3d",
+      "generationTier": "涡轮版",
+      "fourView": false,
+      "targetFaces": 80000,
+      "formats": [
+        "glb"
+      ],
+      "descriptionZh": "公路小镇环境主体：平缓沥青路、路肩与远景店屋外墙，巴士、轿车、路牌和树木单独制作。",
+      "layout": {
+        "size": [
+          40,
+          42
+        ],
+        "wallHeight": 0.0,
+        "entrances": {
+          "oak": [
+            -8,
+            16
+          ],
+          "beach": [
+            -8,
+            -16
+          ],
+          "bank": [
+            8,
+            14
+          ]
+        }
+      },
+      "separatePropKeys": [
+        "bus",
+        "car",
+        "roadSign"
+      ],
+      "requiresLayoutCalibration": true,
+      "parameters": {
+        "prompt": "A compact mid-century rural border-town street environment shell. A broad straight level asphalt road running front to back, faded lane lines, walkable roadside shoulders and a few closed low-rise storefront facades at the outer left and right edges. These distant exterior-only background buildings have no furnished interiors. Keep the center and road ends open. No vehicles, road signs, trees, people or sky. Planning scale: approximately 40 metres wide by 42 metres deep. Ground is y=0. Front is positive z. Floor-plan access references: oak at floor-plan x=-8, z=16; beach at floor-plan x=-8, z=-16; bank at floor-plan x=8, z=14. These are intended layout constraints; retain ample empty space at every access point. Unified stylized Western editorial cartoon game art, matching exaggerated hand-painted comic characters. Chunky readable geometry, beveled solid edges, muted dusty ochre, faded teal, gray-green, warm off-white and dark plum accents. Broad flat color masses and subtle painted wear; restrained serious mood. Physically thick surfaces and complete three-dimensional sides. No photorealism, anime cel characters, text, logo, printed labels, strong baked cast shadows, white studio pedestal or decorative frame.",
+        "version": "G1-Turbo",
+        "style": "cartoon",
+        "faceCount": 80000,
+        "outputFormat": [
+          "glb"
+        ],
+        "enablePbr": true,
+        "aiPredictSize": true
+      },
+      "estimatedCredits": 13,
+      "status": "awaiting_approval"
+    },
+    {
+      "sequence": "5",
+      "id": "beach-architecture",
+      "name": "海滩与修船区 · 环境主体",
+      "scenes": [
+        "beach"
+      ],
+      "quantity": 1,
+      "operation": "text-to-3d",
+      "generationTier": "涡轮版",
+      "fourView": false,
+      "targetFaces": 60000,
+      "formats": [
+        "glb"
+      ],
+      "descriptionZh": "海滩修船区地形：沙地、岸线和地面修船区域，旧船、工具与树木单独制作；海面由游戏效果呈现。",
+      "layout": {
+        "size": [
+          40,
+          37
+        ],
+        "wallHeight": 0.0,
+        "entrances": {
+          "road": [
+            0,
+            16
+          ],
+          "supermarket": [
+            12,
+            10
+          ]
+        }
+      },
+      "separatePropKeys": [
+        "boat",
+        "toolbox"
+      ],
+      "requiresLayoutCalibration": true,
+      "parameters": {
+        "prompt": "A stylized sandy coastal boat-repair ground environment asset. Warm pale sand, a shallow shoreline toward the back, subtle sand ridges confined to edges and a broad flat dry work area in the center. Preserve open passages at the front and right side. No boat, tools, trees, buildings, people, ocean water mesh, sky dome or display pedestal. Planning scale: approximately 40 metres wide by 37 metres deep. Ground is y=0. Front is positive z. Floor-plan access references: road at floor-plan x=0, z=16; supermarket at floor-plan x=12, z=10. These are intended layout constraints; retain ample empty space at every access point. Unified stylized Western editorial cartoon game art, matching exaggerated hand-painted comic characters. Chunky readable geometry, beveled solid edges, muted dusty ochre, faded teal, gray-green, warm off-white and dark plum accents. Broad flat color masses and subtle painted wear; restrained serious mood. Physically thick surfaces and complete three-dimensional sides. No photorealism, anime cel characters, text, logo, printed labels, strong baked cast shadows, white studio pedestal or decorative frame.",
+        "version": "G1-Turbo",
+        "style": "cartoon",
+        "faceCount": 60000,
+        "outputFormat": [
+          "glb"
+        ],
+        "enablePbr": true,
+        "aiPredictSize": true
+      },
+      "estimatedCredits": 13,
+      "status": "awaiting_approval"
+    },
+    {
+      "sequence": "6",
+      "id": "supermarket-architecture",
+      "name": "瑞德工作的超市 · 环境主体",
+      "scenes": [
+        "supermarket"
+      ],
+      "quantity": 1,
+      "operation": "text-to-3d",
+      "generationTier": "涡轮版",
+      "fourView": false,
+      "targetFaces": 60000,
+      "formats": [
+        "glb"
+      ],
+      "descriptionZh": "超市空建筑壳：旧式商店墙面、地砖与入口，货架、冰柜、收银装袋台和四种商品单独制作。",
+      "layout": {
+        "size": [
+          27,
+          26
+        ],
+        "wallHeight": 4.8,
+        "entrances": {
+          "beach": [
+            0,
+            11
+          ],
+          "road": [
+            -9,
+            10
+          ]
+        }
+      },
+      "separatePropKeys": [
+        "shelf",
+        "shelf",
+        "shelf",
+        "freezer",
+        "counter",
+        "bag",
+        "groceries"
+      ],
+      "requiresLayoutCalibration": true,
+      "parameters": {
+        "prompt": "An empty mid-century neighborhood supermarket architectural shell. Faded cream walls, muted checker tile floor, front shop windows with real thickness and two broad front entrance openings, modest ceiling-edge beams. Open front wall and no full ceiling for third-person gameplay visibility. No shelves, freezer, checkout counter, bags, products, signs, people or furniture. Planning scale: approximately 27 metres wide by 26 metres deep, wall height about 4.8 metres. Ground is y=0. Front is positive z. Floor-plan access references: beach at floor-plan x=0, z=11; road at floor-plan x=-9, z=10. These are intended layout constraints; retain ample empty space at every access point. Unified stylized Western editorial cartoon game art, matching exaggerated hand-painted comic characters. Chunky readable geometry, beveled solid edges, muted dusty ochre, faded teal, gray-green, warm off-white and dark plum accents. Broad flat color masses and subtle painted wear; restrained serious mood. Physically thick surfaces and complete three-dimensional sides. No photorealism, anime cel characters, text, logo, printed labels, strong baked cast shadows, white studio pedestal or decorative frame.",
+        "version": "G1-Turbo",
+        "style": "cartoon",
+        "faceCount": 60000,
+        "outputFormat": [
+          "glb"
+        ],
+        "enablePbr": true,
+        "aiPredictSize": true
+      },
+      "estimatedCredits": 13,
+      "status": "awaiting_approval"
+    },
+    {
+      "sequence": "7",
+      "id": "bank-architecture",
+      "name": "新身份 · 银行柜台 · 环境主体",
+      "scenes": [
+        "bank"
+      ],
+      "quantity": 1,
+      "operation": "text-to-3d",
+      "generationTier": "涡轮版",
+      "fourView": false,
+      "targetFaces": 60000,
+      "formats": [
+        "glb"
+      ],
+      "descriptionZh": "银行空建筑壳：浅色石材地面、柱式墙面和入口，业务柜台、账册与职员单独制作。",
+      "layout": {
+        "size": [
+          22,
+          19
+        ],
+        "wallHeight": 5.0,
+        "entrances": {
+          "road": [
+            0,
+            8
+          ]
+        }
+      },
+      "separatePropKeys": [
+        "counter",
+        "counter",
+        "ledger"
+      ],
+      "requiresLayoutCalibration": true,
+      "parameters": {
+        "prompt": "An empty small mid-century bank hall architectural shell. Restrained art-deco stone pilasters, warm worn limestone floor, tall framed windows and a wide front entrance, muted brass architectural trim. Keep a broad flat central floor. Open front wall and no ceiling for a third-person cutaway. No teller counters, ledgers, chairs, money, people, signs or loose props. Planning scale: approximately 22 metres wide by 19 metres deep, wall height about 5.0 metres. Ground is y=0. Front is positive z. Floor-plan access references: road at floor-plan x=0, z=8. These are intended layout constraints; retain ample empty space at every access point. Unified stylized Western editorial cartoon game art, matching exaggerated hand-painted comic characters. Chunky readable geometry, beveled solid edges, muted dusty ochre, faded teal, gray-green, warm off-white and dark plum accents. Broad flat color masses and subtle painted wear; restrained serious mood. Physically thick surfaces and complete three-dimensional sides. No photorealism, anime cel characters, text, logo, printed labels, strong baked cast shadows, white studio pedestal or decorative frame.",
+        "version": "G1-Turbo",
+        "style": "cartoon",
+        "faceCount": 60000,
+        "outputFormat": [
+          "glb"
+        ],
+        "enablePbr": true,
+        "aiPredictSize": true
+      },
+      "estimatedCredits": 13,
+      "status": "awaiting_approval"
+    },
+    {
+      "sequence": "8",
+      "id": "evidence-architecture",
+      "name": "名单、证据与寄出的信 · 环境主体",
+      "scenes": [
+        "evidence"
+      ],
+      "quantity": 1,
+      "operation": "text-to-3d",
+      "generationTier": "涡轮版",
+      "fourView": false,
+      "targetFaces": 50000,
+      "formats": [
+        "glb"
+      ],
+      "descriptionZh": "证据整理室空建筑壳：暖色旧办公室墙面、地板与窗户，书桌、证据板、账本、信和邮筒单独制作。",
+      "layout": {
+        "size": [
+          18,
+          17
+        ],
+        "wallHeight": 4.2,
+        "entrances": {
+          "medicalExterior": [
+            0,
+            7
+          ],
+          "rain": [
+            -6,
+            4
+          ]
+        }
+      },
+      "separatePropKeys": [
+        "desk",
+        "evidenceBoard",
+        "ledger",
+        "letter",
+        "postbox"
+      ],
+      "requiresLayoutCalibration": true,
+      "parameters": {
+        "prompt": "An empty modest mid-century evidence-sorting office shell. Warm faded plaster, wooden lower wall panels, worn timber floor, recessed rear windows and two accessible exits toward the front. Open front wall and no ceiling for a third-person cutaway. Keep the center clear. No desk, documents, pin board, ledger, letter, postbox, furniture or people. Planning scale: approximately 18 metres wide by 17 metres deep, wall height about 4.2 metres. Ground is y=0. Front is positive z. Floor-plan access references: medicalExterior at floor-plan x=0, z=7; rain at floor-plan x=-6, z=4. These are intended layout constraints; retain ample empty space at every access point. Unified stylized Western editorial cartoon game art, matching exaggerated hand-painted comic characters. Chunky readable geometry, beveled solid edges, muted dusty ochre, faded teal, gray-green, warm off-white and dark plum accents. Broad flat color masses and subtle painted wear; restrained serious mood. Physically thick surfaces and complete three-dimensional sides. No photorealism, anime cel characters, text, logo, printed labels, strong baked cast shadows, white studio pedestal or decorative frame.",
+        "version": "G1-Turbo",
+        "style": "cartoon",
+        "faceCount": 50000,
+        "outputFormat": [
+          "glb"
+        ],
+        "enablePbr": true,
+        "aiPredictSize": true
+      },
+      "estimatedCredits": 13,
+      "status": "awaiting_approval"
+    },
+    {
+      "sequence": "9",
+      "id": "medicalExterior-architecture",
+      "name": "追查与抓捕现场 · 环境主体",
+      "scenes": [
+        "medicalExterior"
+      ],
+      "quantity": 1,
+      "operation": "text-to-3d",
+      "generationTier": "涡轮版",
+      "fourView": false,
+      "targetFaces": 80000,
+      "formats": [
+        "glb"
+      ],
+      "descriptionZh": "医疗机构外景主体：机构建筑外立面、围墙、门口与开放院地，警车、调查人员与抓捕人物单独制作。",
+      "layout": {
+        "size": [
+          38,
+          34
+        ],
+        "wallHeight": 0.0,
+        "entrances": {
+          "evidence": [
+            0,
+            14.6
+          ],
+          "operatingRoom": [
+            0,
+            -14.5
+          ]
+        }
+      },
+      "separatePropKeys": [
+        "policeCar"
+      ],
+      "requiresLayoutCalibration": true,
+      "parameters": {
+        "prompt": "A mid-century institutional medical facility exterior environment shell with an empty level courtyard. A modest two-story desaturated gray-green clinical facade at the back, a clearly accessible central entry, side perimeter walls and short low boundary fencing. Leave the front and a central walking route unobstructed. Exterior-only architecture, no furnished interior. No police car, medical devices, props, people, trees or sky. Planning scale: approximately 38 metres wide by 34 metres deep. Ground is y=0. Front is positive z. Floor-plan access references: evidence at floor-plan x=0, z=14.6; operatingRoom at floor-plan x=0, z=-14.5. These are intended layout constraints; retain ample empty space at every access point. Unified stylized Western editorial cartoon game art, matching exaggerated hand-painted comic characters. Chunky readable geometry, beveled solid edges, muted dusty ochre, faded teal, gray-green, warm off-white and dark plum accents. Broad flat color masses and subtle painted wear; restrained serious mood. Physically thick surfaces and complete three-dimensional sides. No photorealism, anime cel characters, text, logo, printed labels, strong baked cast shadows, white studio pedestal or decorative frame.",
+        "version": "G1-Turbo",
+        "style": "cartoon",
+        "faceCount": 80000,
+        "outputFormat": [
+          "glb"
+        ],
+        "enablePbr": true,
+        "aiPredictSize": true
+      },
+      "estimatedCredits": 13,
+      "status": "awaiting_approval"
+    }
+  ],
+  "estimatedCreditsTotal": 117,
+  "assembly": {
+    "included": false,
+    "status": "not_started",
+    "prerequisite": "精确布局校准与完整场景装配需要本地建模工具；当前未检测到可用工具。"
+  },
+  "nextBatch": "草席、字迹石板、手术台、设备车、灯具、橡树、深色标记石、铁盒体、盒盖、信件、巴士、轿车、路牌、旧船、工具箱、超市货架、冰柜、装袋台、纸袋、面粉、罐头、面包、鸡蛋、银行业务柜台、书桌、证据板、账本、邮筒、警车。后续独立报价。",
+  "quoteSummary": {
+    "quotedAt": "2026-10-31T16:21:10.718705469+08:00",
+    "expiresAt": "2026-10-31T16:26:10.718705469+08:00",
+    "pricingScope": "BEFORE_ACCOUNT_BENEFITS"
+  }
+}

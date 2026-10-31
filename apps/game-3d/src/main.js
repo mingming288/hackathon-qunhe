@@ -9,10 +9,11 @@ import { createGame, getTask, getActions, advance, enterScene, travelRule, heroI
 import { ITEM_NAMES } from './story-data.js';
 import { loadGame, saveGame, backupGame, loadPreview, savePreview } from './save.js';
 import { guidanceFor } from './guidance.js';
+import { EarlyPlay } from './early-play.js';
 
 const $ = id => document.getElementById(id);
 const atlas = $('atlas'), menu = $('menu');
-let mode = 'menu', game = null, gameLocation = null, view, catalog = {}, sceneId = 'cell', noticeTimer, atlasView;
+let mode = 'menu', game = null, gameLocation = null, view, catalog = {}, sceneId = 'cell', noticeTimer, atlasView, earlyPlay;
 const storage = { getItem: key => localStorage.getItem(key), setItem: (key, value) => localStorage.setItem(key, value) };
 let storageFailed = false;
 function notify(message) {
@@ -35,6 +36,7 @@ const dialogue = new Dialogue(() => view?.canvas.focus());
 function renderScene(id, options = {}) {
   sceneId = id; const config = SCENE_BY_ID.get(id);
   view.show(config, { ...options, character: mode === 'game' ? heroId(game) : 'andy', catalog, environmentOnly: mode !== 'game' });
+  if (mode === 'game') earlyPlay.attach();
   $('chapter').textContent = config.chapter; $('scene-title').textContent = config.name;
   $('scene-note').textContent = mode === 'game' ? config.note : environmentDescription(config);
   $('scene-count').textContent = String(SCENES.indexOf(config) + 1).padStart(2, '0') + ' / ' + SCENES.length;
@@ -45,27 +47,31 @@ function renderScene(id, options = {}) {
 
 function perform(action) {
   view.pause();
-  dialogue.task(action, () => {
-    try {
-      const previousScene = game.scene;
-      const result = advance(game, action.id, sceneId);
-      game = result.game;
-      if (game.scene !== previousScene || view.heroId !== heroId(game)) renderScene(game.scene);
-      else { refresh(); saveCurrent(); }
-      const message = result.automatic.findLast(item => item.result)?.result || action.result;
-      if (message) notify(message);
-      if (game.finished) {
-        dialogue.open('结局 · ' + game.finished, action.lines, [
-          { label: '返回游戏菜单', run: openMenu },
-          { label: '查看全部场景', run: openAtlas }
-        ]);
-      }
-    } catch (error) { notify(error.message); }
-  });
+  if (earlyPlay.perform(action)) return;
+  dialogue.task(action, () => completeAction(action));
+}
+
+function completeAction(action) {
+  try {
+    const previousScene = game.scene;
+    const result = advance(game, action.id, sceneId);
+    game = result.game;
+    if (game.scene !== previousScene || view.heroId !== heroId(game)) renderScene(game.scene);
+    else { refresh(); saveCurrent(); }
+    const message = action.result || result.automatic.findLast(item => item.result)?.result;
+    if (message) notify(message);
+    if (game.finished) {
+      dialogue.open('结局 · ' + game.finished, action.lines, [
+        { label: '返回游戏菜单', run: openMenu },
+        { label: '查看全部场景', run: openAtlas }
+      ]);
+    }
+  } catch (error) { notify(error.message); }
 }
 
 function travel(target) {
   if (mode === 'explore') { saveCurrent(); renderScene(target, { from: sceneId }); return; }
+  if (earlyPlay.inspectionActive) { notify('检查还没结束，请先站回床边等待。'); return; }
   const from = game.scene;
   try {
     game = enterScene(game, target);
@@ -78,7 +84,7 @@ function refresh() {
   $('return-game').hidden = mode !== 'explore' || !game;
   $('open-assets').hidden = mode !== 'explore';
   $('mode-label').textContent = mode === 'game' ? (heroId(game) === 'red' ? '剧情游玩 · 瑞德 · 第三人称' : '剧情游玩 · 安迪 · 第三人称') : '纯环境查看 · 人物独立管理';
-  $('build-note').textContent = mode === 'game' ? '剧情贯通版 · 简化交互与基础模型' : '环境资产检查 · 不影响游戏进度';
+  $('build-note').textContent = mode === 'game' ? '剧情贯通版 · 原版小游戏与三维场景' : '环境资产检查 · 不影响游戏进度';
   $('world').setAttribute('aria-label', mode === 'game' ? '第三人称三维游戏，方向键移动，拖动环顾，空格互动' : '三维环境资产查看，拖动旋转，右键拖动平移，滚轮缩放');
   $('quest').hidden = mode !== 'game';
   const interactions = [], rules = {};
@@ -89,7 +95,7 @@ function refresh() {
   }
   if (mode === 'game') {
     const task = getTask(game);
-    const guide = guidanceFor(game);
+    const guide = earlyPlay.guide(guidanceFor(game));
     $('quest-title').textContent = guide.title;
     $('quest-purpose').textContent = '目的：' + guide.purpose;
     $('quest-place').textContent = guide.place;
@@ -98,6 +104,7 @@ function refresh() {
     $('evidence-count').textContent = '可选调查（影响结局）：线索 ' + game.evidence.length + '/5 · 旁听 ' + game.observed.length + '/2';
     const grouped = new Map();
     for (const action of getActions(game, sceneId)) {
+      if (action.onArrival) continue;
       if (!grouped.has(action.target)) grouped.set(action.target, []);
       grouped.get(action.target).push(action);
     }
@@ -109,11 +116,12 @@ function refresh() {
     }
     goal = guide.target; goalLabel = guide.marker;
     if (sceneId === 'cell') {
-      if (!game.items.includes('hammer') || did(game, 'hideHammer')) hidden.push('hammer');
+      if (!game.items.includes('hammer') || game.practice.hide.placed || did(game, 'hideHammer')) hidden.push('hammer');
       if (!game.items.includes('bible')) hidden.push('bible');
       if (!game.items.includes('poster')) hidden.push('poster');
     }
   }
+  if (mode === 'game') interactions.unshift(...earlyPlay.interactions());
   view.configure({ interactions, goal, goalLabel, portalRules: rules, hidden });
 }
 
@@ -139,7 +147,7 @@ function resume() {
 }
 function startNew() {
   store(() => backupGame(storage)); game = createGame(); gameLocation = null; mode = 'game'; menu.close();
-  renderScene(game.scene); notify('入狱的第一天：先出牢房，穿过监区走廊，到院子找瑞德。');
+  renderScene(game.scene); notify('牢房的砂浆有些松动。先靠近后墙，观察裂缝，试试徒手能不能撬下来。');
 }
 function buildAtlas() {
   atlasView = createAtlas({ getCatalog: () => catalog, getScene: () => sceneId, onScene: explore,
@@ -153,7 +161,15 @@ async function start() {
   buildAtlas();
   view = new WorldView({
     canvas: $('world'), labelRoot: $('floating-labels'), interactButton: $('interact'), notify, onAutosave: saveCurrent,
-    enabled: () => mode !== 'menu' && !atlas.open && !dialogue.dialog.open && !menu.open
+    enabled: () => mode !== 'menu' && !atlas.open && !dialogue.dialog.open && !menu.open && !earlyPlay?.busy
+  });
+  earlyPlay = new EarlyPlay({ view, getGame: () => game, notify,
+    enabled: () => mode === 'game' && !atlas.open && !dialogue.dialog.open && !menu.open && !earlyPlay.busy,
+    setPractice: (practice, redraw, save) => { game = { ...game, practice }; if (redraw) refresh(); if (save) saveCurrent(); },
+    complete: id => {
+      const action = getActions(game, sceneId).find(item => item.id === id);
+      if (action) completeAction(action);
+    }
   });
   try { catalog = await readModelCatalog(); } catch (error) { notify(error.message); }
   try { const saved = loadGame(storage); if (saved) { game = saved.game; gameLocation = saved.location; } }

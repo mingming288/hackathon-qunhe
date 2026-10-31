@@ -1,0 +1,203 @@
+/* 原版常量 */
+export const originalTiming = Object.freeze({
+  dig: DIG_REQUIRED_SECONDS,
+  soilHold: SOIL_DUMP_HOLD_SECONDS,
+  soilAlert: SOIL_DUMP_GUARD_ALERT_SECONDS,
+  soilCount: SOIL_DUMP_REQUIRED_COUNT,
+  guardSpeed: YARD_GUARD_SOIL_INVESTIGATE_SPEED,
+  catchDistance: YARD_GUARD_CATCH_DISTANCE,
+  cueActive: PIPE_CUE_ACTIVE_SECONDS,
+  cueMin: PIPE_CUE_MIN_INTERVAL_SECONDS,
+  cueMax: PIPE_CUE_MAX_INTERVAL_SECONDS,
+  smashHold: PIPE_SMASH_HOLD_SECONDS,
+  smashCount: PIPE_SMASH_REQUIRED_COUNT,
+  stageTwo: PIPE_SMASH_STAGE_TWO_COUNT,
+});
+export function createTimingRules(
+  kind,
+  { input: InputSystem, guard = {}, thunder = () => {} } = {},
+) {
+  const GameState = {
+    scene: kind === "soil" ? "yard" : kind === "dig" ? "dig" : "pipe",
+    hasSoilPile: kind === "soil",
+    soilDump: {
+      active: false,
+      progress: 0,
+      animTime: 0,
+      guardAlerted: false,
+      completedCount: 0,
+    },
+    dig: { digProgress: 0, isDigging: false, digAnimTime: 0 },
+    pipe: {
+      smashHoldTime: 0,
+      smashHoldActive: false,
+      smashSuccessCount: 0,
+      smashCompleted: false,
+      smashWindowScored: false,
+      cueVisible: false,
+      cueLit: false,
+      cueTimer: 0,
+      cueProgress: 0,
+      nextCueDelay: 0,
+      smashAnimTime: 0,
+    },
+  };
+  const DialogueSystem = { active: false },
+    AudioSystem = { playOneShot: thunder },
+    THUNDER_VOLUME = 1;
+  let done = false,
+    failed = false;
+  const getActiveDigInteraction = () => ({ id: "dig" }),
+    getActiveYardInteraction = () => ({ id: "soil" }),
+    getActivePipeInteraction = () => ({ id: "smashPipe" });
+  const completeDigHold = () => {
+    done = true;
+    GameState.hasSoilPile = true;
+  };
+  const completeSoilDumping = () => {
+    done = true;
+    GameState.hasSoilPile = false;
+  };
+  const failSoilDumpByGuard = () => {
+    failed = true;
+    resetSoilDumpHold();
+  };
+  const failPipeNoiseByGuard = () => {
+    failed = true;
+  };
+  const isYardGuardTouchingPlayer = () => Boolean(guard.touching?.());
+  const alertClosestYardGuardToSoilDump = () => guard.alert?.();
+  const releaseYardGuardsFromSoilInvestigation = () => guard.release?.();
+  /* 原版函数 */
+  GameState.pipe.nextCueDelay = getRandomPipeCueDelay();
+  return {
+    update(dt) {
+      if (done || failed) return;
+      if (kind === "dig") updateDigHold(dt);
+      else if (kind === "soil") updateSoilDumping(dt);
+      else {
+        updatePipeCue(dt);
+        updatePipeSmash(dt);
+        done = GameState.pipe.smashCompleted;
+      }
+    },
+    getState() {
+      return {
+        done,
+        failed,
+        ...GameState[
+          kind === "soil" ? "soilDump" : kind === "dig" ? "dig" : "pipe"
+        ],
+      };
+    },
+  };
+}
+
+// 巡逻区域和速度直接读取原版；二维场景中的劳作区作为独立操作面板展示。
+export function createSoilPatrol(input) {
+  const player = { x: 650, y: 740 };
+  const guards = [
+    { x: 640, y: 470, fast: true },
+    { x: 820, y: 660, fast: false },
+    { x: 920, y: 810, fast: true },
+  ].map((g, sourceIndex) => ({
+    ...g,
+    sourceIndex,
+    scene: "yard",
+    roamingMode: "soilPatrol",
+    speed: 0,
+    speedTimer: 0,
+  }));
+  const GameState = {
+    hasSoilPile: true,
+    soilDump: { active: false },
+    yardGuards: guards,
+  };
+  const distance = (x, y, a, b) => Math.hypot(x - a, y - b),
+    randomRange = (a, b) => a + Math.random() * (b - a);
+  const pointInRect = (p, r) =>
+    p.x >= r.x && p.x <= r.x + r.w && p.y >= r.y && p.y <= r.y + r.h;
+  const soilInteraction = {
+    rect: { x: 600, y: 360, w: 380, h: 560 },
+    shape: "ellipse",
+  };
+  const isPointInYardInteraction = (p) =>
+    Math.pow((p.x - 790) / 190, 2) + Math.pow((p.y - 640) / 280, 2) <= 1;
+  const getYardWalkBounds = () => ({
+    minX: 600,
+    maxX: 980,
+    minY: 360,
+    maxY: 920,
+  });
+  const isNarrativeYardGuard = () => true,
+    isSideRouteMorningGuardStage = () => false,
+    isYardNpcPointWalkable = isPointInYardInteraction;
+  const getSideRouteMorningGateBounds = () => ({ x: 0, y: 0, w: 0, h: 0 }),
+    getAmbientSocialTarget = () => null;
+  const isPointInExpandedYardInteraction = isPointInYardInteraction;
+  /* 原版巡逻常量 */
+  /* 原版巡逻函数 */
+  return {
+    player,
+    guards,
+    alert() {
+      guards.reduce((a, b) =>
+        distance(player.x, player.y, a.x, a.y) <
+        distance(player.x, player.y, b.x, b.y)
+          ? a
+          : b,
+      ).investigatingSoilDump = true;
+    },
+    release() {
+      guards.forEach((g) => {
+        if (g.investigatingSoilDump) {
+          g.investigatingSoilDump = false;
+          g.targetX = g.targetY = 0;
+          g.speedTimer = 0;
+        }
+      });
+    },
+    touching: () =>
+      guards.some(
+        (g) =>
+          distance(player.x, player.y, g.x, g.y) <= YARD_GUARD_CATCH_DISTANCE,
+      ),
+    update(dt, holding) {
+      if (!holding) {
+        const dx =
+          Number(input.isDown("d") || input.isDown("arrowright")) -
+          Number(input.isDown("a") || input.isDown("arrowleft"));
+        const dy =
+          Number(input.isDown("s") || input.isDown("arrowdown")) -
+          Number(input.isDown("w") || input.isDown("arrowup"));
+        const len = Math.hypot(dx, dy) || 1,
+          nx = player.x + (dx / len) * PLAYER_SPEED * dt,
+          ny = player.y + (dy / len) * PLAYER_SPEED * dt;
+        if (isPointInYardInteraction({ x: nx, y: ny })) {
+          player.x = nx;
+          player.y = ny;
+        }
+      }
+      for (const g of guards) {
+        if (g.investigatingSoilDump) {
+          g.targetX = player.x;
+          g.targetY = player.y;
+          g.speed = YARD_GUARD_SOIL_INVESTIGATE_SPEED;
+        } else {
+          g.speedTimer -= dt;
+          if (!g.targetX || Math.hypot(g.x - g.targetX, g.y - g.targetY) <= 8)
+            chooseYardGuardTarget(g, soilInteraction);
+          if (g.speedTimer <= 0) chooseYardGuardSpeed(g);
+        }
+        const dx = g.targetX - g.x,
+          dy = g.targetY - g.y,
+          len = Math.hypot(dx, dy),
+          step = Math.min(len, g.speed * dt);
+        if (len) {
+          g.x += (dx / len) * step;
+          g.y += (dy / len) * step;
+        }
+      }
+    },
+  };
+}

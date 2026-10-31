@@ -1,0 +1,969 @@
+{
+  "version": 1,
+  "scenesAlreadyAvailable": [
+    {
+      "id": "scene-cell",
+      "name": "安迪的牢房",
+      "kind": "scene",
+      "phase": 1,
+      "file": "../common-scenes/references/安迪的牢房-多视角建模设定图-v1.png"
+    },
+    {
+      "id": "scene-cellCorridor",
+      "name": "监区走廊",
+      "kind": "scene",
+      "phase": 1,
+      "file": "../common-scenes/references/监区走廊-多视角建模设定图-v1.png"
+    },
+    {
+      "id": "scene-yard",
+      "name": "院子与监狱大门",
+      "kind": "scene",
+      "phase": 1,
+      "file": "../common-scenes/references/院子与监狱大门-多视角建模设定图-v1.png"
+    },
+    {
+      "id": "scene-solitary",
+      "name": "禁闭室",
+      "kind": "scene",
+      "phase": 3,
+      "file": "../branch-endings/references/solitary-design-sheet-v2.png"
+    }
+  ],
+  "reuse": [
+    {
+      "id": "prop-solitaryDoor",
+      "name": "禁闭室实体铁门",
+      "kind": "prop",
+      "phase": 3,
+      "source": "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/references/锈铁门参考.png",
+      "file": "reused/禁闭室-铁门参考.png"
+    },
+    {
+      "id": "prop-mat",
+      "name": "禁闭室草席",
+      "kind": "prop",
+      "phase": 3,
+      "source": "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/references/草席参考.png",
+      "file": "reused/禁闭室-草席参考.png",
+      "covers": [
+        "mat"
+      ]
+    },
+    {
+      "id": "prop-stone",
+      "name": "禁闭室松动石板",
+      "kind": "prop",
+      "phase": 3,
+      "source": "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/references/石板参考.png",
+      "file": "reused/禁闭室-石板参考.png",
+      "covers": [
+        "stone"
+      ]
+    },
+    {
+      "id": "material-stone",
+      "name": "共用旧石材表面",
+      "kind": "material",
+      "phase": 1,
+      "source": "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/references/石材表面参考.png",
+      "file": "reused/共用石材表面参考.png"
+    }
+  ],
+  "jobs": [
+    {
+      "id": "prop-radio",
+      "name": "瑞德的收音机",
+      "phase": 1,
+      "phaseName": "前期准备",
+      "kind": "prop",
+      "description": "一台中期二十世纪便携木壳／旧金属收音机，保持既有院子图里的外形和低饱和棕木、锈铁材质。显示完整外壳、可拆检修面板、独立主频旋钮和微调旋钮、指针、传动轴与四枚工作齿轮和两枚备用齿轮。齿轮不焊死；用拆解图说明传动关系；不画现代屏幕或按钮界面。",
+      "covers": [
+        "radio"
+      ]
+    },
+    {
+      "id": "scene-library",
+      "sceneId": "library",
+      "name": "老布的图书馆",
+      "phase": 1,
+      "phaseName": "前期准备",
+      "kind": "scene",
+      "description": "温暖但陈旧的监狱图书馆。入口在俯视下方；后墙三组木书架，左右两侧各一组木书架，中央前方为独立阅读整理桌，桌旁留交付圣经和交谈位置；整理用十本书独立，不画人物。必须看见连续可走过道、门口、独立书架与桌椅。灰绿剥落旧漆、石墙、暗旧木材、克制暖灯，与既有牢房同年代。",
+      "covers": [
+        "shelf",
+        "books",
+        "table"
+      ]
+    },
+    {
+      "id": "prop-hammer",
+      "name": "小型地质石锤",
+      "phase": 1,
+      "phaseName": "前期准备",
+      "kind": "prop",
+      "description": "单独一把适合藏进厚书的小型地质石锤，短旧木柄、暗灰钢头，一侧平锤面、一侧较窄凿端。与已有牢房图的石锤同造型和比例，展示正侧背、锤头厚度、柄与头接合细节。不是大铁锤、斧头或武器，不加其他工具。",
+      "covers": [
+        "hammer"
+      ]
+    },
+    {
+      "id": "prop-books",
+      "name": "十本整理用图书",
+      "phase": 1,
+      "phaseName": "前期准备",
+      "kind": "prop",
+      "description": "十本独立的陈旧硬皮书作为同一套排序资产，严格十本，正面主图从高到低排列，参考相对高度96、89、82、75、68、61、54、47、40、34，厚度适度变化。黑、藏蓝、旧棕、苔绿、暗红等克制色，书脊磨损一致，封皮不能融合成整体。附一本代表书正侧背和封面／书页拆件，不添加第十一本。小注“十本独立，按高度排序”，无可读书名长文。",
+      "covers": [
+        "books"
+      ]
+    },
+    {
+      "id": "prop-bible",
+      "name": "可藏石锤的圣经",
+      "phase": 1,
+      "phaseName": "前期准备",
+      "kind": "prop",
+      "description": "一本与既有牢房图一致的厚黑棕旧皮面圣经，封面、书脊、书页和矩形藏物凹槽分离，显示关闭、打开、露出凹槽三种同一本书的状态，附书脊合页与纸页厚度细节。可用淡灰石锤轮廓表示凹槽尺度，不重复设计新锤子。正文只作纹理，不能写伪经文或大段文字；封面短字“圣经”可用。",
+      "covers": [
+        "bible"
+      ]
+    },
+    {
+      "id": "prop-poster",
+      "name": "海报与隐藏洞口",
+      "phase": 1,
+      "phaseName": "前期准备",
+      "kind": "prop",
+      "description": "单独一张与既有牢房图一致的褪色电影海报，薄旧纸、边缘折痕和四角固定点，画面只有模糊印刷图形，不画清晰人物。展示平挂、掀起、卷起三种同一张纸状态，以及与后墙洞口的遮挡关系；海报必须与墙和洞口独立。墙片只是尺度示意，不重新生成整个牢房。",
+      "covers": [
+        "poster"
+      ]
+    },
+    {
+      "id": "prop-libraryShelf",
+      "name": "图书馆木书架",
+      "phase": 1,
+      "phaseName": "前期准备",
+      "kind": "prop",
+      "description": "单独一款高木书架，可复用多实例。暗棕磨旧实木、有合理厚度的侧板和四到五层搁板；一个主体，主视中少量非互动旧书作为可分离摆放示意。主体、搁板和书分开，保留空架状态与摆书状态；不画超市货架。",
+      "covers": [
+        "shelf-library"
+      ]
+    },
+    {
+      "id": "prop-readingTable",
+      "name": "图书馆阅读整理桌",
+      "phase": 1,
+      "phaseName": "前期准备",
+      "kind": "prop",
+      "description": "单独一张可围坐与整理图书的长方形旧实木阅读桌，暗棕色、四腿稳定、桌边磨圆但不玩具化，桌面保持足够平整留白。正侧背与桌腿接榫、桌面厚度细节。桌上仅可用十本书淡线尺度轮廓，不生成新的书款或人物。",
+      "covers": [
+        "table-library"
+      ]
+    },
+    {
+      "id": "prop-cellBed",
+      "name": "牢房铁床与床铺",
+      "phase": 1,
+      "phaseName": "前期准备",
+      "kind": "prop",
+      "description": "与已生成安迪牢房图严格一致的窄单人旧铁架床，圆管弧形床头床尾、薄灰蓝旧床垫、单个枕头与褪色毯子。拆出床架、床板、床垫、枕头、毯子；显示床管弯曲、焊接锈迹和织物磨损。不要双层床、额外床、床下箱子或人物。",
+      "covers": [
+        "bed"
+      ]
+    },
+    {
+      "id": "prop-cellDesk",
+      "name": "牢房木书桌",
+      "phase": 1,
+      "phaseName": "前期准备",
+      "kind": "prop",
+      "description": "与现有牢房图一致的小型旧木书桌，深棕磨损桌面，简单四腿和紧凑抽屉。桌面清空，主体、抽屉可分，给圣经、石锤和管道地图预留平整可放置面积。不画办公室大班台，不添加椅子作为主体。",
+      "covers": [
+        "desk-cell"
+      ]
+    },
+    {
+      "id": "prop-woodChair",
+      "name": "共用旧木椅",
+      "phase": 1,
+      "phaseName": "前期准备",
+      "kind": "prop",
+      "description": "同一款坚实的旧木靠背椅，和现有牢房木椅同系列，暗木框架、简洁竖向椅背、四腿，座面厚度合理。只画一把椅子的整体、正侧背与接榫细节；不变成现代办公转椅、不带人物。",
+      "covers": [
+        "chair"
+      ]
+    },
+    {
+      "id": "prop-bench",
+      "name": "院子旧长椅",
+      "phase": 1,
+      "phaseName": "前期准备",
+      "kind": "prop",
+      "description": "与已有院子图一致的独立长椅，老旧深棕木条座面与靠背、暗灰锈铁支脚。整体、正侧背、木条厚度和铁脚螺栓细节，木条与支架可分。不把收音机或地面焊在长椅上。",
+      "covers": [
+        "bench"
+      ]
+    },
+    {
+      "id": "prop-barredDoor",
+      "name": "可开合铁栅牢门",
+      "phase": 1,
+      "phaseName": "前期准备",
+      "kind": "prop",
+      "description": "一款与既有牢房和监区走廊一致的铁栅门模块，门框、门扇、合页和锁具可分；窄竖栅条、实心门边、旧锈铁，显示关门与开门状态以及门轴位置。不是禁闭室已有的实体铁板门；不重复画整条走廊。",
+      "covers": [
+        "barred-door"
+      ]
+    },
+    {
+      "id": "prop-ironWindow",
+      "name": "高窗铁栅模块",
+      "phase": 1,
+      "phaseName": "前期准备",
+      "kind": "prop",
+      "description": "一款可在牢房和走廊复用的狭长高窗铁栅，厚旧石窗框与嵌入金属框分离，竖向铁栅有真实圆截面与固定点。正面、侧面、背面与墙厚关系剖面，不画整个房间；尺寸线只示意，标“尺寸待校准”。",
+      "covers": [
+        "iron-window"
+      ]
+    },
+    {
+      "id": "prop-industrialLamp",
+      "name": "监区老式灯具",
+      "phase": 1,
+      "phaseName": "前期准备",
+      "kind": "prop",
+      "description": "一款可改为壁挂或吊挂的老式工业灯具，同一灯罩与灯泡结构，金属支臂与吊杆为可替换安装件。暗铁外壳、微暖灯光、外罩和固定件有厚度，展示熄灭与点亮状态，不画电线悬浮或现代LED条。",
+      "covers": [
+        "lamp-industrial"
+      ]
+    },
+    {
+      "id": "prop-yardGate",
+      "name": "监狱大门",
+      "phase": 1,
+      "phaseName": "前期准备",
+      "kind": "prop",
+      "description": "与现有院子图一致的厚重双扇旧铁大门，石门拱／门框和左右门扇分别制作，暗铁铆钉、锈蚀、门闩、锁具，显示开启范围与合页。主门尺寸远大于牢门，保持左右门对称，不能变成禁闭室单人门。",
+      "covers": [
+        "gate"
+      ]
+    },
+    {
+      "id": "prop-yardArchitectureKit",
+      "name": "院墙与瞭望塔模块",
+      "phase": 1,
+      "phaseName": "前期准备",
+      "kind": "prop",
+      "description": "同一组院子结构模块的资产设定：直围墙段、转角段、单座瞭望塔和独立小水塔，四个组件在主图中清楚分开，匹配已有院子图的石材、铁栏和水塔。分别有可拼接端面和简洁正侧视；不重画完整院子。水塔与瞭望塔不是同一物体，不融合地面或建筑。",
+      "covers": [
+        "yard-kit"
+      ]
+    },
+    {
+      "id": "prop-libraryExterior",
+      "name": "图书馆建筑外观",
+      "phase": 1,
+      "phaseName": "前期准备",
+      "kind": "prop",
+      "description": "直接延续已有院子图左侧较低图书馆的外观：旧石墙、灰绿旧漆、平缓屋顶、向院子一侧的入口、少量铁框窗，简短牌匾“图书馆”。只生成单独建筑外观与正侧背和门廊细节，屋顶可拆，不生成内部家具或整个院子。",
+      "covers": [
+        "yard-library-exterior"
+      ]
+    },
+    {
+      "id": "prop-officeExterior",
+      "name": "办公楼建筑外观",
+      "phase": 1,
+      "phaseName": "前期准备",
+      "kind": "prop",
+      "description": "直接延续已有院子图右侧略高办公楼的外观：两层感旧石机构楼，主入口朝院子，有克制台阶、暗木门和旧铁框窗，短牌匾“办公室”。单独建筑外观与正侧背、门口细节，保持同一房屋各立面一致，别增加新侧楼或院地。",
+      "covers": [
+        "yard-office-exterior"
+      ]
+    },
+    {
+      "id": "scene-office",
+      "sceneId": "office",
+      "name": "典狱长办公室",
+      "phase": 2,
+      "phaseName": "挖掘与逃离",
+      "kind": "scene",
+      "description": "入口在俯视下方中央；办公桌在中央偏后，桌后独立木椅；后方左侧一幅刺绣遮住保险柜，后方右侧厚窗帘后预留藏身空间。桌上独立账本、文件，保险柜的门和旋钮可分。整体、俯视和细节均保持左保险柜右窗帘，不画人物。给中央桌、窗帘和保险柜之间留连续通路。",
+      "covers": [
+        "desk",
+        "chair",
+        "safe",
+        "embroidery",
+        "curtain",
+        "ledger"
+      ]
+    },
+    {
+      "id": "scene-dig",
+      "sceneId": "dig",
+      "name": "墙后的挖掘通道",
+      "phase": 2,
+      "phaseName": "挖掘与逃离",
+      "kind": "scene",
+      "description": "狭长地下土石通道，入口来自牢房海报后，向前延伸至排水管维护区域。粗糙土壁、可见凿痕、少量必要支撑，地面独立碎土堆。用同一布局的初始、部分开凿、最终贯通三个状态小图说明，不把三个不同通道画成同一模型；拆出土壁、地面、支撑与碎土，不添加现代挖掘机械。",
+      "covers": [
+        "rubble",
+        "hammer"
+      ]
+    },
+    {
+      "id": "scene-pipe",
+      "sceneId": "pipe",
+      "name": "雷声中的砸管处",
+      "phase": 2,
+      "phaseName": "挖掘与逃离",
+      "kind": "scene",
+      "description": "狭暗的地下维护通道，前方中央是一段可敲破的大型旧排水管，右侧有碎石。预留角色站立挥锤的地面和管道破口后的爬行位置。相同管段分完整、裂开、敲破三个状态；第三次到第二状态、第五次破口的状态注释只写在设定板上。管壁有真实厚度和锈蚀，不画人物和武器。",
+      "covers": [
+        "pipeTarget",
+        "rubble"
+      ]
+    },
+    {
+      "id": "scene-pipeNetwork",
+      "sceneId": "pipeNetwork",
+      "name": "地下管网",
+      "phase": 2,
+      "phaseName": "挖掘与逃离",
+      "kind": "scene",
+      "description": "低矮而可爬行的地下管道网络，清楚区分直管、弯管、三通、岔路和封闭死路，入口在左下侧、通向雨夜的出口在右上侧。用剖开局部管顶的总体透视显示路线结构，俯视给示意通路；显著注明“路线示意，最终按游戏蓝图校准”，不能把生成线路当作已验证正确地图。管壁、积水与接缝分离，出口独立。",
+      "covers": [
+        "pipe-modules",
+        "drain"
+      ]
+    },
+    {
+      "id": "scene-rain",
+      "sceneId": "rain",
+      "name": "高墙外的雨夜",
+      "phase": 2,
+      "phaseName": "挖掘与逃离",
+      "kind": "scene",
+      "description": "所有结局前的逃离收束场景。后方中央是通向地下管网的大型排水口，前方为开阔湿地与浅水洼，远处低矮高墙轮廓而上方保留无遮拦的雨夜天空。地面、排水口、水面、雨幕与天空分层标明；雨幕是效果参考，不作为实体建筑。开放构图可抬头看天，不画人物、台座或胜利界面。",
+      "covers": [
+        "drain"
+      ]
+    },
+    {
+      "id": "prop-soilRubble",
+      "name": "碎土与碎石堆",
+      "phase": 2,
+      "phaseName": "挖掘与逃离",
+      "kind": "prop",
+      "description": "同一挖掘与院子撒土资产的三种状态：小份松散碎土、可搬运的碎土小堆、院子石砾地面散布状态。土褐灰石材，不画包装袋和铲子；每种状态独立，边缘自然落地，展示颗粒大小与地面接触，不重画通道。",
+      "covers": [
+        "rubble"
+      ]
+    },
+    {
+      "id": "prop-pipeTarget",
+      "name": "可破损排水管段",
+      "phase": 2,
+      "phaseName": "挖掘与逃离",
+      "kind": "prop",
+      "description": "一段大型旧排水管作为可互动资产，严格同一管段的完整、裂开、敲破三状态，管径与管壁厚度一致；破口后有能爬入的空腔与切口，独立破片可收起。暗灰锈铁与湿痕，正侧背、横截面和破口细节；不画人物或敲击工具。",
+      "covers": [
+        "pipeTarget"
+      ]
+    },
+    {
+      "id": "prop-pipeModules",
+      "name": "地下管道拼接模块",
+      "phase": 2,
+      "phaseName": "挖掘与逃离",
+      "kind": "prop",
+      "description": "用于地下管网的一套结构模块：一段直管、一段九十度弯管、一段三通、一个封闭死路端盖，四类模块分开摆放并清楚编号，管径与壁厚完全一致，连接法兰方向一致。显示剖面和对接端，内部可爬行，表面锈蚀与湿痕延续既有监狱材质。不画整张迷宫，不把四种模块焊在一起。",
+      "covers": [
+        "pipe-modules"
+      ]
+    },
+    {
+      "id": "prop-drain",
+      "name": "雨夜排水出口",
+      "phase": 2,
+      "phaseName": "挖掘与逃离",
+      "kind": "prop",
+      "description": "地下大排水管通向高墙外地面的单独出口结构：旧石拱／水泥端墙、圆形厚管口、短出口管段与可分离浅积水示意。破旧但可供爬出，不装挡住出口的整面铁栅；给外侧落脚空间，水面与实体分开。正侧背和管口剖面，不画完整雨夜场景。",
+      "covers": [
+        "drain"
+      ]
+    },
+    {
+      "id": "prop-officeDesk",
+      "name": "典狱长办公桌",
+      "phase": 2,
+      "phaseName": "挖掘与逃离",
+      "kind": "prop",
+      "description": "一张与牢房小书桌区别明确的旧式深木办公桌，较宽桌面、左右抽屉柜与中央膝部空间，少量磨损黄铜拉手。桌面留空用于账本，抽屉与桌体可分，正侧背和抽屉滑动细节。无现代电脑、办公椅或人物。",
+      "covers": [
+        "desk-office"
+      ]
+    },
+    {
+      "id": "prop-safe",
+      "name": "隐藏保险柜",
+      "phase": 2,
+      "phaseName": "挖掘与逃离",
+      "kind": "prop",
+      "description": "旧式嵌墙金属保险柜，方形厚柜体、独立柜门、机械旋钮与门闩，暗灰钢、边角锈迹。关闭、开启同一资产，内腔可容纳账本与圣经，柜门合页和厚度清楚。门轴明确，不把刺绣覆盖物与墙焊接进去。",
+      "covers": [
+        "safe"
+      ]
+    },
+    {
+      "id": "prop-embroidery",
+      "name": "遮挡保险柜的刺绣",
+      "phase": 2,
+      "phaseName": "挖掘与逃离",
+      "kind": "prop",
+      "description": "一幅独立旧木框刺绣挂画，素朴抽象山水或几何织物纹样，不使用可读长句。正面、背面挂钩、侧面厚度及可掀开揭露保险柜的安装关系示意；布面、木框和挂件可分。柜体只作浅线定位轮廓，不重设计保险柜。",
+      "covers": [
+        "embroidery"
+      ]
+    },
+    {
+      "id": "prop-curtain",
+      "name": "可藏身的厚窗帘",
+      "phase": 2,
+      "phaseName": "挖掘与逃离",
+      "kind": "prop",
+      "description": "一套独立厚窗帘与挂杆模块，褪色深灰绿织物、自然褶皱和磨损边，分闭合、侧掀露出背后空地两状态，杆、帘布、固定环可分。示意图留出可藏身的深度但不画人物；窗框只作尺度边界，不画整个办公室。",
+      "covers": [
+        "curtain"
+      ]
+    },
+    {
+      "id": "prop-ledger",
+      "name": "账本与转运档案",
+      "phase": 2,
+      "phaseName": "挖掘与逃离",
+      "kind": "prop",
+      "description": "一套独立可拿取文件资产：厚旧账本、薄档案夹与几张转运记录纸，主次分明并分别摆放。深棕或灰绿布皮封面、黄旧纸、装订线与翻页，正侧背和开合细节。页面仅为抽象表格线与空白格，姓名日期和证据正文由游戏绘制，不生成可读个人资料。",
+      "covers": [
+        "ledger"
+      ]
+    },
+    {
+      "id": "prop-mapBlueprint",
+      "name": "管网蓝图纸张",
+      "phase": 2,
+      "phaseName": "挖掘与逃离",
+      "kind": "prop",
+      "description": "一张可独立拿取和展开的旧管网图纸，淡灰蓝纸、折痕、纸边磨损。主图展示展开、折叠和侧面薄厚关系，纸上只有淡而抽象的管道示意线；标注“路线由游戏绘制”，不要编造可用的具体迷宫路线、编号或文字说明。纸张不与桌面融合。",
+      "covers": [
+        "map"
+      ]
+    },
+    {
+      "id": "scene-operatingRoom",
+      "sceneId": "operatingRoom",
+      "name": "异常支线手术室",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "scene",
+      "description": "旧式医疗机构的手术室，冷灰地砖、灰绿旧墙裙、磨损门框，中央独立老式手术台，右后侧设备车，左侧独立灯具与手术照明。保持入口、回程和调查记录位置清楚；外壳、桌、设备车、灯分开。无人物、血迹、人体、手术过程；不画现代超薄显示器或科幻仪器。",
+      "covers": [
+        "operatingTable",
+        "medicalCart",
+        "lamp"
+      ]
+    },
+    {
+      "id": "scene-oak",
+      "sceneId": "oak",
+      "name": "石墙尽头的橡树田野",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "scene",
+      "description": "宽阔但克制的自然田野，一道旧石墙在左后方延伸到一棵形态鲜明的成熟橡树；树根附近单独深色标记石，石下的藏信铁盒可分离。入口在前方，田野步行路线连向石墙尽头。地形、石墙、树、石、铁盒与信件分开，拆件不把道具融合到地形中。保持自然土褐、灰绿材质，不强行把海边田野变成监狱牢房。",
+      "covers": [
+        "oak",
+        "stone-marker",
+        "box",
+        "letter"
+      ]
+    },
+    {
+      "id": "scene-road",
+      "sceneId": "road",
+      "name": "公路与边境小镇",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "scene",
+      "description": "同一公路布景供巴士赴约和轿车驶向海岸复用。连续双向旧公路穿过简洁的中期二十世纪小镇外立面，有可辨认路口、路肩、路牌、少量沿路植被；车道必须连续可行驶。巴士与轿车在拆件区单列，不焊接到道路；房屋外立面、路面、树和路牌分开。低饱和旧材质，避免彩色积木小镇和现代高速设施。",
+      "covers": [
+        "bus",
+        "car",
+        "roadSign",
+        "oak"
+      ]
+    },
+    {
+      "id": "scene-beach",
+      "sceneId": "beach",
+      "name": "海滩与修船区",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "scene",
+      "description": "海岸沙滩与开阔海面，左侧停放一艘待修旧木船，旁边独立修船工具箱，岸边少量复用植被；前方步行路径走向旧船。场景表现重逢或独自修船都可使用的空间，不画人物。海面、地形、旧船和工具全部分开，不生成融合工作棚、货架或不需要的房屋。自然低饱和海蓝和旧木色延续同项目材质质感。",
+      "covers": [
+        "boat",
+        "toolbox",
+        "oak"
+      ]
+    },
+    {
+      "id": "scene-supermarket",
+      "sceneId": "supermarket",
+      "name": "瑞德工作的超市",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "scene",
+      "description": "旧式小型超市内部。三组清楚可通行的货架在后半部，左后方冰柜，前方右侧收银与装袋台，柜台旁有纸袋和四件初始商品；左前侧留经理交谈位置。俯视路线连接货架、冰柜、装袋台和交谈点。不画人物；货架、冰柜、柜台、纸袋和每种商品单独制作。食品袋和清洁用品袋用两个相同纸袋实例表示。",
+      "covers": [
+        "shelf",
+        "freezer",
+        "counter",
+        "bag",
+        "groceries"
+      ]
+    },
+    {
+      "id": "scene-bank",
+      "sceneId": "bank",
+      "name": "新身份银行大厅",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "scene",
+      "description": "简洁中期二十世纪银行大厅，入口在前方中央，后半部左右两处业务柜台，右侧为主要办理窗口，左柜台可放共享账册。旧石墙和地面比监狱整洁但仍有年代感，暗木柜台、金属隔栏、纸质文件。建筑、柜台、账册与文件分开，不画职员、顾客、现代屏幕或可读身份号码。",
+      "covers": [
+        "counter",
+        "ledger"
+      ]
+    },
+    {
+      "id": "scene-evidence",
+      "sceneId": "evidence",
+      "name": "证据整理与寄信空间",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "scene",
+      "description": "旧式紧凑房间，入口在前方；中央偏后书桌，左后方证据板，右侧前部独立邮筒，桌上账本、档案、信纸与信封分别可拿取。清楚的俯视路线连接证据板、桌和邮筒。板上仅用抽象编号格与连线，具体姓名日期由游戏另绘，不生成虚假可读长文。家具复用同项目旧木桌，墙面旧化但可读。",
+      "covers": [
+        "desk",
+        "evidenceBoard",
+        "ledger",
+        "letter",
+        "postbox"
+      ]
+    },
+    {
+      "id": "scene-medicalExterior",
+      "sceneId": "medicalExterior",
+      "name": "医疗机构外景与抓捕现场",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "scene",
+      "description": "机构建筑位于院地后半部，明确正门与可通行门廊，外围低墙和前方道路；左前方留警车停放区，右前方留调查与抓捕演出空地但不画人物。房屋外立面、门、围墙、地面与警车独立。中期二十世纪低饱和机构建筑，厚重旧石材、灰绿旧漆与冷灰水泥，不要明亮黄色圆润摆件。",
+      "covers": [
+        "policeCar"
+      ]
+    },
+    {
+      "id": "prop-operatingTable",
+      "name": "旧式手术台",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "独立中期二十世纪手术台，暗金属底座、分段皮革／胶面台板、机械调节架与轮脚，陈旧但无血迹。台面、底座、支撑、头枕可分，正侧背和关节结构；不画病人、器官或手术过程。",
+      "covers": [
+        "operatingTable"
+      ]
+    },
+    {
+      "id": "prop-medicalCart",
+      "name": "医疗设备车",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "独立旧式医疗推车，金属框架、双层搁板、四个脚轮、少量独立旧式记录盒和器械托盘。灰绿／暗铁材质，台面留出可拿取记录位置；正侧背、轮轴和抽屉细节，组件可分，不含现代超薄屏幕、人体或血迹。",
+      "covers": [
+        "medicalCart"
+      ]
+    },
+    {
+      "id": "prop-surgicalLamp",
+      "name": "手术照明灯",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "一盏旧式可调节手术照明灯，圆形金属反光灯罩、玻璃面、机械关节支臂与固定座。关节和灯头分开，正侧背与铰接结构，熄灭和点亮状态克制，不画手术台和人物，不采用科幻多环灯。",
+      "covers": [
+        "lamp-surgical"
+      ]
+    },
+    {
+      "id": "prop-oakTree",
+      "name": "石墙尽头的橡树",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "一棵形态有辨识度的成熟橡树，粗糙树干、向侧方展开的枝杈、灰绿树冠、外露根部，适合石墙尽头寻物。树冠、干、根可分，底部无微缩台座，正侧背保持同一棵树轮廓，根部给标记石和铁盒留空，不把石墙与盒子融合进去。",
+      "covers": [
+        "oak"
+      ]
+    },
+    {
+      "id": "prop-markerStone",
+      "name": "橡树下的深色标记石",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "一块独立深色扁平标记石，用于遮住橡树根旁的铁盒位置。与禁闭室已有刻痕石板区别明确：自然乌黑灰石、上表面无文字，边缘不规则、底面略平，可拿起。正侧背和厚度剖面，掀起状态只用盒子的浅线定位示意，不生成草地台座。",
+      "covers": [
+        "stone-marker"
+      ]
+    },
+    {
+      "id": "prop-letterBox",
+      "name": "藏信铁盒",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "独立旧金属藏信盒，矩形盒体、可开启盒盖、合页与简单锁扣，暗铁／旧镀锌表面有土痕。封闭、开盖和拆件状态一致，内腔有独立折信与信封的摆放空间；纸件作为独立可移除示意，不与盒体合并。",
+      "covers": [
+        "box"
+      ]
+    },
+    {
+      "id": "prop-letter",
+      "name": "信件与信封",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "一封可独立拿取的旧信，包含一张折叠信纸与一个纸信封，展示封装、取出、展开状态，纸张有淡折痕和年代黄化。信封与纸分开，不画完整可读信件正文、地址或签名，文字由游戏绘制。无桌面或盒体融合。",
+      "covers": [
+        "letter"
+      ]
+    },
+    {
+      "id": "prop-bus",
+      "name": "赴约巴士",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "一辆中期二十世纪美式公共巴士，红褐与奶油白旧涂装，长车身、明确前挡风、侧窗、车门和轮轴，符合原版赴约驾驶场景，不是监狱押送囚车。整体、正侧背和底盘／门／车轮拆件，前后方向一致，车内不画人，无品牌和可读车牌。",
+      "covers": [
+        "bus"
+      ]
+    },
+    {
+      "id": "prop-car",
+      "name": "海岸公路轿车",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "一辆中期二十世纪美式老轿车，褪色灰蓝或灰绿车身、圆而克制的年代车头、镀铬件旧化。四轮、车门和底盘结构明确，整体与正侧背一致，车轮可独立转动。不画司机、品牌、现代车灯或跑车夸张造型。",
+      "covers": [
+        "car"
+      ]
+    },
+    {
+      "id": "prop-roadSign",
+      "name": "公路路牌",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "同一套可复用的老式公路路牌组件：一块方向牌与一块简单道路提示牌，旧金属牌面、立柱、螺栓和背面支撑分别可编辑。牌面留空或用简单箭头，具体地名由游戏绘制；正侧背和安装细节，不画道路、汽车或人。",
+      "covers": [
+        "roadSign"
+      ]
+    },
+    {
+      "id": "prop-boat",
+      "name": "待修旧木船",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "一艘搁在沙滩修整的小型旧木船，开敞船舱、深旧木肋骨、船帮与船底有真实厚度，局部待修木板可分。整体、正侧背与船体横截面，保留可站在旁边修船的尺度；不加帆、现代发动机、人物、工作棚或沙滩台座。",
+      "covers": [
+        "boat"
+      ]
+    },
+    {
+      "id": "prop-toolbox",
+      "name": "修船工具箱",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "独立旧木／锈铁修船工具箱，盒体、盒盖与提手可分。附少量基本修船工具作为独立配件：木槌、锯和扳手，均为工作工具。关闭、打开和拆件状态一致，旧木与暗铁材质，不生成整片修船场地或人物。",
+      "covers": [
+        "toolbox"
+      ]
+    },
+    {
+      "id": "prop-storeShelf",
+      "name": "超市金属货架",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "一款独立中期二十世纪小超市货架，磨损灰绿或灰白金属框、可拆多层搁板与可复用端板。空货架为主，少量抽象包装示意独立可移除；正侧背和搁板卡扣细节。与图书馆木书架区分，不把商品焊成货架纹理。",
+      "covers": [
+        "shelf-supermarket"
+      ]
+    },
+    {
+      "id": "prop-freezer",
+      "name": "超市冰柜",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "一台独立老式商店冰柜，灰白旧金属箱体、可开启／滑动玻璃盖、机械把手与简单散热格，箱内留物品取放空间。关盖、开盖、正侧背和盖轨拆件，不画现代显示屏、品牌或一整面冰箱墙。",
+      "covers": [
+        "freezer"
+      ]
+    },
+    {
+      "id": "prop-storeCounter",
+      "name": "收银与装袋台",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "一组紧凑旧式商店收银与装袋工作台，台体、收银机、可拆隔板和空白装袋区独立，台面能放两个纸袋实例。深木／旧灰绿金属、有实际厚度，正侧背与台面分区，收银机是老式机械外观，无现代触摸屏或人物。",
+      "covers": [
+        "counter-supermarket"
+      ]
+    },
+    {
+      "id": "prop-paperBag",
+      "name": "装袋纸袋",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "单独一个棕色厚牛皮纸购物袋，底部平整、袋口敞开、折边清晰，展示展开、折叠、侧面与底部结构，袋壁有真实薄厚。附空袋内部四层放置空间的淡线示意，仅作为游戏排序区域参考，不把硬隔板做进纸袋。无商品、商标或提绳。",
+      "covers": [
+        "bag"
+      ]
+    },
+    {
+      "id": "prop-flour",
+      "name": "面粉包装",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "独立一袋旧式面粉包装，浅牛皮纸厚袋、上口折封、底部平稳，适合作为较重的装袋底层。正侧背与纸袋接缝，简短中文“面粉”可用，封面克制麦穗图案，无品牌、无额外食物。",
+      "covers": [
+        "groceries-flour"
+      ]
+    },
+    {
+      "id": "prop-can",
+      "name": "罐头",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "独立一个中等大小圆柱食品罐头，旧锡铁罐、上下卷边与纸标签，整体、正侧背、顶盖和底部细节。标签为低饱和红褐与米色，可写短字“罐头”，不画品牌或整批多罐组合。",
+      "covers": [
+        "groceries-can"
+      ]
+    },
+    {
+      "id": "prop-bread",
+      "name": "面包",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "独立一份面包商品，简单纸袋或半透明旧式包装中一条长面包，暖棕面包表面与旧米色包装，形体可拿取、稳放纸袋。正侧背和包装折口，包装与面包可分，不画盘子、餐桌或其他食品。",
+      "covers": [
+        "groceries-bread"
+      ]
+    },
+    {
+      "id": "prop-eggs",
+      "name": "鸡蛋纸盒",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "独立一盒易碎鸡蛋，旧灰纸浆六枚装蛋盒，盒体、上盖和鸡蛋可分，关闭和打开状态完全同一盒。展示正侧背、盒盖铰接和纸浆厚度，鸡蛋完整无破损液体，无额外购物袋。",
+      "covers": [
+        "groceries-eggs"
+      ]
+    },
+    {
+      "id": "prop-milk",
+      "name": "牛奶包装",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "独立一瓶中期二十世纪商店牛奶，简洁玻璃瓶、奶白内容与旧纸封口或金属盖，圆柱形主体比例明确。正侧背与瓶口厚度，留空白标签给游戏绘制，无品牌与现代塑料大桶。",
+      "covers": [
+        "groceries-milk"
+      ]
+    },
+    {
+      "id": "prop-detergent",
+      "name": "清洁用品包装",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "独立一盒旧式清洁洗涤用品，直立硬纸盒，褪色青绿与米白包装，简短“清洁用品”标签或抽象图形，盒底稳定、与食品外观可区分。正侧背和封口折边，无品牌、无液体泄漏。",
+      "covers": [
+        "groceries-detergent"
+      ]
+    },
+    {
+      "id": "prop-bottleDrink",
+      "name": "瓶装饮料",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "独立一瓶旧式汽水饮料，深茶色或绿玻璃、金属压盖、米色小标签，液体颜色克制。正侧背、瓶底和瓶盖厚度，瓶体与盖可分，不画品牌、吸管、人物或其他商品。",
+      "covers": [
+        "groceries-drink"
+      ]
+    },
+    {
+      "id": "prop-frozenFood",
+      "name": "冷冻食品包装",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "独立一份旧式冷冻食品纸盒包装，扁长方体硬纸盒、灰蓝和米白印刷、简单食物轮廓图案，边角略磨损。正侧背与封口纸舌，不画真实可读营养表、品牌、冰柜或其他食品。",
+      "covers": [
+        "groceries-frozen"
+      ]
+    },
+    {
+      "id": "prop-carton",
+      "name": "食品纸盒",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "独立一只轻质食品包装纸盒，较扁的牛皮硬纸长方盒，清楚的上盖折线和盒底，旧棕与米白印刷纹理，标签留白。正侧背和可打开的盒盖结构，区别于清洁用品盒，不画其他物品。",
+      "covers": [
+        "groceries-carton"
+      ]
+    },
+    {
+      "id": "prop-glassBottle",
+      "name": "易碎玻璃瓶",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "独立一个需放上层的透明浅绿玻璃食品瓶或细长玻璃罐，简洁瓶身、金属旋盖与小块空白纸标，玻璃壁厚度可见。整体、正侧背、瓶口剖面，和瓶装饮料通过更宽瓶身明显区分，无品牌、不破碎。",
+      "covers": [
+        "groceries-glass"
+      ]
+    },
+    {
+      "id": "prop-bankCounter",
+      "name": "银行业务柜台",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "独立旧式银行柜台模块，深木台体、少量黄铜隔栏与办理开口，工作人员侧与客户侧空间清楚。台体、隔栏、文件托盘分开，正侧背和窗口台面厚度细节，无人物、现金堆、现代屏幕或超市收银机。",
+      "covers": [
+        "counter-bank"
+      ]
+    },
+    {
+      "id": "prop-evidenceBoard",
+      "name": "证据关联板",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "独立木框证据板，磨损软木面、可分离纸片、图钉与细线。整体、正侧背和图钉／挂点细节，纸片仅有空白格和抽象编号，实际姓名、日期和连线由游戏绘制，不画真实人物照片、个人资料或完整调查房间。",
+      "covers": [
+        "evidenceBoard"
+      ]
+    },
+    {
+      "id": "prop-postbox",
+      "name": "旧式邮筒",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "独立旧式立式邮筒或小型落地投信箱，暗旧绿金属、前方投信口、后方取信门与底座，投信口和门板可分。整体、正侧背、投口和合页细节，简短“邮筒”可用，无国家徽记、品牌、信件长文或场景地面。",
+      "covers": [
+        "postbox"
+      ]
+    },
+    {
+      "id": "prop-policeCar",
+      "name": "调查现场警车",
+      "phase": 3,
+      "phaseName": "分支与结局",
+      "kind": "prop",
+      "description": "一辆中期二十世纪黑白旧式警用轿车，传统圆形顶灯、四门、厚轮胎与镀铬件旧化。正侧背和车轮／车门／顶灯拆件一致，纯抽象警示标记不使用真实机构徽记或品牌；无警员、囚犯、武器或抓捕动作。",
+      "covers": [
+        "policeCar"
+      ]
+    },
+    {
+      "id": "scene-livingRoom",
+      "sceneId": "livingRoom",
+      "name": "电视前的夜晚",
+      "phase": 4,
+      "phaseName": "序章档案",
+      "kind": "scene",
+      "description": "原版序章的现实客厅，当前主线自动略过但场景档案保留。左侧旧沙发，后方中央老式电视与独立电视柜，中央前方低木茶几，右后侧旧立灯；入口在前方，沙发面向电视。略暖低光、陈旧织物与木材，依旧同一项目材质。外壳、电视、柜、沙发、桌、灯分开，不画人物或电视中的真实电影画面。",
+      "covers": [
+        "sofa",
+        "television",
+        "table",
+        "lamp"
+      ]
+    },
+    {
+      "id": "prop-sofa",
+      "name": "客厅旧沙发",
+      "phase": 4,
+      "phaseName": "序章档案",
+      "kind": "prop",
+      "description": "独立双人或紧凑三人旧沙发，褪色灰绿织物、暗木短脚，坐垫、靠垫与框架可分，厚度合理、轻微塌陷但无破洞垃圾。正侧背与织物／木脚细节，保持中期二十世纪年代感，无人物、抱枕堆或客厅场景。",
+      "covers": [
+        "sofa"
+      ]
+    },
+    {
+      "id": "prop-television",
+      "name": "老式电视与电视柜",
+      "phase": 4,
+      "phaseName": "序章档案",
+      "kind": "prop",
+      "description": "一台中期二十世纪木壳显像管电视及独立低矮木电视柜，电视与柜体分开。弧面玻璃屏幕、机械旋钮、散热背板和旧木纹，正侧背、旋钮和支脚细节。屏幕为空白暗灰，不放电影画面、品牌、现代平板或人物。",
+      "covers": [
+        "television"
+      ]
+    },
+    {
+      "id": "prop-coffeeTable",
+      "name": "客厅木茶几",
+      "phase": 4,
+      "phaseName": "序章档案",
+      "kind": "prop",
+      "description": "一张独立低矮长方形旧木茶几，深旧木桌面、四腿、简单下层搁板可选但全视角一致，适合沙发与电视之间。正侧背与接榫细节，桌面清空，无书籍、茶具或人物。",
+      "covers": [
+        "table-livingRoom"
+      ]
+    },
+    {
+      "id": "prop-floorLamp",
+      "name": "客厅旧立灯",
+      "phase": 4,
+      "phaseName": "序章档案",
+      "kind": "prop",
+      "description": "一盏独立旧式落地立灯，细暗金属或木杆、稳定圆底座、褪色米色布灯罩，灯罩、杆、底座和灯泡可分，正侧背与灯罩织物细节。轻暖光与熄灭两状态，无家具或人物。",
+      "covers": [
+        "lamp-livingRoom"
+      ]
+    }
+  ]
+}
