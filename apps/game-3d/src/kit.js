@@ -10,7 +10,7 @@ import { createOakKeepsake } from './oak-keepsakes.js';
 import { createRoadBus } from './road-bus.js';
 
 export const COLORS = { ink: '#34313e', stone: '#9da5a1', trim: '#ddd2b8', wood: '#947558', steel: '#657781', gold: '#d6ac69' };
-export const CHARACTER_NAMES = { red: '瑞德', brooks: '老布', guard: '狱警', warden: '典狱长', manager: '超市经理', clerk: '银行职员', tommy: '汤米', haywood: '海伍德', floyd: '弗洛伊德' };
+export const CHARACTER_NAMES = { andy: '安迪', red: '瑞德', brooks: '老布', guard: '狱警', warden: '典狱长', manager: '超市经理', clerk: '银行职员', tommy: '汤米', haywood: '海伍德', floyd: '弗洛伊德' };
 
 export function box(parent, w, h, d, x, y, z, color, outlined = true) {
   const geometry = new THREE.BoxGeometry(w, h, d);
@@ -112,7 +112,7 @@ export function makeProp(kind, { sceneId, landmark = false } = {}) {
   const anchor = new THREE.Group(), visual = new THREE.Group(); anchor.add(visual);
   anchor.userData = { assetKey: kind, placeholder: visual, label: CHARACTER_NAMES[kind] || '', targetHeight: 1 };
   if (CHARACTER_NAMES[kind]) {
-    const actor = createActor({ skin: ['red', 'brooks'].includes(kind) ? '#a67e60' : '#d6ab82', shirt: kind === 'guard' ? '#657d81' : kind === 'warden' ? '#6d7079' : '#8a9d80', hair: ['red', 'brooks'].includes(kind) ? '#b8b7ad' : '#5a4d43' });
+    const actor = createActor({ skin: ['red', 'brooks'].includes(kind) ? '#a67e60' : '#d6ab82', shirt: kind === 'andy' ? '#8195a1' : kind === 'guard' ? '#657d81' : kind === 'warden' ? '#6d7079' : '#8a9d80', hair: ['red', 'brooks'].includes(kind) ? '#b8b7ad' : '#5a4d43' });
     visual.add(actor); anchor.userData.animate = actor.userData.animate;
   } else if (['desk', 'table'].includes(kind)) table(visual);
   else if (kind === 'chair') {

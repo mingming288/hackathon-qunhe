@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { createWorld, disposeWorld } from '../src/world.js';
 import { SCENE_BY_ID } from '../src/scenes.js';
 import { canStand } from '../src/movement.js';
+import { beachHiddenProps, heroId } from '../src/story.js';
 import * as THREE from 'three';
 
 test('公路轿车保留尺寸与位置，车尾可接近并触发剧情', () => {
@@ -43,5 +44,21 @@ test('海滩旧船的船头留有可交互位置', () => {
   assert.ok(toolbox.userData.placeholder.children.length > 15, '工具箱应包含提手、金属件和木槌');
   assert.ok(toolboxBounds.min.x > new THREE.Box3().setFromObject(boat).max.x, '工具箱不能穿入船体');
   assert.ok(canStand(toolbox.position.x, toolbox.position.z, world.config.size, world.colliders));
+  disposeWorld(world);
+});
+
+test('海滩重逢时瑞德操控、安迪等候；独自修船时隐藏额外人物和碰撞', () => {
+  const world = createWorld(SCENE_BY_ID.get('beach'));
+  const andy = world.anchors.find(anchor => anchor.userData.assetKey === 'andy');
+  assert.ok(andy);
+  assert.equal(andy.userData.label, '安迪');
+  assert.equal(world.anchors.some(anchor => anchor.userData.assetKey === 'red'), false);
+  assert.equal(heroId({ ending: 'one', events: [] }), 'red');
+  assert.deepEqual(beachHiddenProps({ ending: 'one' }), []);
+  assert.equal(heroId({ ending: 'three', events: [] }), 'andy');
+  const hidden = beachHiddenProps({ ending: 'three' });
+  assert.deepEqual(hidden, ['andy']);
+  assert.equal(canStand(andy.position.x, andy.position.z, world.config.size, world.colliders), false);
+  assert.equal(canStand(andy.position.x, andy.position.z, world.config.size, world.colliders.filter(c => !hidden.includes(c.assetKey))), true);
   disposeWorld(world);
 });
