@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createGame, getTask, getActions, advance, enterScene, restoreGame, travelRule, resolveEnding } from '../src/story.js';
+import { createGame, getTask, getActions, advance, enterScene, restoreGame, travelRule, resolveEnding, visibleInventory } from '../src/story.js';
 import { TASKS, EVIDENCE } from '../src/story-data.js';
 import { SCENE_BY_ID } from '../src/scenes.js';
 import { nextDoor } from '../src/routes.js';
@@ -54,6 +54,14 @@ test('标准准备路线能按原结局规则贯通三个结局', () => {
   const one = play({ evidence: ['red'] }); assert.equal(one.finished, '相逢的海滩'); assert.equal(one.scene, 'beach');
   const two = play({ evidence: Object.keys(EVIDENCE) }); assert.equal(two.finished, '高墙下的名单'); assert.equal(two.scene, 'evidence');
   const three = play(); assert.equal(three.finished, '形同陌路'); assert.equal(three.scene, 'supermarket');
+});
+test('切换瑞德后随身栏不显示安迪的工具，故事记录仍保留', () => {
+  const andy = { ending: 'three', events: [], items: ['hammer', 'poster', 'map', 'ledger'] };
+  const red = { ...andy, events: ['threeBoat'], items: [...andy.items, 'groceries'] };
+  assert.deepEqual(visibleInventory(andy), andy.items);
+  assert.deepEqual(visibleInventory(red), ['groceries']);
+  assert.deepEqual(visibleInventory({ ...red, ending: 'one', items: ['hammer', 'letter'] }), ['letter']);
+  assert.ok(red.items.includes('hammer'));
 });
 test('没收石锤后的备用路线仍可找回工具并通关', () => {
   const game = play({ alternate: true, evidence: ['red'] });

@@ -14,6 +14,10 @@ export const getTask = game => TASK_BY_ID.get(game.step);
 export const isAlternate = game => did(game, 'riskInspection');
 export const isLate = game => did(game, 'restYears') || did(game, 'sideYears');
 export const heroId = game => game.ending === 'one' || (game.ending === 'three' && did(game, 'threeBoat')) ? 'red' : 'andy';
+// 故事记录保留全部道具，随身栏只展示当前人物持有的物品。
+export const visibleInventory = game => heroId(game) === 'red'
+  ? game.items.filter(item => ['letter', 'groceries'].includes(item))
+  : game.items.filter(item => item !== 'groceries');
 
 function initialState() {
   return { step: 'watchTv', events: [], items: [], evidence: [], observed: [], ending: null, finished: null, scene: 'livingRoom', practice: createPractice() };

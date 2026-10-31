@@ -5,7 +5,7 @@ import { assetDetails, sceneAssetDetails, environmentDescription } from './asset
 import { readModelCatalog } from './assets.js';
 import { WorldView } from './world-view.js';
 import { Dialogue } from './dialogue.js';
-import { createGame, getTask, getActions, advance, enterScene, travelRule, heroId, did, officeHiddenProps } from './story.js';
+import { createGame, getTask, getActions, advance, enterScene, travelRule, heroId, visibleInventory, did, officeHiddenProps } from './story.js';
 import { ITEM_NAMES } from './story-data.js';
 import { loadGame, saveGame, backupGame, loadPreview, savePreview } from './save.js';
 import { guidanceFor } from './guidance.js';
@@ -110,7 +110,7 @@ function refresh() {
     $('quest-purpose').textContent = '目的：' + guide.purpose;
     $('quest-place').textContent = guide.place;
     $('quest-action').textContent = guide.action;
-    $('inventory').textContent = '随身物品：' + (game.items.map(id => ITEM_NAMES[id]).join('、') || '暂无');
+    $('inventory').textContent = '随身物品：' + (visibleInventory(game).map(id => ITEM_NAMES[id]).join('、') || '暂无');
     $('evidence-count').textContent = '可选调查（影响结局）：线索 ' + game.evidence.length + '/5 · 旁听 ' + game.observed.length + '/2';
     const grouped = new Map();
     for (const action of getActions(game, sceneId)) {
