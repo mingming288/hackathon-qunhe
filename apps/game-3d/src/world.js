@@ -149,6 +149,13 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     if (config.kind === 'maze') {
       [[-5, 4, 1, 15], [5, -4, 1, 15], [-9, -6, 7, 1], [9, 7, 7, 1], [0, -11, 9, 1]].forEach(([x, z, w, d]) => obstacle(w, 2.3, d, x, z, '#647b7c'));
       for (const x of [-9, 0, 9]) box(shell, .8, .04, depth - 3, x, .03, 0, '#8ba6a0', false);
+      for (const [x, z] of [[-5.7, 8], [4.3, 2], [5.7, -8]]) {
+        const light = new THREE.PointLight('#dfa767', 22, 13, 2);
+        light.position.set(x, 2.6, z); root.add(light);
+        const lamp = new THREE.Mesh(new THREE.BoxGeometry(.22, .35, .22),
+          new THREE.MeshStandardMaterial({ color: '#e8cf9d', emissive: '#d7883e', emissiveIntensity: 1 }));
+        lamp.position.copy(light.position); root.add(lamp);
+      }
     }
     if (config.id === 'dig') {
       for (const z of [-7, 1, 8]) {
