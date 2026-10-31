@@ -25,6 +25,40 @@
     "library:shelf": { "url": "/assets/models/shelf.glb", "height": 3.5 },
     "library:table": { "url": "/assets/models/table.glb", "height": 1.3 },
     "hammer": { "url": "/assets/models/hammer.glb", "height": 0.13 },
-    "rubble": { "url": "/assets/models/rubble.glb", "height": 0.6 }
+    "rubble": { "url": "/assets/models/rubble.glb", "height": 0.6 },
+    "andy": {
+      "url": "/assets/models/andy-idle.glb",
+      "height": 2.5,
+      "rotationY": 0,
+      "walkUrl": "/assets/models/andy-walk.glb"
+    },
+    "red": {
+      "url": "/assets/models/red-idle-walk.glb",
+      "height": 2.5,
+      "rotationY": 0,
+      "walkAnimation": 1
+    },
+    "brooks": {
+      "url": "/assets/models/brooks-idle-walk.glb",
+      "height": 2.35,
+      "rotationY": 0,
+      "walkAnimation": 1
+    },
+    "warden": {
+      "url": "/assets/models/norton-idle-walk.glb",
+      "height": 2.55,
+      "rotationY": 0,
+      "walkAnimation": 1
+    },
+    "tommy": {
+      "url": "/assets/models/tommy.glb",
+      "height": 2.45,
+      "rotationY": 0
+    },
+    "guard": {
+      "url": "/assets/models/hadley.glb",
+      "height": 2.55,
+      "rotationY": 0
+    }
   }
 }
