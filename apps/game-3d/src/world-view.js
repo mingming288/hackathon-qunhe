@@ -79,7 +79,7 @@ export class WorldView {
     const version = this.version;
     const loading = [];
     for (const anchor of [...this.world.anchors, ...(this.world.vistaAnchors || []), ...(environmentOnly ? [] : [this.hero])]) {
-      const entry = catalog[config.id + ':' + anchor.userData.assetKey] || catalog[anchor.userData.assetKey]; if (!entry) continue;
+      const entry = catalog[(anchor.userData.assetScope || config.id) + ':' + anchor.userData.assetKey] || catalog[anchor.userData.assetKey]; if (!entry) continue;
       const character = anchor === this.hero || Object.hasOwn(CHARACTER_NAMES, anchor.userData.assetKey);
       if (character && !anchor.userData.replaced) anchor.userData.placeholder.visible = false;
       const pending = replaceAsset(anchor, entry, () => version === this.version).then(mixer => {

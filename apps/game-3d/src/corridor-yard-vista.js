@@ -3,6 +3,7 @@ import { makeProp } from './kit.js';
 import { YARD_BUILDINGS } from './yard-layout.js';
 import { PORTALS } from './navigation.js';
 import { addCorridorDetails } from './corridor-details.js';
+import { SCENE_BY_ID } from './scenes.js';
 
 // 两端入口面对相反方向，旋转半周后以入口坐标对齐。
 export function corridorYardTransform() {
@@ -24,6 +25,13 @@ export function addCorridorYardVista(world) {
   anchor('yard-architecture', [0, 0, 0]);
   for (const building of YARD_BUILDINGS) {
     anchor(building.assetKey, [building.position[0], 0, building.position[1]], building.rotation, building.size[2]);
+  }
+  // 与院内使用同一位置和模型；这些远景物件不参与交互或碰撞。
+  for (const [kind, x, z, rotation = 0] of SCENE_BY_ID.get('yard').props) {
+    const prop = makeProp(kind, { sceneId: 'yard' });
+    prop.position.set(x, 0, z); prop.rotation.y = rotation;
+    prop.userData.assetScope = 'yard'; prop.userData.clipPlane = clipPlane;
+    root.add(prop); world.vistaAnchors.push(prop);
   }
   const gate = makeProp('gate'); gate.position.set(0, 0, -17); root.add(gate);
   // 加载前保留一块连续的远景地面；不参与碰撞或剧情。

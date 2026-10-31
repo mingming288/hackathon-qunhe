@@ -250,8 +250,7 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
   }
   config.props.forEach(([kind, x, z, rotation]) => prop(kind, x, z, rotation));
   if (config.id === 'yard') {
-    prop('gate', 0, -17); prop('warden', 0, -7);
-    prop('tommy', -3, 2); prop('haywood', -10, 4); prop('floyd', 8, 4);
+    prop('gate', 0, -17);
     const soil = prop('rubble', -10, 7); soil.userData.assetKey = 'soilSpot';
   }
   if (includeHelpers) config.links.forEach((targetId, index) => {
