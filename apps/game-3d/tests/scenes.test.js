@@ -4,6 +4,8 @@ import { SCENES, SCENE_BY_ID } from '../src/scenes.js';
 import { createWorld, disposeWorld } from '../src/world.js';
 import { canStand, moveWithCollision } from '../src/movement.js';
 import { validateModelEntry } from '../src/assets.js';
+import { entryPosition } from '../src/navigation.js';
+import * as THREE from 'three';
 
 test('全部十九组场景可以构造，出生点安全，出入口可通过行走抵达', () => {
   assert.equal(SCENES.length, 19); assert.equal(SCENE_BY_ID.size, 19);
@@ -41,6 +43,23 @@ test('长距离移动不会穿过薄墙，沿墙移动仍可继续', () => {
   moveWithCollision(position, 5, 2, [20, 20], colliders);
   assert.ok(position.x < -.4); assert.ok(position.z > 1.8);
   assert.equal(canStand(10, 0, [20, 20], []), false);
+});
+
+test('院子可见两栋独立建筑，门口连接对应室内，返回时位于同一门前', () => {
+  const world = createWorld(SCENE_BY_ID.get('yard'));
+  for (const id of ['library', 'office']) {
+    const portal = world.portals.find(item => item.id === id);
+    const building = world.anchors.find(anchor => anchor.userData.assetKey === portal.object.userData.exteriorKey);
+    assert.ok(building, id + ' 入口必须附着于一栋可替换的建筑');
+    const size = new THREE.Box3().setFromObject(building).getSize(new THREE.Vector3());
+    assert.ok(size.x > 6 && size.z > 6 && size.y > 6, id + ' 应有完整建筑体量');
+    assert.equal(canStand(building.position.x, building.position.z, world.config.size, world.colliders), false, '不能穿过建筑主体');
+    assert.ok(SCENE_BY_ID.get(id).links.includes('yard'), '室内必须保留返回院子的出口');
+    const entry = entryPosition(world, id);
+    assert.ok(canStand(entry.x, entry.z, world.config.size, world.colliders));
+    assert.ok(Math.hypot(entry.x - portal.object.position.x, entry.z - portal.object.position.z) < 2.7, '返回落点应在同一建筑门前');
+  }
+  disposeWorld(world);
 });
 
 test('替换模型限定本应用路径，并拒绝不合法尺寸', () => {

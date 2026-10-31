@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { box, cylinder, makeProp, PROP_COLLIDERS, COLORS } from './kit.js';
 import { SCENE_BY_ID } from './scenes.js';
 import { PORTALS } from './navigation.js';
+import { addYardBuildings } from './yard-buildings.js';
+import { YARD_BUILDINGS } from './yard-layout.js';
 
 const TONES = {
   warm: ['#d4c8ad', '#a9a18d', '#eee3c9'], dark: ['#a3ada5', '#6f7e7c', '#cccbb6'],
@@ -82,8 +84,11 @@ export function createWorld(config) {
     obstacle(width, 6, .6, 0, -depth / 2); obstacle(.6, 6, depth, -width / 2, 0); obstacle(.6, 6, depth, width / 2, 0);
     const towerOffset = width / 2 - 2.5;
     tower(-towerOffset, -depth / 2 + 2.5); tower(towerOffset, -depth / 2 + 2.5);
-    building(-width / 2 + 6, -depth / 2 + 9, 6, 10, 10);
-    building(width / 2 - 6, -depth / 2 + 9, 6, 10, 10);
+    if (config.id === 'yard') addYardBuildings(world, shell);
+    else {
+      building(-width / 2 + 6, -depth / 2 + 9, 6, 10, 10);
+      building(width / 2 - 6, -depth / 2 + 9, 6, 10, 10);
+    }
     box(shell, 5, 4.4, .25, 0, 2.2, -depth / 2 + .4, '#576e72');
     for (let i = -3; i <= 3; i++) box(shell, .07, 4.5, .35, i * .7, 2.25, -depth / 2 + .6, COLORS.trim);
     cylinder(shell, 1, 14, -width / 2 + 7, 7, -depth / 2 + 5, '#ad9074');
@@ -142,8 +147,12 @@ export function createWorld(config) {
     const marker = new THREE.Group();
     const placement = PORTALS[config.id]?.[targetId] || [(index - (config.links.length - 1) / 2) * 3.2, depth / 2 - 2.4];
     marker.position.set(placement[0], 0, placement[1]); marker.rotation.y = placement[2] || 0;
-    for (const side of [-1, 1]) box(marker, .13, 3, .15, side * 1.05, 1.5, 0, COLORS.steel);
-    box(marker, 2.3, .15, .2, 0, 3, 0, COLORS.trim);
+    const exterior = config.id === 'yard' && YARD_BUILDINGS.find(building => building.id === targetId);
+    if (exterior) marker.userData = { exteriorKey: exterior.assetKey, labelHeight: 1.1 };
+    else if (config.id !== 'yard') {
+      for (const side of [-1, 1]) box(marker, .13, 3, .15, side * 1.05, 1.5, 0, COLORS.steel);
+      box(marker, 2.3, .15, .2, 0, 3, 0, COLORS.trim);
+    }
     cylinder(marker, .5, .04, 0, .025, 0, COLORS.gold, 24);
     const ring = new THREE.Mesh(new THREE.TorusGeometry(.62, .035, 6, 24), new THREE.MeshBasicMaterial({ color: '#f4e4b8' }));
     ring.rotation.x = Math.PI / 2; ring.position.y = .09; marker.add(ring); root.add(marker);
@@ -158,7 +167,7 @@ export function disposeWorld(world) {
     if (node.userData.externalAsset) return;
     node.geometry?.dispose();
     const materials = Array.isArray(node.material) ? node.material : node.material ? [node.material] : [];
-    materials.forEach(material => material.dispose());
+    materials.forEach(material => { material.map?.dispose(); material.dispose(); });
     node.children.forEach(release);
   }
   release(world.root); world.root.removeFromParent(); world.root.clear();
