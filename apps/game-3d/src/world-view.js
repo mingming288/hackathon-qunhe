@@ -8,6 +8,7 @@ import { entryPosition, transitionOrientation } from './navigation.js';
 import { CHARACTER_NAMES } from './kit.js';
 import { AutoTravel } from './auto-travel.js';
 import { revealPendingCharacters } from './scene-load-gate.js';
+import { goalDirection } from './goal-direction.js';
 
 export class WorldView {
   constructor({ canvas, labelRoot, interactButton, enabled, onAutosave, onAutoTravel = () => {}, notify }) {
@@ -188,6 +189,15 @@ export class WorldView {
     this.button.hidden = !this.current || !this.controls.enabled();
     if (this.current) this.button.textContent = this.current.label + ' · 空格 / 点击';
     const projected = new THREE.Vector3();
+    const direction = document.getElementById('goal-direction');
+    if (direction) {
+      direction.hidden = this.environmentOnly || !this.goal || !this.goal.visible;
+      if (!direction.hidden) {
+        const target = this.goal.getWorldPosition(projected);
+        const text = goalDirection(this.hero.position, target, this.controls.yaw);
+        if (direction.textContent !== text) direction.textContent = text;
+      }
+    }
     for (const { label, object, height } of this.labels) {
       object.getWorldPosition(projected); projected.y += height;
       const distance = projected.distanceTo(this.camera.position); projected.project(this.camera);

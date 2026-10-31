@@ -45,3 +45,5 @@ button:disabled{cursor:default;opacity:.4;transform:none}
 #fade.show::after{animation:loading-hint .3s .7s forwards}
 @keyframes loading-hint{to{opacity:1}}
 @media(max-width:700px){.quest-panel{top:85px;right:14px;width:230px;padding:12px}.quest-panel h2{font-size:12px}.quest-panel p{font-size:10px}.top-actions{max-width:65vw;flex-wrap:wrap;justify-content:flex-end}.scene-caption{max-width:210px;padding:15px}.scene-caption h1{font-size:23px}#menu{padding:28px}#menu h2{font-size:36px}}
+
+#goal-direction{color:#e5c576;font-weight:600}
