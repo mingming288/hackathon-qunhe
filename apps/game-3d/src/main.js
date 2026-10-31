@@ -12,10 +12,13 @@ import { guidanceFor } from './guidance.js';
 import { EarlyPlay } from './early-play.js';
 import { SceneLoadGate } from './scene-load-gate.js';
 import { fadeBeforeTravel } from './scene-transition.js';
+import { RainAmbience } from './rain-ambience.js';
+import rainUrl from '../../../Beyond the wall/音效/四秒雨声.opus';
 
 const $ = id => document.getElementById(id);
 const atlas = $('atlas'), menu = $('menu');
 let mode = 'menu', game = null, gameLocation = null, view, catalog = {}, sceneId = 'cell', noticeTimer, atlasView, earlyPlay;
+const rainAmbience = new RainAmbience(new Audio(rainUrl));
 const sceneLoad = new SceneLoadGate();
 const storage = { getItem: key => localStorage.getItem(key), setItem: (key, value) => localStorage.setItem(key, value) };
 let storageFailed = false;
@@ -93,7 +96,12 @@ function travel(target) {
   } catch (error) { dialogue.open('这条路暂未开放', [error.message, guidanceFor(game).action]); view.pause(); }
 }
 
+function syncRain() {
+  rainAmbience.setActive(mode === 'game' && sceneId === 'rain' && !atlas.open && !menu.open && !document.hidden);
+}
+
 function refresh() {
+  syncRain();
   document.body.dataset.mode = mode;
   $('return-game').hidden = mode !== 'explore' || !game;
   $('open-assets').hidden = mode !== 'explore';
@@ -146,6 +154,7 @@ function openAtlas() {
   view.pause(); atlasView.render();
   $('atlas-note').textContent = '环境、道具与人物分开制作。选择场景进入纯环境查看，不显示人物，也不会推进任务或覆盖游戏存档。';
   if (!atlas.open) atlas.showModal();
+  syncRain();
 }
 function explore(id) {
   saveCurrent(); mode = 'explore';
@@ -175,6 +184,9 @@ function buildAtlas() {
   });
 }
 async function start() {
+  window.addEventListener('pointerdown', () => rainAmbience.retry());
+  window.addEventListener('keydown', () => rainAmbience.retry());
+  document.addEventListener('visibilitychange', syncRain);
   buildAtlas();
   view = new WorldView({
     canvas: $('world'), labelRoot: $('floating-labels'), interactButton: $('interact'), notify, onAutosave: saveCurrent, onAutoTravel: travel,
@@ -194,6 +206,7 @@ async function start() {
   renderScene('cell');
   $('open-atlas').addEventListener('click', openAtlas);
   $('close-atlas').addEventListener('click', () => { atlas.close(); view.canvas.focus(); });
+  atlas.addEventListener('close', syncRain);
   $('camera-reset').addEventListener('click', () => view.resetCamera());
   $('open-menu').addEventListener('click', openMenu);
   $('new-game').addEventListener('click', startNew); $('resume-game').addEventListener('click', resume);
