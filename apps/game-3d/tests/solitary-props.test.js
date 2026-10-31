@@ -25,3 +25,13 @@ test('禁闭室草席与刻痕石板使用独立模型，剧情目标保持可�
   }
   disposeWorld(world);
 });
+
+test('禁闭室颜色贴图压缩后仍为内嵌资源，材质参数贴图保持无损', async () => {
+  for (const file of ['solitary-shell.glb', 'solitary-mat.glb', 'solitary-inscribed-stone.glb']) {
+    const model = inspectGlb(await readFile(new URL('../public/assets/models/' + file, import.meta.url)));
+    assert.equal(model.externalResources, 0, file);
+    assert.ok(model.textures.some(texture => texture.mimeType === 'image/jpeg'), file);
+    assert.ok(model.textures.some(texture => texture.mimeType === 'image/png'), file);
+    assert.ok(model.materials.some(material => material.baseColor && material.metallicRoughness), file);
+  }
+});
