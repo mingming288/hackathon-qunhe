@@ -1,0 +1,983 @@
+{
+  "updatedAt": "2026-10-31T18:48:41.903550+08:00",
+  "scope": "当前项目各批次已归档的生成参考图、人物预览、三维渲染、检查图、材质贴图与历史草稿；不包含原仓库自带的游戏图片。",
+  "destination": "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references",
+  "imageCount": 105,
+  "newCopies": 67,
+  "identicalCopiesReused": 10,
+  "originalsPreserved": true,
+  "groups": {
+    "人物三维预览": 3,
+    "人物参考图": 1,
+    "历史批次预览": 1,
+    "历史试样预览": 3,
+    "原始三维模型检查图": 10,
+    "已有复用参考图": 4,
+    "常用场景三维检查图": 18,
+    "常用场景设定图": 3,
+    "本批场景与道具参考图": 38,
+    "材质贴图": 14,
+    "禁闭室第三版三维渲染图": 3,
+    "禁闭室第三版参考图": 1,
+    "禁闭室第二版三维渲染图": 3,
+    "禁闭室设定图": 1,
+    "网页与过程检查截图": 2
+  },
+  "images": [
+    {
+      "file": "人物三维预览__andy-rigged.jpg",
+      "category": "人物三维预览",
+      "sha256": "fb79b397254add08f7909770f6ebfac34b27652309ed22ed9b3575feac1a8bd4",
+      "bytes": 41096,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe/docs/characters/previews/andy-rigged.jpg"
+      ]
+    },
+    {
+      "file": "人物三维预览__andy-static.jpg",
+      "category": "人物三维预览",
+      "sha256": "1fac1c1229234501575f8cd596346de5be93f09ff8cc3bdc7259891429c16450",
+      "bytes": 36265,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe/docs/characters/previews/andy-static.jpg"
+      ]
+    },
+    {
+      "file": "人物三维预览__red-rigged.jpg",
+      "category": "人物三维预览",
+      "sha256": "df39748aa0bbfd51d09dc6850382ba0f73549709900fa3cbdf7d41a2cfa48afc",
+      "bytes": 40357,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe/docs/characters/previews/red-rigged.jpg"
+      ]
+    },
+    {
+      "file": "人物参考图__肖申克角色三视图.png",
+      "category": "人物参考图",
+      "sha256": "20b44af14c195195f3d62d57525bd4f785d5d175c24d2cff85e34deab699e053",
+      "bytes": 2523392,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/characters/肖申克角色三视图.png"
+      ]
+    },
+    {
+      "file": "历史批次预览__模型初稿预览.jpg",
+      "category": "历史批次预览",
+      "sha256": "860b8324f19efffc63534b923d6da9c0f7a7b5601f710a81256f7fde49fad193",
+      "bytes": 69889,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/2026-10-31-v1/模型初稿预览.jpg"
+      ]
+    },
+    {
+      "file": "历史试样预览__禁闭室-墙面与草席.png",
+      "category": "历史试样预览",
+      "sha256": "14149ca057e7faab49f1bdda96cb5c900079554baeeac067366e254f777ea65e",
+      "bytes": 3079571,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/working/draft-before-local-repair/renders/禁闭室-墙面与草席.png"
+      ]
+    },
+    {
+      "file": "历史试样预览__禁闭室-整体预览.png",
+      "category": "历史试样预览",
+      "sha256": "41c7ce7b56304f66815163abcda249dc5070093c5d30141a783f69470f129a6e",
+      "bytes": 2995515,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/working/draft-before-local-repair/renders/禁闭室-整体预览.png"
+      ]
+    },
+    {
+      "file": "历史试样预览__禁闭室-铁门细节.png",
+      "category": "历史试样预览",
+      "sha256": "bd1e06c7bcd6a8a3d7ca391d0c9fcaf898fb6c077736eafd9e0cd98bd30bf2d0",
+      "bytes": 2666534,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/working/draft-before-local-repair/renders/禁闭室-铁门细节.png"
+      ]
+    },
+    {
+      "file": "原始三维模型检查图__door-back.png",
+      "category": "原始三维模型检查图",
+      "sha256": "808a8bcddd9681bb8e1ad83d679886291202198518e642641abf6c3288d3aace",
+      "bytes": 993903,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/working/source-review/door-back.png"
+      ]
+    },
+    {
+      "file": "原始三维模型检查图__door-front.png",
+      "category": "原始三维模型检查图",
+      "sha256": "c1b5f5c639b02e9ec7c7b3ec3d9615716ac6dacdc9cee26dcd1f8b3abf1c0c47",
+      "bytes": 1011359,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/working/source-review/door-front.png"
+      ]
+    },
+    {
+      "file": "原始三维模型检查图__mat-back.png",
+      "category": "原始三维模型检查图",
+      "sha256": "ef3dfa5161f8c90f06c0b59ee6a016982140d60e5c23010fa2767ee0e269b5cf",
+      "bytes": 705573,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/working/source-review/mat-back.png"
+      ]
+    },
+    {
+      "file": "原始三维模型检查图__mat-front.png",
+      "category": "原始三维模型检查图",
+      "sha256": "26bb6afe5b9d0e1cfbb0e7e594c9b5668eddf738177b2ec58f56df14be77288b",
+      "bytes": 705553,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/working/source-review/mat-front.png"
+      ]
+    },
+    {
+      "file": "原始三维模型检查图__shell-back.png",
+      "category": "原始三维模型检查图",
+      "sha256": "0210a902dc09f103964baf5fd6fb59f53fd0d744f25092da06efc27f7c9581a1",
+      "bytes": 1475172,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v3/working/source-review/shell-back.png"
+      ]
+    },
+    {
+      "file": "原始三维模型检查图__shell-front.png",
+      "category": "原始三维模型检查图",
+      "sha256": "c7ebabed2e716ed8a6b4c1c36db167aacfd4c918d7b2d82999340260116be373",
+      "bytes": 1553761,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v3/working/source-review/shell-front.png"
+      ]
+    },
+    {
+      "file": "原始三维模型检查图__shell-high.png",
+      "category": "原始三维模型检查图",
+      "sha256": "780d4a7452f5b3faa866e3aee08d34bdb1847915c36215d877c319174ac0a3fd",
+      "bytes": 1635561,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v3/working/source-review/shell-high.png"
+      ]
+    },
+    {
+      "file": "原始三维模型检查图__stone-back.png",
+      "category": "原始三维模型检查图",
+      "sha256": "6131847cbe8c595d719343c23b45874dec4acc32f964860d865e61965da4b645",
+      "bytes": 1526699,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v3/working/source-review/stone-back.png"
+      ]
+    },
+    {
+      "file": "原始三维模型检查图__stone-front.png",
+      "category": "原始三维模型检查图",
+      "sha256": "43f1cd121ea99f52d657eb87154c3792680a4e0f691750a469be550c5f3f29d3",
+      "bytes": 1517343,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v3/working/source-review/stone-front.png"
+      ]
+    },
+    {
+      "file": "原始三维模型检查图__stone-high.png",
+      "category": "原始三维模型检查图",
+      "sha256": "6016a704d8bf20b7953685728cf1632a0d19a50303d1827e376ce0c30f60ce6f",
+      "bytes": 1660285,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v3/working/source-review/stone-high.png"
+      ]
+    },
+    {
+      "file": "已有复用参考图__共用石材表面参考.png",
+      "category": "已有复用参考图",
+      "sha256": "a4c4741a6f4eccf79fb6b65e495f83c2d3540f4f82a6af943a3b4e17ab6466d4",
+      "bytes": 4741123,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/reused/共用石材表面参考.png",
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/references/石材表面参考.png"
+      ]
+    },
+    {
+      "file": "已有复用参考图__禁闭室-石板参考.png",
+      "category": "已有复用参考图",
+      "sha256": "ffeb78162a0d0330fe6516fbf8f69281ef1b0cf215e2292018240846ef8fea21",
+      "bytes": 3027158,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/reused/禁闭室-石板参考.png",
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/references/石板参考.png",
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v3/references/刻痕石板参考.png"
+      ]
+    },
+    {
+      "file": "已有复用参考图__禁闭室-草席参考.png",
+      "category": "已有复用参考图",
+      "sha256": "9efadad35812a5dceae2d97809d3918e7048b6c5b6a79fe32c37375cc565919e",
+      "bytes": 2835459,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/reused/禁闭室-草席参考.png",
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/references/草席参考.png"
+      ]
+    },
+    {
+      "file": "已有复用参考图__禁闭室-铁门参考.png",
+      "category": "已有复用参考图",
+      "sha256": "60170c8eedbabd938e0f93ca64c81b4c0b019a0dc96e6f06209c0caf7c790f21",
+      "bytes": 2624389,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/reused/禁闭室-铁门参考.png",
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/references/锈铁门参考.png"
+      ]
+    },
+    {
+      "file": "常用场景三维检查图__browser-original-cell.png",
+      "category": "常用场景三维检查图",
+      "sha256": "bf3554244076067952cd3e81267b8bedec6447f08777b03f3f9df9736b5cda02",
+      "bytes": 144103,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/common-scenes-high-quality-2026-10-31/inspection/browser-original-cell.png"
+      ]
+    },
+    {
+      "file": "常用场景三维检查图__browser-original-cellCorridor.png",
+      "category": "常用场景三维检查图",
+      "sha256": "292ca839c7e397a3eaf010db9571dcbcdad2183d06f61a1fc2662cfed8f30b75",
+      "bytes": 112880,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/common-scenes-high-quality-2026-10-31/inspection/browser-original-cellCorridor.png"
+      ]
+    },
+    {
+      "file": "常用场景三维检查图__browser-original-yard.png",
+      "category": "常用场景三维检查图",
+      "sha256": "75f4fa665b6d700d1014b5944ffeaa6d26594b56ab07033aaf3e6178b24b3be7",
+      "bytes": 120457,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/common-scenes-high-quality-2026-10-31/inspection/browser-original-yard.png"
+      ]
+    },
+    {
+      "file": "常用场景三维检查图__cell-overall.png",
+      "category": "常用场景三维检查图",
+      "sha256": "3d3ff38b0d2950b7ff4d30460858f12633a411c41387b2be2b877bb0ffbb4513",
+      "bytes": 983639,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/common-scenes-high-quality-2026-10-31/inspection/cell-overall.png"
+      ]
+    },
+    {
+      "file": "常用场景三维检查图__cell-reverse.png",
+      "category": "常用场景三维检查图",
+      "sha256": "5d5274ff9565fb2b3486748df46d1e0e461bdde312f5323b97e916e23e076b0a",
+      "bytes": 1026529,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/common-scenes-high-quality-2026-10-31/inspection/cell-reverse.png"
+      ]
+    },
+    {
+      "file": "常用场景三维检查图__cell-top.png",
+      "category": "常用场景三维检查图",
+      "sha256": "4c10c8b495acc89810180312d54fb839b4edb5fb7a532beaa03b99384737b1de",
+      "bytes": 926044,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/common-scenes-high-quality-2026-10-31/inspection/cell-top.png"
+      ]
+    },
+    {
+      "file": "常用场景三维检查图__cellCorridor-overall.png",
+      "category": "常用场景三维检查图",
+      "sha256": "9dcca3b215a687ae878df2d8e09703fb474dc6ef36964991c2918d93164ea332",
+      "bytes": 888725,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/common-scenes-high-quality-2026-10-31/inspection/cellCorridor-overall.png"
+      ]
+    },
+    {
+      "file": "常用场景三维检查图__cellCorridor-refined-overall.png",
+      "category": "常用场景三维检查图",
+      "sha256": "cec2666831b58106f32ab4ba09cec8d52d75d6efdc9e01feb55e5dda7a9a7cc7",
+      "bytes": 804334,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/common-scenes-high-quality-2026-10-31/inspection/cellCorridor-refined-overall.png"
+      ]
+    },
+    {
+      "file": "常用场景三维检查图__cellCorridor-refined-reverse.png",
+      "category": "常用场景三维检查图",
+      "sha256": "4df30fda5ed6e20e1ae90911ba5fc9bc4402bc7919a953c87ba82a43547eb802",
+      "bytes": 916629,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/common-scenes-high-quality-2026-10-31/inspection/cellCorridor-refined-reverse.png"
+      ]
+    },
+    {
+      "file": "常用场景三维检查图__cellCorridor-refined-top.png",
+      "category": "常用场景三维检查图",
+      "sha256": "101c476e5a10c296967c4b50be5597dd99693bf6242717bb4b95cfb363c57c57",
+      "bytes": 861927,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/common-scenes-high-quality-2026-10-31/inspection/cellCorridor-refined-top.png"
+      ]
+    },
+    {
+      "file": "常用场景三维检查图__cellCorridor-reverse.png",
+      "category": "常用场景三维检查图",
+      "sha256": "af6d6a7d779510581aa13c962879ccd3541ebce604cda9139c6a8045dad021a2",
+      "bytes": 970292,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/common-scenes-high-quality-2026-10-31/inspection/cellCorridor-reverse.png"
+      ]
+    },
+    {
+      "file": "常用场景三维检查图__cellCorridor-top.png",
+      "category": "常用场景三维检查图",
+      "sha256": "37c72b2a57ec63f1a0b78b12854f6e384652209fc5af3f5448019932ce678ad7",
+      "bytes": 866804,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/common-scenes-high-quality-2026-10-31/inspection/cellCorridor-top.png"
+      ]
+    },
+    {
+      "file": "常用场景三维检查图__yard-overall.png",
+      "category": "常用场景三维检查图",
+      "sha256": "928777627d690af79bcdf0c228254d455e4ad5e9f80486230bf8187884262b64",
+      "bytes": 951294,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/common-scenes-high-quality-2026-10-31/inspection/yard-overall.png"
+      ]
+    },
+    {
+      "file": "常用场景三维检查图__yard-refined-overall.png",
+      "category": "常用场景三维检查图",
+      "sha256": "e6f9dafb7ea35ef76742771db5511a1556cf4053c180908a363f932c6e270bad",
+      "bytes": 1019413,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/common-scenes-high-quality-2026-10-31/inspection/yard-refined-overall.png"
+      ]
+    },
+    {
+      "file": "常用场景三维检查图__yard-refined-reverse.png",
+      "category": "常用场景三维检查图",
+      "sha256": "5603745774c1c008d7cd6baea18997f0888c560c0284f22da51f8235ffbe809c",
+      "bytes": 1038403,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/common-scenes-high-quality-2026-10-31/inspection/yard-refined-reverse.png"
+      ]
+    },
+    {
+      "file": "常用场景三维检查图__yard-refined-top.png",
+      "category": "常用场景三维检查图",
+      "sha256": "2937070c4b2c8c75c67a3ba8b92fed643502a6874afdd9a05dff33138cbecec0",
+      "bytes": 1248820,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/common-scenes-high-quality-2026-10-31/inspection/yard-refined-top.png"
+      ]
+    },
+    {
+      "file": "常用场景三维检查图__yard-reverse.png",
+      "category": "常用场景三维检查图",
+      "sha256": "5ff27446f6347996c4f9d437848592ae67a9c7529aa551e8b05191e83956aa31",
+      "bytes": 965497,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/common-scenes-high-quality-2026-10-31/inspection/yard-reverse.png"
+      ]
+    },
+    {
+      "file": "常用场景三维检查图__yard-top.png",
+      "category": "常用场景三维检查图",
+      "sha256": "bd6668f345f62ff8261bb2163248ad6f34ad0b1137ec4d8ee6a9fbdbe2e8a374",
+      "bytes": 851033,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/common-scenes-high-quality-2026-10-31/inspection/yard-top.png"
+      ]
+    },
+    {
+      "file": "常用场景设定图__安迪的牢房-多视角建模设定图-v1.png",
+      "category": "常用场景设定图",
+      "sha256": "8dae8e12e1439250f0e45afd22811026293b186f4d053d3c05f5bcadc9334661",
+      "bytes": 2964189,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/common-scenes/references/安迪的牢房-多视角建模设定图-v1.png",
+        "/Users/lijiawei/code/lux3d/output/common-scenes-high-quality-2026-10-31/references/安迪的牢房-多视角建模设定图-v1.png"
+      ]
+    },
+    {
+      "file": "常用场景设定图__监区走廊-多视角建模设定图-v1.png",
+      "category": "常用场景设定图",
+      "sha256": "4ef9b08e5573ae6471b941ae1fd7ac8049e857e1e9c399d78719dc48fb35645a",
+      "bytes": 2941266,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/common-scenes/references/监区走廊-多视角建模设定图-v1.png",
+        "/Users/lijiawei/code/lux3d/output/common-scenes-high-quality-2026-10-31/references/监区走廊-多视角建模设定图-v1.png"
+      ]
+    },
+    {
+      "file": "常用场景设定图__院子与监狱大门-多视角建模设定图-v1.png",
+      "category": "常用场景设定图",
+      "sha256": "1c6b94dc07ec0f21b54418f345e520b343a15052b026bc8b0a8307ac82061b53",
+      "bytes": 3179750,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/common-scenes/references/院子与监狱大门-多视角建模设定图-v1.png",
+        "/Users/lijiawei/code/lux3d/output/common-scenes-high-quality-2026-10-31/references/院子与监狱大门-多视角建模设定图-v1.png"
+      ]
+    },
+    {
+      "file": "prop-barredDoor-可开合铁栅牢门-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "8a5c5627b8f9d3bb7e9a1bae4a7b9f03dcc15ea24ed250e74ced3c02f709e3f2",
+      "bytes": 2361400,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-barredDoor-可开合铁栅牢门-v1.png"
+      ]
+    },
+    {
+      "file": "prop-bench-院子旧长椅-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "47902bf0125525aab9f9c4a22ee0ec4343730a71d934fe92ffe3325b08a8ea4b",
+      "bytes": 2423603,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-bench-院子旧长椅-v1.png"
+      ]
+    },
+    {
+      "file": "prop-bible-可藏石锤的圣经-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "64fa1b81ff9a15e2f906adf6863273b01aad7665e64874e36045c30da19ab05b",
+      "bytes": 2690591,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-bible-可藏石锤的圣经-v1.png"
+      ]
+    },
+    {
+      "file": "prop-books-十本整理用图书-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "fb5d885d4caea571e44f6b2ac14fa03117d1ef1f50f490753b681fb44f009966",
+      "bytes": 2480433,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-books-十本整理用图书-v1.png"
+      ]
+    },
+    {
+      "file": "prop-cellBed-牢房铁床与床铺-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "b597fa540c89a8b12fd9dcc6facb6de1dea77ce68121d86f42de8bb69bdfcafc",
+      "bytes": 2452779,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-cellBed-牢房铁床与床铺-v1.png"
+      ]
+    },
+    {
+      "file": "prop-cellDesk-牢房木书桌-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "dd9460f42577b00e7de33885a26d54d31ee86073a55186431b47014d45a276ba",
+      "bytes": 2386403,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-cellDesk-牢房木书桌-v1.png"
+      ]
+    },
+    {
+      "file": "prop-curtain-可藏身的厚窗帘-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "be8331e5278cdfd3b832cdaabd61f6b9b6960bd1fd4861fd172a6c65101fbb06",
+      "bytes": 2793527,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-curtain-可藏身的厚窗帘-v1.png"
+      ]
+    },
+    {
+      "file": "prop-drain-雨夜排水出口-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "a59eb6b009f33a52829f16628c84a5fe6e12fb300d084b5f0dcb93038f2f0e76",
+      "bytes": 2830399,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-drain-雨夜排水出口-v1.png"
+      ]
+    },
+    {
+      "file": "prop-embroidery-遮挡保险柜的刺绣-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "f6ab93eb36d4e04f6eb5f1cf45d3d3704bcbe1b24d897cecd8bb7fbc0cf8ba48",
+      "bytes": 2586355,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-embroidery-遮挡保险柜的刺绣-v1.png"
+      ]
+    },
+    {
+      "file": "prop-hammer-小型地质石锤-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "4ac7a3382ce9e1905ebf7d37b78d518fdc6b927c7607d214b93934e068670550",
+      "bytes": 2212559,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-hammer-小型地质石锤-v1.png"
+      ]
+    },
+    {
+      "file": "prop-industrialLamp-监区老式灯具-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "4b85060b856e2ff28c7bf5c435b576059a8ece4c1a6a79ed3c9fcf474077f332",
+      "bytes": 2154614,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-industrialLamp-监区老式灯具-v1.png"
+      ]
+    },
+    {
+      "file": "prop-ironWindow-高窗铁栅模块-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "506b2a02fc71a60bd7144831fff0a5b95ef44501299077b789074642611d3018",
+      "bytes": 2536727,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-ironWindow-高窗铁栅模块-v1.png"
+      ]
+    },
+    {
+      "file": "prop-ledger-账本与转运档案-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "51257aafd5b15e184da71cef2c05f5921d9a5fdb9b2cc8202b7f47b07f4236b9",
+      "bytes": 2621182,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-ledger-账本与转运档案-v1.png"
+      ]
+    },
+    {
+      "file": "prop-libraryExterior-图书馆建筑外观-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "391322bbf6c5bb1fe2e65c81e7207311deab397f2743e049bb2face68aef8ac1",
+      "bytes": 2893403,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-libraryExterior-图书馆建筑外观-v1.png"
+      ]
+    },
+    {
+      "file": "prop-libraryShelf-图书馆木书架-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "05de00bb82b4655ca7c803c0ad228724a63c97630f8807bd645f518feb249a34",
+      "bytes": 2454049,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-libraryShelf-图书馆木书架-v1.png"
+      ]
+    },
+    {
+      "file": "prop-mapBlueprint-管网蓝图纸张-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "e1d8b61ff363271cfb9b160cc43254c29a6705c0dcbd2fc371a60a37e57b0e54",
+      "bytes": 2614364,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-mapBlueprint-管网蓝图纸张-v1.png"
+      ]
+    },
+    {
+      "file": "prop-officeDesk-典狱长办公桌-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "008f4404fbd59fed14779e991f7ee7949c24dbabfa0b464dd7f96c664fe47e99",
+      "bytes": 2500360,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-officeDesk-典狱长办公桌-v1.png"
+      ]
+    },
+    {
+      "file": "prop-officeExterior-办公楼建筑外观-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "cad45913e169b02b18916c2c8824f8ecae2f3cf3372b9c49797c42b281bdae6a",
+      "bytes": 2941854,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-officeExterior-办公楼建筑外观-v1.png"
+      ]
+    },
+    {
+      "file": "prop-pipeModules-地下管道拼接模块-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "0b56b2386b48e7f2cc329c7ecb01c257ed5d222bf6e82abce084108d814658e5",
+      "bytes": 2465543,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-pipeModules-地下管道拼接模块-v1.png"
+      ]
+    },
+    {
+      "file": "prop-pipeTarget-可破损排水管段-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "448515a7ea560a4c1ca6377b32df36d175744f81db50ff6d114a255605023ab5",
+      "bytes": 2512921,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-pipeTarget-可破损排水管段-v1.png"
+      ]
+    },
+    {
+      "file": "prop-poster-海报与隐藏洞口-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "2b97e9457c43615d4c683877a7a0c1c4f6769041692f9c00f0af758242eaa266",
+      "bytes": 2969806,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-poster-海报与隐藏洞口-v1.png"
+      ]
+    },
+    {
+      "file": "prop-radio-瑞德的收音机-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "c7808ca3df9d3465825e77951489eeece8f1507d346e7ca8a68cd7b58ea1eaa6",
+      "bytes": 2802290,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-radio-瑞德的收音机-v1.png"
+      ]
+    },
+    {
+      "file": "prop-readingTable-图书馆阅读整理桌-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "23e46337b9cf1e259c1ab45aba3c3d9b1a799cd39201826b0bf41c29012b82db",
+      "bytes": 2208491,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-readingTable-图书馆阅读整理桌-v1.png"
+      ]
+    },
+    {
+      "file": "prop-safe-隐藏保险柜-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "b207ec903791ee0812d72aae7695cbb57663579f6420ddf0f2950bc3cda9243c",
+      "bytes": 2732105,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-safe-隐藏保险柜-v1.png"
+      ]
+    },
+    {
+      "file": "prop-soilRubble-碎土与碎石堆-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "67b21aa848448c88c533c566c346de3e047f58180c4d1e63170b74a141c50a38",
+      "bytes": 3005564,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-soilRubble-碎土与碎石堆-v1.png"
+      ]
+    },
+    {
+      "file": "prop-woodChair-共用旧木椅-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "834bc88b583f9d72b5e6c9ab4f71575ae4db1a554cca6c46f1150a07990da320",
+      "bytes": 2168630,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-woodChair-共用旧木椅-v1.png"
+      ]
+    },
+    {
+      "file": "prop-yardArchitectureKit-院墙与瞭望塔模块-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "2a93489f1c2d976a412e9f3f62d81c9822984abccfd425674ad2dfef349e90f8",
+      "bytes": 2491025,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-yardArchitectureKit-院墙与瞭望塔模块-v1.png"
+      ]
+    },
+    {
+      "file": "prop-yardGate-监狱大门-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "c57995fdaff83f9aa3daefa660a930e26c0a8aaead9a063cfb4f1d51cdf074ea",
+      "bytes": 2836993,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/prop-yardGate-监狱大门-v1.png"
+      ]
+    },
+    {
+      "file": "scene-beach-海滩与修船区-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "09137d1267efc0fdcd24388f025475a14be83166efb861ad8c2a0a3eeab8c561",
+      "bytes": 3231228,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/scene-beach-海滩与修船区-v1.png"
+      ]
+    },
+    {
+      "file": "scene-dig-墙后的挖掘通道-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "f777769eb0f7a610f9b153b429e8dc64193798997ea5de82440ffc609a35a820",
+      "bytes": 2685401,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/scene-dig-墙后的挖掘通道-v1.png"
+      ]
+    },
+    {
+      "file": "scene-library-老布的图书馆-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "96caefce9240b0084e88adfbb52b31206bf4b26d4668dd1f3394df03a505128c",
+      "bytes": 2785833,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/scene-library-老布的图书馆-v1.png"
+      ]
+    },
+    {
+      "file": "scene-oak-石墙尽头的橡树田野-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "efaaa03fdba3d4013925b97601dbaea633c80cb03b1256016e7023bc3379ba3a",
+      "bytes": 3454592,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/scene-oak-石墙尽头的橡树田野-v1.png"
+      ]
+    },
+    {
+      "file": "scene-office-典狱长办公室-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "100e90d93a480ad8475dfbafa13b8a96c820765d7f4ed38b3a240e8c80859be8",
+      "bytes": 2917976,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/scene-office-典狱长办公室-v1.png"
+      ]
+    },
+    {
+      "file": "scene-pipe-雷声中的砸管处-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "9bc9b4c996c073ed7399abba7caa9fba8bd82410142c460215d16eb3d98310f6",
+      "bytes": 2800131,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/scene-pipe-雷声中的砸管处-v1.png"
+      ]
+    },
+    {
+      "file": "scene-pipeNetwork-地下管网-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "05d884cb51e59677a1ad701080740086d402f32dfd9d757fa7b4f4a67c4c0da7",
+      "bytes": 2620216,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/scene-pipeNetwork-地下管网-v1.png"
+      ]
+    },
+    {
+      "file": "scene-rain-高墙外的雨夜-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "23b184107a75c3323fdf98b6b6f27393d942b11d9fabcde1edc487feca7a0357",
+      "bytes": 3157938,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/scene-rain-高墙外的雨夜-v1.png"
+      ]
+    },
+    {
+      "file": "scene-road-公路与边境小镇-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "341ce6b87de82465771981ecf1c249247529e622ca3ba507911519bdc314548e",
+      "bytes": 3327642,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/scene-road-公路与边境小镇-v1.png"
+      ]
+    },
+    {
+      "file": "scene-supermarket-瑞德工作的超市-v1.png",
+      "category": "本批场景与道具参考图",
+      "sha256": "3dd37abb4bd449db318d2105d4ea46584132724a105c29ba6a8ce1798ea46b93",
+      "bytes": 2899580,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/remaining-assets/references/scene-supermarket-瑞德工作的超市-v1.png"
+      ]
+    },
+    {
+      "file": "材质贴图__floor-basecolor.png",
+      "category": "材质贴图",
+      "sha256": "136253262db269df231047ebe53f828097645681441fae165b3ec32bfc5b758e",
+      "bytes": 1921709,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/working/initial-procedural-textures/floor-basecolor.png"
+      ]
+    },
+    {
+      "file": "材质贴图__floor-basecolor__58b42aaa037b.png",
+      "category": "材质贴图",
+      "sha256": "58b42aaa037bb2678471fa678f6caf93a690c89336f7b487bf28e42a952f84b7",
+      "bytes": 4680575,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/working/textures/floor-basecolor.png"
+      ]
+    },
+    {
+      "file": "材质贴图__floor-normal.png",
+      "category": "材质贴图",
+      "sha256": "8876425a88f6be5111646fb79d6d45e046d47a9172ffe213716d5e2e634c3e6d",
+      "bytes": 4659222,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/working/initial-procedural-textures/floor-normal.png"
+      ]
+    },
+    {
+      "file": "材质贴图__floor-normal__f9f99bff1883.png",
+      "category": "材质贴图",
+      "sha256": "f9f99bff188351c8246855b75e6e84c9f4e04b841166427e0ccef2eec863ac19",
+      "bytes": 4659221,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/working/textures/floor-normal.png"
+      ]
+    },
+    {
+      "file": "材质贴图__paint-basecolor.png",
+      "category": "材质贴图",
+      "sha256": "1d090259dbf9bc0e32c960762a518ab8eb2ab2e96ded3a580f28193660a553be",
+      "bytes": 2372171,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/working/initial-procedural-textures/paint-basecolor.png"
+      ]
+    },
+    {
+      "file": "材质贴图__paint-basecolor__5d393cb08eef.png",
+      "category": "材质贴图",
+      "sha256": "5d393cb08eef9599b7c3754f1be79c0a97ecb123bef2ecd12f07ce1569dbce27",
+      "bytes": 3606450,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/working/textures/paint-basecolor.png"
+      ]
+    },
+    {
+      "file": "材质贴图__paint-normal.png",
+      "category": "材质贴图",
+      "sha256": "e43bf7ba070fbe8e51f152f560c38ed70bcb7466de5c0b879891300c2340cd55",
+      "bytes": 4659222,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/working/initial-procedural-textures/paint-normal.png"
+      ]
+    },
+    {
+      "file": "材质贴图__paint-normal__01043e1cf96a.png",
+      "category": "材质贴图",
+      "sha256": "01043e1cf96a565a02e42ee4d427048058406ac8c2cf66a1f4273699536b02cd",
+      "bytes": 4659224,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/working/textures/paint-normal.png"
+      ]
+    },
+    {
+      "file": "材质贴图__stone-basecolor.png",
+      "category": "材质贴图",
+      "sha256": "fc8a558c2c492ae4f9554fc8d649bbba280dfc1fb234695ce89c7ea225d9eccc",
+      "bytes": 1730680,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/working/initial-procedural-textures/stone-basecolor.png"
+      ]
+    },
+    {
+      "file": "材质贴图__stone-basecolor__60fae60dfa0c.png",
+      "category": "材质贴图",
+      "sha256": "60fae60dfa0ce9a36e3e9c558345d1e7b71a9452b328da38f951d129bddd9941",
+      "bytes": 4764936,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/working/textures/stone-basecolor.png"
+      ]
+    },
+    {
+      "file": "材质贴图__stone-normal.png",
+      "category": "材质贴图",
+      "sha256": "27f4d564ff1eb3a3899e0710c0b69211a6ea58d7d7f10cb8d185112b83036e46",
+      "bytes": 4659224,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/working/initial-procedural-textures/stone-normal.png"
+      ]
+    },
+    {
+      "file": "材质贴图__stone-normal__6bc6ff829d09.png",
+      "category": "材质贴图",
+      "sha256": "6bc6ff829d09b08a518898fea5a7ba8a5da8586fa062f51218b9938f1d27ca03",
+      "bytes": 4659223,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/working/textures/stone-normal.png"
+      ]
+    },
+    {
+      "file": "材质贴图__wall-basecolor.png",
+      "category": "材质贴图",
+      "sha256": "912155387c4dbf46a64064752dcd6c4e19d6f16e1fd3dc50c8df7b5f48e514bb",
+      "bytes": 20094032,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/working/textures/wall-basecolor.png"
+      ]
+    },
+    {
+      "file": "材质贴图__wall-normal.png",
+      "category": "材质贴图",
+      "sha256": "8f0bbcf2047aa9051f56f9d6e126ae19bfc9dec92c98d45f6f4444f32b467cb4",
+      "bytes": 20966573,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/working/textures/wall-normal.png"
+      ]
+    },
+    {
+      "file": "禁闭室第三版三维渲染图__禁闭室-墙面与草席.png",
+      "category": "禁闭室第三版三维渲染图",
+      "sha256": "bd385389c772001874e7185712979ca8fd8cac5066316a1a5d58b89af92fdcc0",
+      "bytes": 2101253,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v3/renders/禁闭室-墙面与草席.png"
+      ]
+    },
+    {
+      "file": "禁闭室第三版三维渲染图__禁闭室-整体预览.png",
+      "category": "禁闭室第三版三维渲染图",
+      "sha256": "cb683665a7d8b86ceedaec05fc26fb5bfd6710ab3423a80e6bf88d83bc92669a",
+      "bytes": 2429180,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v3/renders/禁闭室-整体预览.png"
+      ]
+    },
+    {
+      "file": "禁闭室第三版三维渲染图__禁闭室-铁门细节.png",
+      "category": "禁闭室第三版三维渲染图",
+      "sha256": "b9d33e73a31745f5d3f05647c3288e420d0d2d80acd315f2c78038a5099ece12",
+      "bytes": 1697568,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v3/renders/禁闭室-铁门细节.png"
+      ]
+    },
+    {
+      "file": "禁闭室第三版参考图__建筑主体参考.png",
+      "category": "禁闭室第三版参考图",
+      "sha256": "6e85f221ad5a0634dda02b473172184fbf23d325e044ee8fedcfe0715f4ab0e6",
+      "bytes": 3002418,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v3/references/建筑主体参考.png"
+      ]
+    },
+    {
+      "file": "禁闭室第二版三维渲染图__禁闭室-墙面与草席.png",
+      "category": "禁闭室第二版三维渲染图",
+      "sha256": "41b0ec30036726096ec72ada291347b61ea0a67fe4f5db6424729d8c4a5fe77c",
+      "bytes": 3074793,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/renders/禁闭室-墙面与草席.png"
+      ]
+    },
+    {
+      "file": "禁闭室第二版三维渲染图__禁闭室-整体预览.png",
+      "category": "禁闭室第二版三维渲染图",
+      "sha256": "10b1cfa293246450fec01e6da70c11ee9efb0f42b38aa6c9347daef128f4ce7f",
+      "bytes": 2994042,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/renders/禁闭室-整体预览.png"
+      ]
+    },
+    {
+      "file": "禁闭室第二版三维渲染图__禁闭室-铁门细节.png",
+      "category": "禁闭室第二版三维渲染图",
+      "sha256": "ec1853565d128e5bfc8a4838e82171e760206a70444d9eb4bb4f155c4a3c3ff3",
+      "bytes": 2653861,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v2/renders/禁闭室-铁门细节.png"
+      ]
+    },
+    {
+      "file": "禁闭室设定图__solitary-design-sheet-v2.png",
+      "category": "禁闭室设定图",
+      "sha256": "70f528c6bd8f578fb7d55637a8689aaac1ab840e0a025c972f30e6e1f489020d",
+      "bytes": 3088013,
+      "sources": [
+        "/Users/lijiawei/code/hackathon-qunhe-3d/docs/models/branch-endings/references/solitary-design-sheet-v2.png",
+        "/Users/lijiawei/code/lux3d/output/branch-endings/concept-images-v2/禁闭室-单张多视角建模设定图-v2.png",
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v3/references/已确认设定图.png"
+      ]
+    },
+    {
+      "file": "网页与过程检查截图__整体三维网页-已验证.jpg",
+      "category": "网页与过程检查截图",
+      "sha256": "614a18a80e627f27dded71bc5474486e072b81369d153402bf39ce50398d7608",
+      "bytes": 54810,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v3/working/整体三维网页-已验证.jpg"
+      ]
+    },
+    {
+      "file": "网页与过程检查截图__网页模型预览-已验证.jpg",
+      "category": "网页与过程检查截图",
+      "sha256": "4517f2dc3d25cac6f990d4f7f3d7ebdd61518481947ad9b4338cba509b0f1e47",
+      "bytes": 74879,
+      "sources": [
+        "/Users/lijiawei/code/lux3d/output/branch-endings/solitary-pilot-v3/working/网页模型预览-已验证.jpg"
+      ]
+    }
+  ]
+}
