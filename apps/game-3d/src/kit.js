@@ -10,6 +10,7 @@ import { createOakKeepsake } from './oak-keepsakes.js';
 import { createRoadBus } from './road-bus.js';
 import { createPrisonGate } from './prison-gate.js';
 import { createEvidenceBoard } from './evidence-board.js';
+import { createEvidenceProp } from './evidence-props.js';
 
 export const COLORS = { ink: '#34313e', stone: '#9da5a1', trim: '#ddd2b8', wood: '#947558', steel: '#657781', gold: '#d6ac69' };
 export const CHARACTER_NAMES = { andy: '安迪', red: '瑞德', brooks: '老布', guard: '狱警', warden: '典狱长', manager: '超市经理', clerk: '银行职员', tommy: '汤米', haywood: '海伍德', floyd: '弗洛伊德' };
@@ -104,7 +105,8 @@ export function makeProp(kind, { sceneId, landmark = false } = {}) {
   if (CHARACTER_NAMES[kind]) {
     const actor = createActor({ skin: ['red', 'brooks'].includes(kind) ? '#a67e60' : '#d6ab82', shirt: kind === 'andy' ? '#8195a1' : kind === 'guard' ? '#657d81' : kind === 'warden' ? '#6d7079' : '#8a9d80', hair: ['red', 'brooks'].includes(kind) ? '#b8b7ad' : '#5a4d43' });
     visual.add(actor); anchor.userData.animate = actor.userData.animate;
-  } else if (['desk', 'table'].includes(kind)) table(visual);
+  } else if (sceneId === 'evidence' && ['desk', 'ledger', 'letter', 'postbox'].includes(kind)) createEvidenceProp(visual, kind);
+  else if (['desk', 'table'].includes(kind)) table(visual);
   else if (kind === 'chair') {
     box(visual, .9, .14, .9, 0, .65, 0, COLORS.wood); box(visual, .9, 1.1, .12, 0, 1.13, -.4, COLORS.wood);
     for (const x of [-.34, .34]) for (const z of [-.34, .34]) box(visual, .1, .6, .1, x, .3, z, COLORS.steel);
