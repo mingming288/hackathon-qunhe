@@ -17,10 +17,20 @@
   <div id="floating-labels" aria-hidden="true"></div>
   <button id="interact" class="interaction" type="button" hidden></button>
   <div id="notice" class="notice" role="status" aria-live="polite"></div>
-  <footer class="controls"><span><b>↑ ↓ ← →</b> 移动</span><span>拖动 · 环顾</span><span>滚轮 · 远近</span><span>空格 · 互动</span><span id="build-note" class="build-note"></span></footer>
+  <footer class="controls"><span><b>↑ ↓ ← →</b> 移动</span><span>拖动 · 环顾</span><span>滚轮 · 远近</span><span>空格 · 互动</span><span class="environment-controls">拖动 · 旋转　右键拖动或双指 · 平移　滚轮或双指 · 缩放</span><span id="build-note" class="build-note"></span></footer>
   <div class="touch-controls" aria-label="移动控制"><button data-move="ArrowUp" aria-label="向前">↑</button><button data-move="ArrowLeft" aria-label="向左">←</button><button data-move="ArrowDown" aria-label="向后">↓</button><button data-move="ArrowRight" aria-label="向右">→</button></div>
   <dialog id="menu" aria-labelledby="menu-title"><span class="eyebrow">第三人称 · 剧情贯通版</span><h2 id="menu-title">高墙之外</h2><p>一间牢房，一段漫长准备。沿着原有故事，亲自走向高墙的另一边。</p><div class="menu-actions"><button id="new-game" class="primary" type="button">开始新游戏</button><button id="resume-game" type="button">继续游戏</button><button id="menu-atlas" type="button">场景总览 · 自由查看</button><button id="menu-last-preview" type="button">继续上次的场景查看</button></div><small>十九组基础场景 · 主线、备用路线与三条结局 · 场景查看独立保存</small></dialog>
-  <dialog id="atlas" aria-labelledby="atlas-title"><div class="dialog-heading"><div><span class="eyebrow">场景档案</span><h2 id="atlas-title">从高墙，到远方。</h2></div><button id="close-atlas" aria-label="关闭场景总览" type="button">关闭</button></div><p id="atlas-note" class="atlas-note"></p><div id="scene-list"></div></dialog>
+  <dialog id="atlas" aria-labelledby="atlas-title">
+    <div class="dialog-heading"><div><span class="eyebrow">场景与建模档案</span><h2 id="atlas-title">从高墙，到远方。</h2></div><button id="close-atlas" aria-label="关闭场景总览" type="button">关闭</button></div>
+    <p id="atlas-note" class="atlas-note"></p>
+    <div class="atlas-tabs" role="tablist" aria-label="建模资产分类">
+      <button id="atlas-environments" type="button" role="tab" data-atlas-category="environments" aria-selected="true" aria-controls="atlas-panel">场景环境</button>
+      <button id="atlas-props" type="button" role="tab" data-atlas-category="props" aria-selected="false" aria-controls="atlas-panel" tabindex="-1">陈设与道具</button>
+      <button id="atlas-characters" type="button" role="tab" data-atlas-category="characters" aria-selected="false" aria-controls="atlas-panel" tabindex="-1">人物资产</button>
+    </div>
+    <p id="atlas-summary" class="atlas-summary" role="status" aria-live="polite"></p>
+    <div id="atlas-panel" role="tabpanel" aria-labelledby="atlas-environments"></div>
+  </dialog>
   <dialog id="detail" aria-labelledby="detail-title"><span class="eyebrow">高墙之外</span><h2 id="detail-title"></h2><div id="detail-copy"></div><div id="challenge"></div><div id="detail-actions"></div><button id="close-detail" type="button">返回探索</button></dialog>
   <div id="fade" aria-hidden="true"></div>
   <div id="fatal" class="fatal" role="alert" hidden><h2>暂时无法打开三维场景</h2><p id="fatal-message"></p><button type="button" onclick="location.reload()">重新尝试</button></div>

@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { createWorld, disposeWorld } from './world.js';
 import { createActor } from './actor.js';
 import { ThirdPersonController } from './controller.js';
@@ -8,6 +9,7 @@ import { entryPosition } from './navigation.js';
 export class WorldView {
   constructor({ canvas, labelRoot, interactButton, enabled, onAutosave, notify }) {
     this.canvas = canvas; this.labelRoot = labelRoot; this.button = interactButton; this.notify = notify;
+    this.environmentOnly = false; this.enabled = enabled;
     this.labels = []; this.mixers = []; this.interactions = []; this.version = 0; this.onAutosave = onAutosave;
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75)); this.renderer.setSize(innerWidth, innerHeight);
@@ -20,7 +22,10 @@ export class WorldView {
     sun.shadow.mapSize.set(2048, 2048);
     Object.assign(sun.shadow.camera, { left: -30, right: 30, top: 30, bottom: -30 }); sun.shadow.normalBias = .035;
     this.scene.add(sun); this.setHero('andy');
-    this.controls = new ThirdPersonController(this.camera, this.hero, canvas); this.controls.enabled = enabled;
+    this.controls = new ThirdPersonController(this.camera, this.hero, canvas);
+    this.controls.enabled = () => enabled() && !this.environmentOnly;
+    this.orbit = new OrbitControls(this.camera, canvas); this.orbit.enabled = false;
+    this.orbit.enableDamping = true; this.orbit.minPolarAngle = .1; this.orbit.maxPolarAngle = Math.PI * .49;
     this.button.addEventListener('click', () => this.current?.run());
     window.addEventListener('keydown', event => {
       if (event.code === 'Space' && !event.repeat && enabled() && !event.target.closest('button, input')) {
@@ -48,18 +53,21 @@ export class WorldView {
     this.scene.add(this.hero); if (this.controls) this.controls.player = this.hero;
   }
 
-  show(config, { from = null, location = null, character = 'andy', catalog = {} } = {}) {
+  show(config, { from = null, location = null, character = 'andy', catalog = {}, environmentOnly = false } = {}) {
     if (this.world) disposeWorld(this.world);
+    this.environmentOnly = environmentOnly;
     this.setHero(character); this.version++; this.mixers = [];
-    this.world = createWorld(config); this.baseColliders = [...this.world.colliders]; this.scene.add(this.world.root);
+    this.hero.visible = !environmentOnly;
+    this.world = createWorld(config, { includeCharacters: !environmentOnly, includeHelpers: !environmentOnly });
+    this.baseColliders = [...this.world.colliders]; this.scene.add(this.world.root);
     this.scene.background = new THREE.Color(this.world.background); this.scene.fog = new THREE.Fog(this.world.fog, 35, 95);
     const position = entryPosition(this.world, from, location);
     this.hero.position.set(position.x, 0, position.z); this.hero.rotation.y = Math.PI;
     this.hero.scale.y = config.id === 'pipeNetwork' ? .72 : 1;
-    this.controls.reset(); this.camera.position.copy(this.hero.position).add(new THREE.Vector3(0, 5, 7));
+    this.resetCamera();
     this.interactions = []; this.current = null; this.button.hidden = true; this.goal = null;
     const version = this.version;
-    for (const anchor of [...this.world.anchors, this.hero]) {
+    for (const anchor of [...this.world.anchors, ...(environmentOnly ? [] : [this.hero])]) {
       const entry = catalog[anchor.userData.assetKey]; if (!entry) continue;
       replaceAsset(anchor, entry).then(mixer => {
         if (mixer && version === this.version) this.mixers.push(mixer);
@@ -78,6 +86,7 @@ export class WorldView {
     this.world.anchors.forEach(anchor => { anchor.visible = !hidden.includes(anchor.userData.assetKey); });
     this.world.colliders = [...this.baseColliders];
     this.labelRoot.replaceChildren(); this.labels = [];
+    if (this.environmentOnly) { this.goal = null; return; }
     this.goal = goal ? this.anchor(goal) : null;
     for (const portal of this.world.portals) {
       const locked = Boolean(portalRules[portal.id]);
@@ -95,13 +104,34 @@ export class WorldView {
 
   position() { return { x: this.hero.position.x, z: this.hero.position.z }; }
   pause() { this.controls.keys.clear(); }
-  resetCamera() { this.controls.reset(); this.canvas.focus(); }
+  resetCamera() {
+    this.controls.reset();
+    if (this.environmentOnly && this.world) {
+      const sphere = new THREE.Box3().setFromObject(this.world.root).getBoundingSphere(new THREE.Sphere());
+      const verticalAngle = THREE.MathUtils.degToRad(this.camera.fov / 2);
+      const visibleAngle = Math.min(verticalAngle, Math.atan(Math.tan(verticalAngle) * this.camera.aspect));
+      const distance = sphere.radius / Math.sin(visibleAngle) * 1.08;
+      this.orbit.target.copy(sphere.center);
+      this.camera.position.copy(sphere.center).addScaledVector(new THREE.Vector3(.8, .9, 1.2).normalize(), distance);
+      this.orbit.minDistance = Math.max(1, sphere.radius * .08); this.orbit.maxDistance = distance * 2;
+      this.camera.far = Math.max(130, distance * 4); this.scene.fog = null;
+      this.orbit.update();
+    } else {
+      this.camera.position.copy(this.hero.position).add(new THREE.Vector3(0, 5, 7));
+      this.camera.far = 130;
+    }
+    this.camera.updateProjectionMatrix(); this.canvas.focus();
+  }
 
   tick(now) {
     const dt = Math.min((now - this.last) / 1000, .05); this.last = now; this.elapsed += dt;
     if (!this.world) return;
-    const speed = this.controls.update(dt, this.world);
-    this.heroVisual.userData.animate(this.elapsed, speed / 3.3);
+    this.orbit.enabled = this.environmentOnly && this.enabled();
+    if (this.environmentOnly) this.orbit.update();
+    else {
+      const speed = this.controls.update(dt, this.world);
+      this.heroVisual.userData.animate(this.elapsed, speed / 3.3);
+    }
     this.world.animations.forEach(anchor => anchor.userData.animate(this.elapsed, 0));
     this.mixers.forEach(mixer => mixer.update(dt));
     if (this.world.rain) {

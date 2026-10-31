@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { box, cylinder, makeProp, PROP_COLLIDERS, COLORS } from './kit.js';
+import { box, cylinder, makeProp, PROP_COLLIDERS, COLORS, CHARACTER_NAMES } from './kit.js';
 import { SCENE_BY_ID } from './scenes.js';
 import { PORTALS } from './navigation.js';
 import { addYardBuildings } from './yard-buildings.js';
@@ -12,7 +12,7 @@ const TONES = {
   clinical: ['#cbd7d0', '#99aaa5', '#edf0d8'], default: ['#c9cbb5', '#929e96', '#e7dfc8']
 };
 
-export function createWorld(config) {
+export function createWorld(config, { includeCharacters = true, includeHelpers = true } = {}) {
   const root = new THREE.Group(), architecture = new THREE.Group(); root.add(architecture);
   const shell = new THREE.Group(); architecture.add(shell);
   architecture.userData = { assetKey: config.id + '-architecture', placeholder: shell, targetHeight: 4 };
@@ -20,8 +20,10 @@ export function createWorld(config) {
   const world = { root, config, colliders: [], anchors: [architecture], portals: [], animations: [], background, fog: background };
   const [width, depth] = config.size;
   box(shell, width + 1, .35, depth + 1, 0, -.2, 0, floorColor);
-  const grid = new THREE.GridHelper(Math.max(width, depth), Math.round(Math.max(width, depth)), '#aca991', '#c2bca4');
-  grid.position.y = .005; grid.material.transparent = true; grid.material.opacity = .18; shell.add(grid);
+  if (includeHelpers) {
+    const grid = new THREE.GridHelper(Math.max(width, depth), Math.round(Math.max(width, depth)), '#aca991', '#c2bca4');
+    grid.position.y = .005; grid.material.transparent = true; grid.material.opacity = .18; shell.add(grid);
+  }
 
   function obstacle(w, h, d, x, z, color = wallColor, y = h / 2) {
     const mesh = box(shell, w, h, d, x, y, z, color);
@@ -29,6 +31,7 @@ export function createWorld(config) {
     return mesh;
   }
   function prop(kind, x, z, angle = 0) {
+    if (!includeCharacters && Object.hasOwn(CHARACTER_NAMES, kind)) return null;
     const anchor = makeProp(kind); anchor.position.set(x, 0, z); anchor.rotation.y = angle;
     if (['hammer', 'bible', 'books', 'ledger', 'letter', 'bag', 'groceries'].includes(kind)) anchor.position.y = 1.32;
     root.add(anchor); world.anchors.push(anchor);
@@ -142,7 +145,7 @@ export function createWorld(config) {
     prop('tommy', -3, 2); prop('haywood', -10, 4); prop('floyd', 8, 4);
     const soil = prop('rubble', -10, 7); soil.userData.assetKey = 'soilSpot';
   }
-  config.links.forEach((targetId, index) => {
+  if (includeHelpers) config.links.forEach((targetId, index) => {
     const target = SCENE_BY_ID.get(targetId);
     const marker = new THREE.Group();
     const placement = PORTALS[config.id]?.[targetId] || [(index - (config.links.length - 1) / 2) * 3.2, depth / 2 - 2.4];
