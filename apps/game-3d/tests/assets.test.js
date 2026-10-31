@@ -121,3 +121,22 @@ test('行走动作加载失败时保留待机并允许重新进入场景后重�
   assert.equal(typeof mixer.setMoving, 'function');
   assert.equal(target.children.length, 2, '重试不重复添加人物');
 });
+
+test('无动作的骨骼人物可共享待机动作，且不继承其他人物的位移', async context => {
+  const source = new THREE.Group(), bone = new THREE.Bone(); bone.name = 'Hips'; bone.position.y = 2;
+  source.add(bone, new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1)));
+  const clip = new THREE.AnimationClip('idle', 1, [
+    new THREE.VectorKeyframeTrack('Hips.position', [0, 1], [0, 8, 0, 0, 9, 0]),
+    new THREE.QuaternionKeyframeTrack('Hips.quaternion', [0, 1], [0, 0, 0, 1, 0, 0, 1, 0])
+  ]);
+  const load = context.mock.method(GLTFLoader.prototype, 'loadAsync', async url =>
+    url.endsWith('shared-idle.glb') ? { scene: new THREE.Group(), animations: [clip] } : { scene: source, animations: [] });
+  const first = anchor(), second = anchor();
+  const entry = { url: '/assets/models/no-idle.glb', idleUrl: '/assets/models/shared-idle.glb' };
+  const mixers = await Promise.all([replaceAsset(first, entry), replaceAsset(second, entry)]);
+  mixers.forEach(mixer => mixer.update(.5));
+  const posed = first.children[1].getObjectByName('Hips');
+  assert.equal(posed.position.y, 2);
+  assert.ok(Math.abs(posed.quaternion.z) > .5, '共享动作驱动关节旋转');
+  assert.equal(load.mock.calls.filter(call => call.arguments[0].endsWith('shared-idle.glb')).length, 1);
+});

@@ -41,6 +41,12 @@ export async function replaceAsset(anchor, entry, isCurrent = () => true) {
   validateModelEntry(entry);
   if (anchor.userData.replaced) return anchor.userData.loadAnimation?.() ?? anchor.userData.mixer ?? null;
   const gltf = await loadModel(entry.url);
+  let idleGltf = gltf;
+  if (entry.idleUrl) {
+    validateModelEntry({ url: entry.idleUrl });
+    idleGltf = await loadModel(entry.idleUrl);
+    if (!idleGltf.animations.length) throw new Error('人物待机动作不存在。');
+  }
   if (!anchor.parent || !isCurrent()) return null; // 切换场景后，不再把旧的异步结果放入场景。
   if (anchor.userData.replaced) return anchor.userData.loadAnimation?.() ?? anchor.userData.mixer ?? null;
   const model = clone(gltf.scene);
@@ -72,10 +78,13 @@ export async function replaceAsset(anchor, entry, isCurrent = () => true) {
   anchor.userData.placeholder.visible = false;
   anchor.add(model);
   anchor.userData.replaced = true;
-  const mixer = gltf.animations.length ? new THREE.AnimationMixer(model) : null;
+  const idleClip = idleGltf.animations[0]?.clone();
+  // 外部骨架比例可能不同，保留目标人物的位置，只复用关节旋转。
+  if (entry.idleUrl && idleClip) idleClip.tracks = idleClip.tracks.filter(track => track.name.endsWith('.quaternion'));
+  const mixer = idleClip ? new THREE.AnimationMixer(model) : null;
   // 切换场景可能发生在行走动画下载期间；先保存混合器，避免新场景丢失待机动画。
   anchor.userData.mixer = mixer;
-  if (mixer) mixer.clipAction(gltf.animations[0]).play();
+  if (mixer) mixer.clipAction(idleClip).play();
   if (mixer && (entry.walkUrl || Number.isInteger(entry.walkAnimation))) {
     let pending;
     anchor.userData.loadAnimation = () => {
@@ -87,7 +96,7 @@ export async function replaceAsset(anchor, entry, isCurrent = () => true) {
           validateModelEntry({ url: entry.walkUrl });
           walking = await loadModel(entry.walkUrl);
         }
-        const idle = mixer.clipAction(gltf.animations[0]);
+        const idle = mixer.clipAction(idleClip);
         const clip = walking.animations[entry.walkAnimation ?? 0];
         if (!clip) throw new Error('人物行走动作不存在。');
         const walk = mixer.clipAction(clip);

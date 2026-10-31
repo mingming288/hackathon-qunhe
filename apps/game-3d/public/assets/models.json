@@ -69,6 +69,7 @@
     },
     "tommy": {
       "url": "/assets/models/tommy.glb",
+      "idleUrl": "/assets/models/andy-idle-only.glb",
       "height": 2.45,
       "rotationY": 0
     },
@@ -77,8 +78,8 @@
       "height": 2.55,
       "rotationY": 0
     },
-    "haywood": { "url": "/assets/models/prisoner302.glb", "height": 2.45 },
-    "floyd": { "url": "/assets/models/tommy.glb", "height": 2.4 },
+    "haywood": { "url": "/assets/models/prisoner302.glb", "idleUrl": "/assets/models/andy-idle-only.glb", "height": 2.45 },
+    "floyd": { "url": "/assets/models/tommy.glb", "idleUrl": "/assets/models/andy-idle-only.glb", "height": 2.4 },
     "manager": { "url": "/assets/models/norton-idle-walk.glb", "height": 2.5, "walkAnimation": 1 },
     "clerk": { "url": "/assets/models/norton-idle-walk.glb", "height": 2.45, "walkAnimation": 1 }
   }
