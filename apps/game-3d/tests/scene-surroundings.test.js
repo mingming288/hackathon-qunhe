@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { SCENES, SCENE_BY_ID } from '../src/scenes.js';
 import { createWorld, disposeWorld } from '../src/world.js';
+import { canStand } from '../src/movement.js';
 
  test('室内游玩四周有可避让的背景墙，展示模式不包含背景墙', () => {
   for (const scene of SCENES.filter(s => ['room', 'corridor', 'tunnel', 'maze'].includes(s.kind))) {
@@ -46,6 +47,10 @@ test('医疗机构庭院在游玩和预览中均有独立铺装，不影响碰�
     assert.ok(!world.colliders.some(c => c.assetKey === '医疗机构庭院铺装'));
     const building = world.root.getObjectByName('医疗机构建筑');
     assert.ok(building && building.children.length > 20, '建筑入口、窗户与侧翼应完整保留');
+    assert.ok(world.root.getObjectByName('医疗机构围墙'));
+    assert.ok(world.root.getObjectByName('医疗机构入口道路'));
+    assert.ok(canStand(0, 14.7, scene.size, world.colliders), '大门需保留通路');
+    assert.ok(!canStand(8, 14.7, scene.size, world.colliders), '围墙不能被穿透');
     disposeWorld(world);
   }
 });
