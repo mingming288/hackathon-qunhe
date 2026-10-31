@@ -101,6 +101,25 @@ test('银行剧情落点的镜头留在入口建筑内侧', () => {
   disposeWorld(world);
 });
 
+test('证据室出生与返回落点的镜头保持在前墙内', async () => {
+  const { entryPosition } = await import('../src/navigation.js');
+  const world = createWorld(SCENE_BY_ID.get('evidence'));
+  for (const from of [null, 'medicalExterior']) {
+    const position = entryPosition(world, from);
+    const player = new THREE.Group(); player.position.set(position.x, 0, position.z);
+    const target = player.position.clone().add(new THREE.Vector3(0, 1.45, 0));
+    const camera = new THREE.PerspectiveCamera();
+    camera.position.copy(target).add(new THREE.Vector3(0, Math.sin(.4), Math.cos(.4)).multiplyScalar(7));
+    const controller = Object.assign(Object.create(ThirdPersonController.prototype), {
+      camera, player, yaw: 0, pitch: .4, distance: 7, keys: new Set(), enabled: () => true,
+    });
+    controller.update(.016, world);
+    assert.ok(camera.position.z < 5.6, '镜头不能穿过前墙');
+    assert.ok(camera.position.distanceTo(target) > 2, '返回落点应为人物留出观察空间');
+  }
+  disposeWorld(world);
+});
+
 test('瑞德进入超市时镜头位于门口上沿内侧', () => {
   const world = createWorld(SCENE_BY_ID.get('supermarket'));
   const player = new THREE.Group(); player.position.set(world.config.spawn[0], 0, world.config.spawn[1]);

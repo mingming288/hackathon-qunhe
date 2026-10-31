@@ -121,6 +121,8 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     obstacle(17.5, 4, .5, 0, -7.9);
     obstacle(.5, 4, 16, -8.8, 0);
   } else if (config.id === 'evidence') {
+    // 实际建筑的前墙位于房间边缘，镜头须留在室内以免被窗框遮挡。
+    if (includeHelpers) world.cameraColliders.push({ x: 0, z: 6.2, w: 18, d: .5, h: 10, camera: true });
     obstacle(17, 4, .5, 0, -7.7);
     obstacle(.5, 4, 15.5, -8.1, 0);
     obstacle(.5, 4, 15.5, 8.5, 0);

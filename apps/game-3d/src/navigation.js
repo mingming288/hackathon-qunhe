@@ -42,6 +42,7 @@ export function transitionOrientation(from, to, yaw, facing, entry = null) {
 export function entryPosition(world, from, saved = null) {
   const candidate = saved || (() => {
     if (world.config.id === 'rain' && from === 'pipeNetwork') return { x: 0, z: -12.4 };
+    if (world.config.id === 'evidence' && from === 'medicalExterior') return { x: 0, z: 3 };
     const portal = world.portals.find(item => item.id === from);
     if (!portal) return null;
     const { x, z } = portal.object.position;
