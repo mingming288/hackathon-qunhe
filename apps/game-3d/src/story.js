@@ -7,7 +7,7 @@ export const did = (game, action) => game.events.includes(action);
 // 刺绣移开后才展示保险柜；典狱长离开后不再出现在办公室。
 export function officeHiddenProps(game) {
   const hidden = [did(game, 'openSafe') ? 'embroidery' : 'safe'];
-  if (did(game, 'meetWarden') || did(game, 'sideHide')) hidden.push('warden');
+  if (did(game, 'meetWarden') || did(game, 'riskInspection')) hidden.push('warden');
   // 主线账本藏在柜中；备用路线的桌面记录在取走后消失。
   if (!did(game, 'riskInspection') || did(game, 'sideRecover')) hidden.push('ledger');
   return hidden;
