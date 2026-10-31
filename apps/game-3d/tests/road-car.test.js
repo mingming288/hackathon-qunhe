@@ -4,6 +4,8 @@ import { createWorld, disposeWorld } from '../src/world.js';
 import { SCENE_BY_ID } from '../src/scenes.js';
 import { canStand } from '../src/movement.js';
 import { beachHiddenProps, heroId } from '../src/story.js';
+import { TASK_BY_ID } from '../src/story-data.js';
+import { entryPosition, transitionOrientation } from '../src/navigation.js';
 import * as THREE from 'three';
 
 test('公路轿车保留尺寸与位置，车尾可接近并触发剧情', () => {
@@ -55,6 +57,11 @@ test('海滩重逢时瑞德操控、安迪等候；独自修船时隐藏额外�
   assert.equal(world.anchors.some(anchor => anchor.userData.assetKey === 'red'), false);
   assert.equal(heroId({ ending: 'one', events: [] }), 'red');
   assert.deepEqual(beachHiddenProps({ ending: 'one' }), []);
+  assert.equal(TASK_BY_ID.get('oneMeet').target, 'andy');
+  assert.ok(canStand(andy.position.x, andy.position.z + 1.2, world.config.size, world.colliders));
+  const arrival = entryPosition(world, null);
+  assert.deepEqual(arrival, { x: 0, z: 10 });
+  assert.deepEqual(transitionOrientation(null, 'beach', 0, 0), { yaw: 0, facing: Math.PI });
   assert.equal(heroId({ ending: 'three', events: [] }), 'andy');
   const hidden = beachHiddenProps({ ending: 'three' });
   assert.deepEqual(hidden, ['andy']);

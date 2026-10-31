@@ -70,7 +70,7 @@ export const TASKS = [
   task('oneOak', 'oak', 'oak', '瑞德：寻找石墙尽头的橡树', 'oneBox', ['就是这棵树。树根旁有一块深色石头。']),
   task('oneBox', 'oak', 'box', '打开铁盒，读安迪留下的信', 'oneBus', ['铁盒里有安迪留下的指引。你决定去赴这个约。'], { challenge: 'oak', grant: ['letter'] }),
   task('oneBus', 'road', 'bus', '踏上前往海岸的旅程', 'oneMeet', ['小镇和树影从车窗外退去。前方是那片约定中的海。'], { challenge: 'route', autoScene: 'beach' }),
-  task('oneMeet', 'beach', 'boat', '走向旧船，与老友重逢', null, ['在海边，安迪等到了瑞德。你们终于可以把未来交还给自己。'], { finish: '相逢的海滩' }),
+  task('oneMeet', 'beach', 'andy', '走向安迪，与老友重逢', null, ['在海边，安迪等到了瑞德。你们终于可以把未来交还给自己。'], { finish: '相逢的海滩' }),
   task('twoCompare', 'evidence', 'evidenceBoard', '核对名单、证言和转运记录', 'twoMail', ['编号、日期和车辆记录彼此印证。消失的人并没有被正常转移。']),
   task('twoMail', 'evidence', 'postbox', '寄出证据与举报信', 'twoInvestigate', ['你把证据分别寄给报社和调查部门。请查清他们究竟去了哪里。']),
   task('twoInvestigate', 'medicalExterior', 'guard', '协助调查人员核实去向', 'twoMedical', ['车辆路线指向这所医疗机构。调查继续向里面推进。']),
