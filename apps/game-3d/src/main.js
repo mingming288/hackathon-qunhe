@@ -44,7 +44,7 @@ function renderScene(id, options = {}) {
   $('scene-count').textContent = String(SCENES.indexOf(config) + 1).padStart(2, '0') + ' / ' + SCENES.length;
   document.querySelectorAll('[data-scene]').forEach(button => button.classList.toggle('active', button.dataset.scene === id));
   $('fade').classList.add('show');
-  const crossing = (options.from === 'cellCorridor' && id === 'yard') || (options.from === 'yard' && id === 'cellCorridor');
+  const crossing = (options.from === 'cellCorridor' && id === 'yard') || (options.from === 'yard' && id === 'cellCorridor') || (options.from === 'pipeNetwork' && id === 'rain');
   if (crossing && mode === 'game') {
     let finished = false;
     const finish = () => { if (!finished) { finished = true; if (sceneRevision === revision) $('fade').classList.remove('show'); } };
@@ -65,7 +65,7 @@ function completeAction(action) {
     const previousScene = game.scene;
     const result = advance(game, action.id, sceneId);
     game = result.game;
-    if (game.scene !== previousScene || view.heroId !== heroId(game)) renderScene(game.scene);
+    if (game.scene !== previousScene || view.heroId !== heroId(game)) renderScene(game.scene, previousScene === 'pipeNetwork' && game.scene === 'rain' ? { from: previousScene } : {});
     else { refresh(); saveCurrent(); }
     const message = action.result || result.automatic.findLast(item => item.result)?.result;
     if (message) notify(message);

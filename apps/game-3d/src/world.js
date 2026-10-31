@@ -7,6 +7,7 @@ import { YARD_BUILDINGS } from './yard-layout.js';
 import { addCorridorDetails } from './corridor-details.js';
 import { addSceneSurroundings } from './scene-surroundings.js';
 import { addCorridorYardVista, addYardCorridorVista } from './corridor-yard-vista.js';
+import { addPipeRainVista } from './pipe-rain-vista.js';
 
 const TONES = {
   warm: ['#39352d', '#686459', '#857d6c'], dark: ['#292f2e', '#555d59', '#777970'],
@@ -147,6 +148,7 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
       for (const side of [-1, 1]) box(shell, 1.4, .2, .25, side * (width / 2 - 1), 3.4, z, '#a3ab9d');
     }
     if (config.kind === 'maze') {
+      if (includeHelpers && config.id === 'pipeNetwork') addPipeRainVista(world);
       [[-5, 4, 1, 15], [5, -4, 1, 15], [-9, -6, 7, 1], [9, 7, 7, 1], [0, -11, 9, 1]].forEach(([x, z, w, d]) => obstacle(w, 2.3, d, x, z, '#647b7c'));
       for (const x of [-9, 0, 9]) box(shell, .8, .04, depth - 3, x, .03, 0, '#8ba6a0', false);
       for (const [x, z] of [[-5.7, 8], [4.3, 2], [5.7, -8]]) {

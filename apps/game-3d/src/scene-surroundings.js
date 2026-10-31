@@ -31,7 +31,14 @@ export function addSceneSurroundings(world) {
     mesh.position.set(x, y, z); mesh.receiveShadow = true; group.add(mesh);
     world.cameraColliders.push({ x, z, w: sizeX, d: sizeZ, h: y + h / 2, camera: true });
   }
-  wall(0, -d / 2, w, .25);
+  if (config.id === 'pipeNetwork') {
+    // 雨夜出口处保留视野，其余区域仍有背景墙和镜头碰撞。
+    const left = 6.5, right = 11.5;
+    const start = -w / 2, end = w / 2;
+    wall((start + left) / 2, -d / 2, left - start, .25);
+    wall((right + end) / 2, -d / 2, end - right, .25);
+    world.background = '#384d59'; world.fog = world.background;
+  } else wall(0, -d / 2, w, .25);
   if (config.id === 'cellCorridor') {
     // 院子入口保持开阔；墙垛仍供镜头避让，不改变玩家移动碰撞。
     const opening = 11.6, side = (w - opening) / 2;

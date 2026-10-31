@@ -1,0 +1,30 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import * as THREE from 'three';
+import { createWorld, disposeWorld } from '../src/world.js';
+import { SCENE_BY_ID } from '../src/scenes.js';
+import { entryPosition, PORTALS, transitionOrientation } from '../src/navigation.js';
+import { canStand } from '../src/movement.js';
+
+test('管网出口展示雨夜远景，进入后落在排水口外并面向场地', () => {
+  const network = createWorld(SCENE_BY_ID.get('pipeNetwork'));
+  const vista = network.root.getObjectByName('管网外的雨夜');
+  assert.ok(vista);
+  assert.equal(network.vistaAnchors[0].userData.assetKey, 'rain-architecture');
+  assert.ok(!network.anchors.includes(network.vistaAnchors[0]));
+  const front = network.cameraColliders.filter(c => c.z < -16 && c.d === .25);
+  assert.equal(front.length, 2);
+  assert.ok(front.every(c => Math.abs(c.x - PORTALS.pipeNetwork.rain[0]) >= c.w / 2 + 2));
+  const transform = new THREE.Vector3(0, 0, -15.7);
+  vista.updateWorldMatrix(true, false); vista.localToWorld(transform);
+  assert.ok(Math.abs(transform.x - 9) < 1e-6 && Math.abs(transform.z + 15.5) < 1e-6);
+  const rain = createWorld(SCENE_BY_ID.get('rain'));
+  const position = entryPosition(rain, 'pipeNetwork');
+  assert.ok(canStand(position.x, position.z, rain.config.size, rain.colliders));
+  const drain = rain.anchors.find(anchor => anchor.userData.assetKey === 'drain');
+  assert.ok(Math.hypot(position.x - drain.position.x, position.z - drain.position.z) < 2.7);
+  assert.deepEqual(transitionOrientation('pipeNetwork', 'rain', 0, 0), { yaw: Math.PI, facing: 0 });
+  const saved = { x: 4, z: 4 };
+  assert.deepEqual(entryPosition(rain, 'pipeNetwork', saved), saved);
+  disposeWorld(network); disposeWorld(rain);
+});

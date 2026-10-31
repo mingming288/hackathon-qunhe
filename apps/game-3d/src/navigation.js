@@ -23,6 +23,7 @@ export const PORTALS = {
 
 // 院子与走廊的出口相对，跨越时对视角和人物朝向做相同的坐标变换。
 export function transitionOrientation(from, to, yaw, facing) {
+  if (from === 'pipeNetwork' && to === 'rain') return { yaw: Math.PI, facing: 0 };
   if ((from === 'cellCorridor' && to === 'yard') || (from === 'yard' && to === 'cellCorridor')) {
     return { yaw: yaw + Math.PI, facing: facing + Math.PI };
   }
@@ -31,6 +32,7 @@ export function transitionOrientation(from, to, yaw, facing) {
 
 export function entryPosition(world, from, saved = null) {
   const candidate = saved || (() => {
+    if (world.config.id === 'rain' && from === 'pipeNetwork') return { x: 0, z: -12.4 };
     const portal = world.portals.find(item => item.id === from);
     if (!portal) return null;
     const { x, z } = portal.object.position;
