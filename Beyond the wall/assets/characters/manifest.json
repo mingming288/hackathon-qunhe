@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "stage": "reference_ready",
+  "style": {
+    "name": "复古美式漫画",
+    "traits": [
+      "夸张大头",
+      "细长四肢",
+      "深紫结构线",
+      "块面明暗",
+      "低饱和旧印刷色彩"
+    ],
+    "background": "建模参考使用浅灰背景，游戏中不保留背景"
+  },
+  "production": {
+    "plannedConcurrency": 2,
+    "accountWideGenerationLimitAtPlanning": 5,
+    "modelGenerationApproval": "pending",
+    "geometry": {
+      "tier": "standard",
+      "targetFaceCount": 40000,
+      "fourViewEnhancement": false
+    },
+    "rigging": "not_started",
+    "animations": "not_started",
+    "quote": {
+      "estimatedCreditsBeforeAccountBenefits": 40,
+      "perCharacter": {
+        "andy": 20,
+        "red": 20
+      },
+      "quotedAt": "2026-10-31T14:16:10+08:00",
+      "expiresAt": "2026-10-31T14:21:10+08:00",
+      "scope": "static_models_only"
+    }
+  },
+  "characters": [
+    {
+      "id": "andy",
+      "name": "安迪",
+      "role": "主角；验证持物、挖掘、爬行与结局演出",
+      "reference": "references/andy-v1.png",
+      "model": null,
+      "rig": null,
+      "animations": [],
+      "status": "reference_ready",
+      "appearance": {
+        "skin": "浅肤色",
+        "hair": "棕色短发",
+        "shirt": "灰蓝色",
+        "trousers": "深靛蓝色"
+      },
+      "requiredActions": [
+        "待机",
+        "行走",
+        "交谈",
+        "持物",
+        "拾取",
+        "挖掘",
+        "倒土",
+        "蹲下",
+        "爬行"
+      ]
+    },
+    {
+      "id": "red",
+      "name": "瑞德",
+      "role": "主要对话人物；验证近景表情与漫画造型",
+      "reference": "references/red-v1.png",
+      "model": null,
+      "rig": null,
+      "animations": [],
+      "status": "reference_ready",
+      "appearance": {
+        "skin": "深棕色",
+        "hair": "灰色短发",
+        "shirt": "灰绿色",
+        "trousers": "深靛蓝色"
+      },
+      "requiredActions": [
+        "待机",
+        "行走",
+        "交谈",
+        "交付物品",
+        "调查",
+        "乘车",
+        "装袋"
+      ]
+    }
+  ]
+}
