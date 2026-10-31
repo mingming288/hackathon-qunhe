@@ -196,6 +196,13 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     prop('oak', 15, 8); prop('oak', -15, 10);
   } else if (config.kind === 'rain') {
     obstacle(width, 5, .7, 0, -depth / 2, '#657b83');
+    for (const x of [-3.8, 3.8]) {
+      const light = new THREE.PointLight('#e5a55f', 30, 13, 2);
+      light.position.set(x, 3.1, -14.7); root.add(light);
+      const lamp = new THREE.Mesh(new THREE.BoxGeometry(.25, .5, .25),
+        new THREE.MeshStandardMaterial({ color: '#ead0a1', emissive: '#d78335', emissiveIntensity: 1 }));
+      lamp.position.copy(light.position); root.add(lamp);
+    }
     const positions = new Float32Array(700 * 3);
     for (let i = 0; i < 700; i++) {
       positions[i * 3] = Math.sin(i * 133.1) * width / 2;
@@ -206,7 +213,7 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     world.rain = new THREE.Points(geometry, new THREE.PointsMaterial({ color: '#d9e6d8', size: .065, transparent: true, opacity: .6 }));
     root.add(world.rain);
     for (let i = 0; i < 6; i++) {
-      const puddle = cylinder(shell, 2, .015, Math.sin(i * 4) * 12, .015, Math.cos(i * 3) * 11, '#8fa8a6', 20); puddle.scale.z = .5;
+      const puddle = cylinder(root, 2, .015, Math.sin(i * 4) * 12, .015, Math.cos(i * 3) * 11, '#647a7b', 20); puddle.scale.z = .5;
     }
   }
   config.props.forEach(([kind, x, z, rotation]) => prop(kind, x, z, rotation));

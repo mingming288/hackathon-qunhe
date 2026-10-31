@@ -1,6 +1,8 @@
 {
   "version": 1,
   "models": {
+    "rain-architecture": { "url": "/assets/models/rain-exterior-rebuilt.glb", "normalize": false },
+    "rain:drain": { "url": "/assets/models/rain-drain-rebuilt.glb", "normalize": false },
     "pipeNetwork-architecture": { "url": "/assets/models/pipe-network-rebuilt.glb", "normalize": false },
     "pipe-architecture": { "url": "/assets/models/pipe-room-rebuilt.glb", "normalize": false },
     "pipe:pipeTarget": { "url": "/assets/models/pipe-target-rebuilt.glb", "normalize": false },
