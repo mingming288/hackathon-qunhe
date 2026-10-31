@@ -99,6 +99,7 @@ function bookStack(group) {
 export function makeProp(kind, { sceneId, landmark = false } = {}) {
   const anchor = new THREE.Group(), visual = new THREE.Group(); anchor.add(visual);
   anchor.userData = { assetKey: kind, placeholder: visual, label: CHARACTER_NAMES[kind] || '', targetHeight: 1 };
+  if (sceneId === 'medicalExterior' && kind === 'guard') anchor.userData.label = '调查人员';
   if (CHARACTER_NAMES[kind]) {
     const actor = createActor({ skin: ['red', 'brooks'].includes(kind) ? '#a67e60' : '#d6ab82', shirt: kind === 'andy' ? '#8195a1' : kind === 'guard' ? '#657d81' : kind === 'warden' ? '#6d7079' : '#8a9d80', hair: ['red', 'brooks'].includes(kind) ? '#b8b7ad' : '#5a4d43' });
     visual.add(actor); anchor.userData.animate = actor.userData.animate;

@@ -13,6 +13,8 @@ export function officeHiddenProps(game) {
 export const oakHiddenProps = game => !did(game, 'oneOak') || did(game, 'oneBox') ? ['box'] : [];
 // 重逢路线由瑞德操控，安迪在海边等待；独自修船路线由安迪操控。
 export const beachHiddenProps = game => game.ending === 'one' ? [] : ['andy'];
+// 抓捕完成后人物及其碰撞都应离开调查现场。
+export const medicalHiddenProps = game => did(game, 'twoArrest') ? ['warden'] : [];
 export const getTask = game => TASK_BY_ID.get(game.step);
 export const isAlternate = game => did(game, 'riskInspection');
 export const isLate = game => did(game, 'restYears') || did(game, 'sideYears');
