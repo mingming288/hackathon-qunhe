@@ -18,7 +18,7 @@ export function loadGame(storage) {
 }
 
 export function saveGame(storage, game, location) {
-  storage.setItem(GAME_KEY, JSON.stringify({ version: 1, events: game.events, scene: game.scene, location }));
+  storage.setItem(GAME_KEY, JSON.stringify({ version: 2, events: game.events, scene: game.scene, practice: game.practice, location }));
 }
 
 export function backupGame(storage) {

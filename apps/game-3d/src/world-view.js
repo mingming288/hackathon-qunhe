@@ -54,6 +54,7 @@ export class WorldView {
   }
 
   show(config, { from = null, location = null, character = 'andy', catalog = {}, environmentOnly = false } = {}) {
+    this.setStage(null);
     if (this.world) disposeWorld(this.world);
     this.environmentOnly = environmentOnly;
     this.setHero(character); this.version++; this.mixers = [];
@@ -70,20 +71,23 @@ export class WorldView {
     for (const anchor of [...this.world.anchors, ...(environmentOnly ? [] : [this.hero])]) {
       const entry = catalog[anchor.userData.assetKey]; if (!entry) continue;
       replaceAsset(anchor, entry).then(mixer => {
-        if (mixer && version === this.version) this.mixers.push(mixer);
+        if (version === this.version) { if (mixer) this.mixers.push(mixer); this.stage?.sync(); }
       }).catch(() => { if (version === this.version) this.notify('部分正式模型未载入，保留基础模型继续游戏。'); });
     }
     this.canvas.focus();
   }
 
   anchor(target) {
-    return target.startsWith('exit:') ? this.world.portals.find(item => item.id === target.slice(5))?.object
-      : this.world.anchors.find(item => item.userData.assetKey === target);
+    return this.stage?.anchor(target) || (target.startsWith('exit:') ? this.world.portals.find(item => item.id === target.slice(5))?.object
+      : this.world.anchors.find(item => item.userData.assetKey === target));
   }
+
+  setStage(stage) { this.stage?.dispose(); this.stage = stage; }
 
   configure({ interactions, goal, goalLabel = '当前目标', portalRules = {}, hidden = [] }) {
     this.interactions = interactions.map(item => ({ ...item, object: this.anchor(item.target) })).filter(item => item.object);
     this.world.anchors.forEach(anchor => { anchor.visible = !hidden.includes(anchor.userData.assetKey); });
+    this.stage?.sync();
     this.world.colliders = [...this.baseColliders];
     this.labelRoot.replaceChildren(); this.labels = [];
     if (this.environmentOnly) { this.goal = null; return; }
@@ -95,6 +99,7 @@ export class WorldView {
     }
     this.world.anchors.filter(anchor => anchor.visible && anchor !== this.goal && anchor.userData.label).forEach(anchor => this.addLabel(anchor.userData.label, anchor, 2.9));
     if (this.goal) this.addLabel(goalLabel + ' ↓', this.goal, this.goal.userData.labelHeight ?? 3.6, 'goal-label');
+    for (const { object, text, height } of this.stage?.labels || []) this.addLabel(text, object, height);
   }
 
   addLabel(text, object, height, extra = '') {
@@ -133,6 +138,7 @@ export class WorldView {
       this.heroVisual.userData.animate(this.elapsed, speed / 3.3);
     }
     this.world.animations.forEach(anchor => anchor.userData.animate(this.elapsed, 0));
+    this.stage?.updateFrame(dt, this.elapsed);
     this.mixers.forEach(mixer => mixer.update(dt));
     if (this.world.rain) {
       const positions = this.world.rain.geometry.attributes.position;

@@ -33,21 +33,8 @@ export class Dialogue {
       const element = document.createElement('button'); element.type = 'button'; element.textContent = text;
       element.addEventListener('click', callback); area.append(element); return element;
     };
-    if (action.challenge === 'radio') {
-      hint.textContent = '先点击“复位传动齿轮”，再把频率调到73，最后点击“确认调谐”。';
-      let repaired = false;
-      const input = document.createElement('input'); input.type = 'range'; input.min = '0'; input.max = '100'; input.value = '25';
-      input.setAttribute('aria-label', '收音机频率'); area.append(input);
-      const readout = document.createElement('output'); area.append(readout);
-      const update = () => { readout.textContent = '频率 ' + input.value + ' · ' + (Math.abs(Number(input.value) - 73) <= 2 ? '信号稳定' : '有杂音'); };
-      input.addEventListener('input', update); update();
-      button('检查并复位传动齿轮', event => { repaired = true; event.target.disabled = true; event.target.textContent = '齿轮已复位'; });
-      button('确认调谐', () => {
-        if (repaired && Math.abs(Number(input.value) - 73) <= 2) finish();
-        else hint.textContent = repaired ? '请把频率调到73附近（71至75），再确认调谐。' : '请先点击“检查并复位传动齿轮”。';
-      });
-    } else if (['books', 'bag', 'map'].includes(action.challenge)) {
-      const expected = action.challenge === 'books' ? ['高书', '中书', '矮书'] : action.challenge === 'bag' ? ['面粉', '罐头', '面包', '鸡蛋'] : ['左转', '右转', '右转'];
+    if (['bag', 'map'].includes(action.challenge)) {
+      const expected = action.challenge === 'bag' ? ['面粉', '罐头', '面包', '鸡蛋'] : ['左转', '右转', '右转'];
       const options = action.challenge === 'map' ? ['左转', '右转', '直行'] : [...expected].reverse();
       let sequence = [];
       const update = () => { hint.textContent = '已选择：' + (sequence.join(' → ') || '等待操作'); };
@@ -57,10 +44,6 @@ export class Dialogue {
         if (sequence.length === expected.length) finish(); else update();
       });
       button('重新排列', () => { sequence = []; update(); }); update();
-    } else if (action.challenge === 'hide') {
-      for (const option of ['桌面上', '圣经的书页凹槽', '枕头旁']) button(option, () => {
-        if (option === '圣经的书页凹槽') finish(); else hint.textContent = '这个位置在检查时很容易被发现。';
-      });
     } else if (action.challenge === 'thunder') {
       const started = performance.now(); let hits = 0, lastCycle = -1;
       const strike = button('挥动石锤', () => {

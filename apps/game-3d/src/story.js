@@ -1,5 +1,6 @@
 import { TASK_BY_ID, EVIDENCE } from './story-data.js';
 import { SCENE_BY_ID } from './scenes.js';
+import { createPractice, completePractice, restorePractice } from './practice-state.js';
 
 export const did = (game, action) => game.events.includes(action);
 export const getTask = game => TASK_BY_ID.get(game.step);
@@ -8,7 +9,7 @@ export const isLate = game => did(game, 'restYears') || did(game, 'sideYears');
 export const heroId = game => game.ending === 'one' || (game.ending === 'three' && did(game, 'threeBoat')) ? 'red' : 'andy';
 
 function initialState() {
-  return { step: 'watchTv', events: [], items: [], evidence: [], observed: [], ending: null, finished: null, scene: 'livingRoom' };
+  return { step: 'watchTv', events: [], items: [], evidence: [], observed: [], ending: null, finished: null, scene: 'livingRoom', practice: createPractice() };
 }
 
 export function createGame() { return settle(initialState()).game; }
@@ -43,6 +44,7 @@ function applyAction(game, id, scene) {
   const action = getActions(game, scene).find(item => item.id === id);
   if (!action || did(game, id)) throw new Error('当前任务尚不允许这个操作。');
   const next = structuredClone(game); next.events.push(id); next.scene = scene;
+  next.practice = completePractice(next.practice, id);
   next.items = next.items.filter(item => !action.consume?.includes(item));
   for (const item of action.grant || []) if (!next.items.includes(item)) next.items.push(item);
   if (action.evidence) next.evidence.push(action.evidence);
@@ -122,11 +124,15 @@ export function enterScene(game, to) {
 
 // 只持久化合法事件序列，恢复时重新推导道具、分支与任务，避免半更新存档造成软锁。
 export function restoreGame(record) {
-  if (!record || record.version !== 1 || !Array.isArray(record.events) || record.events.length > 100) throw new Error('游戏记录格式不正确。');
+  if (!record || ![1, 2].includes(record.version) || !Array.isArray(record.events) || record.events.length > 100) throw new Error('游戏记录格式不正确。');
   // 先按旧顺序逐项重放，再合并当前的自动剧情，兼容优化前停在中间步骤的记录。
   let game = initialState();
   for (const id of record.events) {
     if (typeof id !== 'string') throw new Error('任务事件格式不正确。');
+    // 旧版已借到锤子或离开牢房时，不强制重做新增的观察与交付。
+    if (record.version === 1 && ['inspectWall', 'takeHammer'].includes(game.step) && id !== game.step) {
+      const bridge = getTask(game); game = applyAction(game, bridge.id, bridge.scene).game;
+    }
     const source = TASK_BY_ID.get(id)?.scene || (id === 'riskInspection' ? 'cell' : id.startsWith('evidence:') ? EVIDENCE[id.slice(9)]?.[0] : id.startsWith('observe:') ? 'yard' : null);
     if (!source) throw new Error('记录含未知任务。');
     game = applyAction(game, id, source).game;
@@ -135,7 +141,14 @@ export function restoreGame(record) {
   // 允许保存于已到达的正常区域；任务中的自动转场仍由已重放的事件决定。
   if (!sceneAccessible(game, record.scene)) throw new Error('记录中的场景尚未解锁。');
   game.scene = record.scene;
-  return settle(game).game;
+  game = settle(game).game;
+  if (record.version === 1) {
+    while (['inspectWall', 'takeHammer', 'getBible', 'inspection'].includes(game.step)) {
+      const bridge = getTask(game); game = settle(applyAction(game, bridge.id, bridge.scene).game).game;
+    }
+  }
+  game.practice = restorePractice(record.practice, game.events);
+  return game;
 }
 
 export function sceneAccessible(game, target) {
