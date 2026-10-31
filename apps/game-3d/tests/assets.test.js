@@ -90,3 +90,15 @@ test('人物行走动画仍在加载时切换场景，可以复用已创建的�
   assert.equal(await first, reused);
   assert.equal(typeof reused.setMoving, 'function');
 });
+
+test('多个角色共用行走动作时只加载一次', async context => {
+  const source = new THREE.Group(); source.add(new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1)));
+  const load = context.mock.method(GLTFLoader.prototype, 'loadAsync', async url => ({
+    scene: source, animations: [new THREE.AnimationClip(url.includes('shared-walk') ? 'walk' : 'idle', 1, [])]
+  }));
+  await Promise.all([
+    replaceAsset(anchor(), { url: '/assets/models/cache-idle-a.glb', walkUrl: '/assets/models/shared-walk.glb' }),
+    replaceAsset(anchor(), { url: '/assets/models/cache-idle-b.glb', walkUrl: '/assets/models/shared-walk.glb' })
+  ]);
+  assert.equal(load.mock.calls.filter(call => call.arguments[0].endsWith('shared-walk.glb')).length, 1);
+});

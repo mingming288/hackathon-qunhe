@@ -47,7 +47,7 @@
       "url": "/assets/models/andy-idle.glb",
       "height": 2.5,
       "rotationY": 0,
-      "walkUrl": "/assets/models/andy-walk.glb"
+      "walkUrl": "/assets/models/andy-walk-only.glb"
     },
     "red": {
       "url": "/assets/models/red-idle-walk.glb",

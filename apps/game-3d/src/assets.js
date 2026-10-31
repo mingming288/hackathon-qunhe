@@ -5,6 +5,11 @@ import { clone } from 'three/addons/utils/SkeletonUtils.js';
 const loader = new GLTFLoader();
 const cache = new Map();
 
+function loadModel(url) {
+  if (!cache.has(url)) cache.set(url, loader.loadAsync(url).catch(error => { cache.delete(url); throw error; }));
+  return cache.get(url);
+}
+
 export function validateModelEntry(entry) {
   if (!entry || typeof entry.url !== 'string' || !entry.url.startsWith('/assets/models/')) {
     throw new Error('模型地址必须位于当前应用的 /assets/models/ 目录。');
@@ -35,11 +40,7 @@ export async function readModelCatalog() {
 export async function replaceAsset(anchor, entry, isCurrent = () => true) {
   validateModelEntry(entry);
   if (anchor.userData.replaced) return anchor.userData.mixer || null;
-  if (!cache.has(entry.url)) {
-    const pending = loader.loadAsync(entry.url).catch(error => { cache.delete(entry.url); throw error; });
-    cache.set(entry.url, pending);
-  }
-  const gltf = await cache.get(entry.url);
+  const gltf = await loadModel(entry.url);
   if (!anchor.parent || !isCurrent()) return null; // 切换场景后，不再把旧的异步结果放入场景。
   if (anchor.userData.replaced) return anchor.userData.mixer || null;
   const model = clone(gltf.scene);
@@ -79,7 +80,7 @@ export async function replaceAsset(anchor, entry, isCurrent = () => true) {
     let walking = gltf;
     if (entry.walkUrl) {
       validateModelEntry({ url: entry.walkUrl });
-      walking = await loader.loadAsync(entry.walkUrl);
+      walking = await loadModel(entry.walkUrl);
     }
     const idle = mixer.clipAction(gltf.animations[0]);
     const clip = walking.animations[entry.walkAnimation ?? 0];
