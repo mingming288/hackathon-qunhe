@@ -69,6 +69,10 @@ export function mountStore(root, { onComplete, phase }) {
   listen(window, "blur", release);
   listen(document, "visibilitychange", release);
   listen(action, "click", () => rules.interact());
+  listen(get("confirmBag"), "click", () => {
+    // 排序成功后按钮随面板隐藏，恢复焦点以便立即继续使用键盘。
+    if (!get("sortingGame").classList.contains("show")) canvas.focus();
+  });
   let drag = null;
   listen(canvas, "pointerdown", (e) => {
     if (e.button !== 0) return;
