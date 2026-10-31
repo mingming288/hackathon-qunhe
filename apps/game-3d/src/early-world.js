@@ -29,7 +29,7 @@ export class EarlyWorld {
         this.cellBook = bookModel('#6a7763', true); this.cellBook.scale.setScalar(.45);
         this.cellBook.position.copy(this.originalBible.position); this.cellBook.rotation.x = -Math.PI / 2; this.root.add(this.cellBook);
       }
-      const wall = this.point('wallClue', find('poster'), new THREE.Vector3(0, 0, .28));
+      const wall = this.point('wallClue', find('poster'), new THREE.Vector3(0, 0, -.12));
       if (wall) {
         for (let i = 0; i < 4; i++) block(wall, .035, .2, .035, Math.sin(i * 2) * .08, 1.3 + i * .18, 0, '#626d59');
         lettering(wall, '松动的砂浆', 0, 2.2, .05, 1.6, .25);
@@ -62,6 +62,11 @@ export class EarlyWorld {
     const game = this.getGame();
     this.setPipeDamage(game.events.includes('smashPipe') ? 5 : (this.pipeDamageHits || 0));
     const wall = this.points.get('wallClue'); if (wall) wall.visible = game.step === 'inspectWall';
+    const poster = this.view.world.anchors.find(anchor => anchor.userData.assetKey === 'poster');
+    if (poster && this.view.world.config.id === 'cell') {
+      const hung = game.events.includes('hangPoster');
+      for (const visual of poster.children) visual.visible = hung && (visual !== poster.userData.placeholder || !poster.userData.replaced);
+    }
     const radio = this.points.get('radioRepaired'); if (radio) radio.visible = game.events.includes('repairRadio');
     if (this.cellBook) {
       // 正式外观仍由原资产入口加载；未接入时用能显示开合状态的玩法模型。

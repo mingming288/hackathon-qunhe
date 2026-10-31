@@ -116,7 +116,7 @@ test('各场景中的主线互动目标可以从出生点走近', async () => {
       // 砂浆裂缝由运行时挂在海报位置生成。
       const target = world.anchors.find(anchor => anchor.userData.assetKey === (task.target === 'wallClue' ? 'poster' : task.target));
       assert.ok(target, `${task.id} 缺少互动目标`);
-      assert.ok(queue.some(([x, z]) => Math.hypot(x - target.position.x, z - target.position.z - (task.target === 'wallClue' ? .28 : 0)) < 2.7), `${task.id} 无法走近`);
+      assert.ok(queue.some(([x, z]) => Math.hypot(x - target.position.x, z - target.position.z - (task.target === 'wallClue' ? -.12 : 0)) < 2.7), `${task.id} 无法走近`);
     }
     disposeWorld(world);
   }
