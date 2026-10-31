@@ -85,3 +85,17 @@ test('银行剧情落点的镜头留在入口建筑内侧', () => {
   assert.ok(camera.position.z < 7.4, '镜头不能穿过银行入口上沿');
   disposeWorld(world);
 });
+
+test('瑞德进入超市时镜头位于门口上沿内侧', () => {
+  const world = createWorld(SCENE_BY_ID.get('supermarket'));
+  const player = new THREE.Group(); player.position.set(world.config.spawn[0], 0, world.config.spawn[1]);
+  const target = player.position.clone().add(new THREE.Vector3(0, 1.45, 0));
+  const camera = new THREE.PerspectiveCamera();
+  camera.position.copy(target).add(new THREE.Vector3(0, Math.sin(.4), Math.cos(.4)).multiplyScalar(7));
+  const controller = Object.assign(Object.create(ThirdPersonController.prototype), {
+    camera, player, yaw: 0, pitch: .4, distance: 7, keys: new Set(), enabled: () => true,
+  });
+  controller.update(.016, world);
+  assert.ok(camera.position.z < 11, '镜头不能穿过入口上沿');
+  disposeWorld(world);
+});

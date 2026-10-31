@@ -117,6 +117,8 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     obstacle(.5, 4, 15.5, -8.1, 0);
     obstacle(.5, 4, 15.5, 8.5, 0);
   } else if (config.id === 'supermarket') {
+    // 门口建筑上沿挡住俯视镜头；玩家仍可正常走向出入口。
+    if (includeHelpers) world.cameraColliders.push({ x: 0, z: 11.3, w: 25, d: .4, h: 10, camera: true });
     obstacle(25, 4, .5, 0, -12);
     obstacle(.5, 4, 24, -12.2, 0);
     obstacle(.5, 4, 24, 12.2, 0);
