@@ -26,5 +26,10 @@ test('海滩旧船的船头留有可交互位置', () => {
   const point = { x: boat.position.x, z: boat.position.z + 3.8 };
   assert.ok(canStand(point.x, point.z, world.config.size, world.colliders));
   assert.ok(Math.hypot(point.x - boat.position.x, point.z - boat.position.z) < 4.2);
+  const toolbox = world.anchors.find(anchor => anchor.userData.assetKey === 'toolbox');
+  const toolboxBounds = new THREE.Box3().setFromObject(toolbox);
+  assert.ok(toolbox.userData.placeholder.children.length > 15, '工具箱应包含提手、金属件和木槌');
+  assert.ok(toolboxBounds.min.x > new THREE.Box3().setFromObject(boat).max.x, '工具箱不能穿入船体');
+  assert.ok(canStand(toolbox.position.x, toolbox.position.z, world.config.size, world.colliders));
   disposeWorld(world);
 });

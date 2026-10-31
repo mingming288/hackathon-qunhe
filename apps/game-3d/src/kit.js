@@ -4,6 +4,7 @@ import { createRoadCar } from './road-car.js';
 import { createStoreProp } from './store-props.js';
 import { createStoreFixture } from './store-fixtures.js';
 import { createBeachBoat } from './beach-boat.js';
+import { createBeachToolbox } from './beach-toolbox.js';
 
 export const COLORS = { ink: '#34313e', stone: '#9da5a1', trim: '#ddd2b8', wood: '#947558', steel: '#657781', gold: '#d6ac69' };
 export const CHARACTER_NAMES = { red: '瑞德', brooks: '老布', guard: '狱警', warden: '典狱长', manager: '超市经理', clerk: '银行职员', tommy: '汤米', haywood: '海伍德', floyd: '弗洛伊德' };
@@ -163,6 +164,7 @@ export function makeProp(kind, { sceneId } = {}) {
   } else if (kind === 'car') createRoadCar(visual);
   else if (['bus', 'policeCar'].includes(kind)) vehicle(visual, kind);
   else if (kind === 'boat') createBeachBoat(visual);
+  else if (kind === 'toolbox') createBeachToolbox(visual);
   else if (['pipeTarget', 'drain'].includes(kind)) {
     const pipe = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 4, 14, 1, true), new THREE.MeshToonMaterial({ color: '#657678', side: THREE.DoubleSide }));
     pipe.rotation.z = Math.PI / 2; pipe.position.y = 1.6; visual.add(pipe);
