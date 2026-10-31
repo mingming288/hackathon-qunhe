@@ -8,7 +8,7 @@ import { entryPosition, transitionOrientation } from './navigation.js';
 import { CHARACTER_NAMES } from './kit.js';
 import { AutoTravel } from './auto-travel.js';
 import { revealPendingCharacters } from './scene-load-gate.js';
-import { goalDirection } from './goal-direction.js';
+import { goalDirection, pipeExitWaypoint } from './goal-direction.js';
 
 export class WorldView {
   constructor({ canvas, labelRoot, interactButton, enabled, onAutosave, onAutoTravel = () => {}, notify }) {
@@ -194,7 +194,9 @@ export class WorldView {
       direction.hidden = this.environmentOnly || !this.goal || !this.goal.visible;
       if (!direction.hidden) {
         const target = this.goal.getWorldPosition(projected);
-        const text = goalDirection(this.hero.position, target, this.controls.yaw);
+        const waypoint = this.world.config.id === 'pipeNetwork' && this.goal === this.world.portals.find(portal => portal.id === 'rain')?.object
+          ? pipeExitWaypoint(this.hero.position) : null;
+        const text = goalDirection(this.hero.position, waypoint || target, this.controls.yaw, waypoint ? { nearDistance: 0, label: '绕过隔墙' } : undefined);
         if (direction.textContent !== text) direction.textContent = text;
       }
     }
