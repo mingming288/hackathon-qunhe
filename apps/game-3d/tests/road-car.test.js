@@ -20,6 +20,17 @@ test('公路轿车保留尺寸与位置，车尾可接近并触发剧情', () =>
   disposeWorld(world);
 });
 
+test('调查现场警车保留原碰撞尺寸，并具有警灯和双侧标识', () => {
+  const world = createWorld(SCENE_BY_ID.get('medicalExterior'));
+  const car = world.anchors.find(anchor => anchor.userData.assetKey === 'policeCar');
+  const size = new THREE.Box3().setFromObject(car).getSize(new THREE.Vector3());
+  assert.ok(size.x <= 2.5 && size.z <= 4.9 && size.y > 2);
+  assert.ok(car.userData.placeholder.children.some(mesh => mesh.geometry?.type === 'SphereGeometry'));
+  assert.equal(car.userData.placeholder.children.filter(mesh => mesh.geometry?.type === 'ShapeGeometry').length, 2);
+  assert.ok(canStand(car.position.x + 2, car.position.z, world.config.size, world.colliders));
+  disposeWorld(world);
+});
+
 test('赴约巴士位于原碰撞范围内，侧面可以进入驾驶关卡', () => {
   const world = createWorld(SCENE_BY_ID.get('road'));
   const bus = world.anchors.find(anchor => anchor.userData.assetKey === 'bus');

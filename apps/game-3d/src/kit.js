@@ -96,19 +96,6 @@ function bookStack(group) {
   }
 }
 
-function vehicle(group, kind) {
-  const bus = kind === 'bus'; const police = kind === 'policeCar';
-  const width = bus ? 2.8 : 2.4, length = bus ? 7 : 4.8;
-  box(group, width, bus ? 2.4 : .8, length, 0, bus ? 1.6 : .95, 0, police ? '#dadbd1' : bus ? '#d5bc85' : '#789391');
-  box(group, width * .8, .95, length * .52, 0, bus ? 2.65 : 1.73, -.2, '#b3c7c3');
-  for (const x of [-width / 2, width / 2]) {
-    for (const z of [-length * .32, length * .32]) {
-      const wheel = cylinder(group, .48, .22, x, .48, z, '#393a40'); wheel.rotation.z = Math.PI / 2;
-    }
-  }
-  if (police) { box(group, .5, .2, .3, -.35, 2.3, 0, '#b96c60'); box(group, .5, .2, .3, .35, 2.3, 0, '#6a90ad'); }
-}
-
 export function makeProp(kind, { sceneId, landmark = false } = {}) {
   const anchor = new THREE.Group(), visual = new THREE.Group(); anchor.add(visual);
   anchor.userData = { assetKey: kind, placeholder: visual, label: CHARACTER_NAMES[kind] || '', targetHeight: 1 };
@@ -166,7 +153,7 @@ export function makeProp(kind, { sceneId, landmark = false } = {}) {
   } else if (kind === 'oak') createOakTree(visual, landmark);
   else if (kind === 'car') createRoadCar(visual);
   else if (kind === 'bus') createRoadBus(visual);
-  else if (kind === 'policeCar') vehicle(visual, kind);
+  else if (kind === 'policeCar') createRoadCar(visual, { police: true });
   else if (kind === 'boat') createBeachBoat(visual);
   else if (kind === 'toolbox') createBeachToolbox(visual);
   else if (['pipeTarget', 'drain'].includes(kind)) {

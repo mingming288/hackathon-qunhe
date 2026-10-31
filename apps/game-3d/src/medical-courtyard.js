@@ -8,7 +8,9 @@ export function addMedicalCourtyard(root, size) {
     const context = canvas.getContext('2d'), image = context.createImageData(256, 256);
     for (let i = 0; i < 256 * 256; i++) {
       // 稳定的细颗粒让庭院更像旧混凝土，不依赖网络纹理。
-      const value = 205 + ((Math.imul(i + 1, 2654435761) >>> 24) % 34);
+      let hash = Math.imul(i + 1, 0x45d9f3b);
+      hash = Math.imul(hash ^ (hash >>> 16), 0x45d9f3b);
+      const value = 205 + (((hash ^ (hash >>> 16)) >>> 0) % 34);
       image.data.set([value, value, value, 255], i * 4);
     }
     context.putImageData(image, 0, 0);
