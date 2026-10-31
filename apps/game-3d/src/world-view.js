@@ -94,7 +94,7 @@ export class WorldView {
     this.goal = goal ? this.anchor(goal) : null;
     for (const portal of this.world.portals) {
       const locked = Boolean(portalRules[portal.id]);
-      portal.ring.material.color.set(locked ? '#8e9690' : '#d7b56b');
+      portal.ring.material.color.set(locked ? '#686b60' : '#b99755');
       if (portal.object !== this.goal) this.addLabel((locked ? '暂未开放 · ' : '进入 ') + portal.name + ' ↗', portal.object, portal.object.userData.labelHeight ?? 3.3);
     }
     this.world.anchors.filter(anchor => anchor.visible && anchor !== this.goal && anchor.userData.label).forEach(anchor => this.addLabel(anchor.userData.label, anchor, 2.9));

@@ -7,7 +7,7 @@ export const PORTALS = {
   cell: { cellCorridor: [-3.8, 5.4], dig: [0, -5.4] },
   cellCorridor: { cell: [5, 0, Math.PI / 2], yard: [0, 12.7], solitary: [-5, -5.6, -Math.PI / 2] },
   yard: { cellCorridor: [0, 16.8], ...YARD_ENTRANCES, operatingRoom: [0, -16.8] },
-  library: { yard: [0, 9] }, office: { yard: [0, 8] }, solitary: { cellCorridor: [0, 4.7] },
+  library: { yard: [0, 9] }, office: { yard: [0, 8] }, solitary: { cellCorridor: [-2.8, 4.7] },
   dig: { cell: [0, 10.2], pipe: [0, -10.2] },
   pipe: { dig: [0, 7.8], pipeNetwork: [-5.5, -5] },
   pipeNetwork: { pipe: [0, 13.4], rain: [9, -13.3] },
@@ -18,7 +18,7 @@ export const PORTALS = {
   beach: { road: [0, 16], supermarket: [12, 10] },
   supermarket: { beach: [0, 11], road: [-9, 10] },
   bank: { road: [0, 8] }, evidence: { medicalExterior: [0, 7], rain: [-6, 4] },
-  medicalExterior: { evidence: [0, 14.6], operatingRoom: [0, -14.5] }
+  medicalExterior: { evidence: [0, 14.6], operatingRoom: [0, -11.2] }
 };
 
 export function entryPosition(world, from, saved = null) {

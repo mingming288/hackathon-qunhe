@@ -82,10 +82,25 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     obstacle(12.4, 4, .5, 0, -6.2);
     obstacle(.5, 4, 12.4, -6.1, 0);
     obstacle(.5, 4, 12.4, 6.1, 0);
+  } else if (config.id === 'solitary') {
+    obstacle(8.4, 4, .6, 0, -4.3);
+    obstacle(.6, 4, 9, -3.45, 0);
+    obstacle(.6, 4, 9, 3.95, 0);
   } else if (config.id === 'library') {
     obstacle(21.6, 4, .5, 0, -10);
     obstacle(.5, 4, 20, -10.75, 0);
     obstacle(.5, 4, 20, 10.75, 0);
+  } else if (config.id === 'operatingRoom') {
+    obstacle(17.5, 4, .5, 0, -7.9);
+    obstacle(.5, 4, 16, -8.8, 0);
+  } else if (config.id === 'evidence') {
+    obstacle(17, 4, .5, 0, -7.7);
+    obstacle(.5, 4, 15.5, -8.1, 0);
+    obstacle(.5, 4, 15.5, 8.5, 0);
+  } else if (config.id === 'supermarket') {
+    obstacle(25, 4, .5, 0, -12);
+    obstacle(.5, 4, 24, -12.2, 0);
+    obstacle(.5, 4, 24, 12.2, 0);
   } else if (config.kind === 'room') {
     obstacle(width, 4, .4, 0, -depth / 2);
     obstacle(.4, 4, depth, -width / 2, 0); obstacle(.4, 4, depth, width / 2, 0);
@@ -98,6 +113,10 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     if (config.id === 'supermarket') {
       for (let x = -10; x <= 10; x += 2) box(shell, .03, .015, depth - 1, x, .02, 0, '#c4cabb', false);
     }
+  } else if (config.id === 'medicalExterior') {
+    // 医疗机构源模型的两翼和后侧主体占据庭院边缘。
+    for (const x of [-14, 14]) world.colliders.push({ x, z: -7, w: 8, d: 12, h: 6, camera: true });
+    world.colliders.push({ x: 0, z: -13.5, w: 36, d: 2, h: 6, camera: true });
   } else if (config.kind === 'yard') {
     obstacle(width, 6, .6, 0, -depth / 2); obstacle(.6, 6, depth, -width / 2, 0); obstacle(.6, 6, depth, width / 2, 0);
     const towerOffset = width / 2 - 2.5;
@@ -126,18 +145,22 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
       for (let i = 0; i < 9; i++) box(shell, .8, .5 + i % 3 * .2, .8, (i % 2 ? -1 : 1) * (width / 2 - 1), .25, -depth / 2 + 2 + i * 2, '#958267');
     }
   } else if (config.kind === 'field') {
+    // 与已校准的石墙模型对应，保留两端绕行空间。
+    world.colliders.push({ x: 0, z: -10, w: 30, d: 1.2, h: 2.2, camera: false });
     for (let z = -12; z < 11; z += 1.5) box(shell, .8, .7, 1.4, -6, .35, z, '#9a9b87');
     for (let i = 0; i < 12; i++) prop('oak', (i % 2 ? -1 : 1) * (width / 2 - 3), -depth / 2 + 3 + Math.floor(i / 2) * 5);
     box(shell, 2, .02, depth, 0, .02, 0, '#c1b58f', false);
   } else if (config.kind === 'road') {
     box(shell, 9, .04, depth, 0, .03, 0, '#87908d', false);
     for (let z = -depth / 2; z < depth / 2; z += 4) box(shell, .12, .02, 1.8, 0, .06, z, '#e2d4aa', false);
-    building(-13, -8); building(13, -9); building(-13, 6, 6, 6, 6);
+    for (const x of [-14, 14]) for (const z of [-15, -5, 5, 15]) {
+      world.colliders.push({ x, z, w: 9, d: 8, h: 6, camera: true });
+    }
     for (const x of [-7, 7]) for (const z of [-17, 12]) prop('oak', x, z);
   } else if (config.kind === 'beach') {
-    box(shell, width, .04, 11, 0, .01, -depth / 2 + 5.5, '#7eaeb2', false);
+    box(root, width, .04, 11.5, 0, .04, -depth / 2 + 5.75, '#668b8f', false);
     world.colliders.push({ x: 0, z: -depth / 2 + 5.5, w: width, d: 11, h: .1, camera: false });
-    for (let i = 0; i < 7; i++) box(shell, width, .01, .05, 0, .045, -depth / 2 + 2 + i * 1.3, '#b8d7ca', false);
+    for (let i = 0; i < 7; i++) box(root, width, .01, .05, 0, .07, -depth / 2 + 2 + i * 1.3, '#9cbbaf', false);
     prop('oak', 15, 8); prop('oak', -15, 10);
   } else if (config.kind === 'rain') {
     obstacle(width, 5, .7, 0, -depth / 2, '#657b83');
@@ -167,13 +190,9 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     marker.position.set(placement[0], 0, placement[1]); marker.rotation.y = placement[2] || 0;
     const exterior = config.id === 'yard' && YARD_BUILDINGS.find(building => building.id === targetId);
     if (exterior) marker.userData = { exteriorKey: exterior.assetKey, labelHeight: 1.1 };
-    else if (config.id !== 'yard') {
-      for (const side of [-1, 1]) box(marker, .13, 3, .15, side * 1.05, 1.5, 0, COLORS.steel);
-      box(marker, 2.3, .15, .2, 0, 3, 0, COLORS.trim);
-    }
-    cylinder(marker, .5, .04, 0, .025, 0, COLORS.gold, 24);
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(.62, .035, 6, 24), new THREE.MeshBasicMaterial({ color: '#f4e4b8' }));
-    ring.rotation.x = Math.PI / 2; ring.position.y = .09; marker.add(ring); root.add(marker);
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(.43, .018, 6, 32),
+      new THREE.MeshBasicMaterial({ color: '#b99755', transparent: true, opacity: .7, depthWrite: false }));
+    ring.rotation.x = Math.PI / 2; ring.position.y = .025; marker.add(ring); root.add(marker);
     world.portals.push({ id: targetId, name: target.name, object: marker, ring });
   });
   return world;

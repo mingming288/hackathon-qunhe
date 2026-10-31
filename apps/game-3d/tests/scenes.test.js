@@ -7,6 +7,27 @@ import { validateModelEntry } from '../src/assets.js';
 import { entryPosition } from '../src/navigation.js';
 import * as THREE from 'three';
 
+test('场景入口只使用低调的地面指示，不生成悬空门框', () => {
+  const world = createWorld(SCENE_BY_ID.get('cell'));
+  for (const portal of world.portals) {
+    assert.deepEqual(portal.object.children, [portal.ring]);
+    assert.equal(portal.ring.material.transparent, true);
+  }
+  disposeWorld(world);
+});
+
+test('结局外景的石墙、道路建筑与医疗机构保留可到达的通路', () => {
+  for (const [id, blocked, open] of [
+    ['oak', [0, -10], [0, 0]], ['road', [14, 5], [0, 5]],
+    ['medicalExterior', [14, -7], [0, -7]]
+  ]) {
+    const world = createWorld(SCENE_BY_ID.get(id));
+    assert.equal(canStand(...blocked, world.config.size, world.colliders), false, id);
+    assert.equal(canStand(...open, world.config.size, world.colliders), true, id);
+    disposeWorld(world);
+  }
+});
+
 test('监区走廊两侧门洞可接近，门洞之间的墙垛阻挡通行', () => {
   const world = createWorld(SCENE_BY_ID.get('cellCorridor'));
   for (const x of [-6, 6]) {
