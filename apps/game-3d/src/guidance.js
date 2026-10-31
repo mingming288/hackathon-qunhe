@@ -2,6 +2,12 @@ import { getTask } from './story.js';
 import { routeTo } from './routes.js';
 import { SCENE_BY_ID } from './scenes.js';
 
+// 同一处海滩服务不同结局，场景说明应与当前故事一致。
+export function sceneNoteFor(scene, game) {
+  if (scene.id === 'beach' && game.ending === 'three') return '安迪在海边修整旧船，开始新的生活。';
+  return scene.note;
+}
+
 // 提示描述可见位置与具体动作；空间细节改变时，只更新这份引导数据。
 const GUIDES = {
   inspectWall: ['靠近牢房后墙中央的砂浆裂缝，观察墙面并思考需要的工具。', '观察环境，弄清楚需要什么工具。'],

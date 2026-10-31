@@ -8,7 +8,7 @@ import { Dialogue } from './dialogue.js';
 import { createGame, getTask, getActions, advance, enterScene, travelRule, heroId, visibleInventory, did, officeHiddenProps, oakHiddenProps, beachHiddenProps, medicalHiddenProps } from './story.js';
 import { ITEM_NAMES } from './story-data.js';
 import { loadGame, saveGame, backupGame, loadPreview, savePreview } from './save.js';
-import { guidanceFor } from './guidance.js';
+import { guidanceFor, sceneNoteFor } from './guidance.js';
 import { EarlyPlay } from './early-play.js';
 import { SceneLoadGate } from './scene-load-gate.js';
 import { fadeBeforeTravel } from './scene-transition.js';
@@ -46,7 +46,7 @@ function renderScene(id, options = {}) {
   const ready = view.show(config, { ...options, character: mode === 'game' ? heroId(game) : 'andy', catalog, environmentOnly: mode !== 'game' });
   if (mode === 'game') earlyPlay.attach();
   $('chapter').textContent = config.chapter; $('scene-title').textContent = config.name;
-  $('scene-note').textContent = mode === 'game' ? config.note : environmentDescription(config);
+  $('scene-note').textContent = mode === 'game' ? sceneNoteFor(config, game) : environmentDescription(config);
   $('scene-count').textContent = String(SCENES.indexOf(config) + 1).padStart(2, '0') + ' / ' + SCENES.length;
   document.querySelectorAll('[data-scene]').forEach(button => button.classList.toggle('active', button.dataset.scene === id));
   $('fade').classList.add('show');

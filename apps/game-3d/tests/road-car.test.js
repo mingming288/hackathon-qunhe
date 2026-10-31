@@ -6,6 +6,7 @@ import { canStand } from '../src/movement.js';
 import { beachHiddenProps, heroId } from '../src/story.js';
 import { TASK_BY_ID } from '../src/story-data.js';
 import { entryPosition, transitionOrientation } from '../src/navigation.js';
+import { sceneNoteFor } from '../src/guidance.js';
 import * as THREE from 'three';
 
 test('公路轿车保留尺寸与位置，车尾可接近并触发剧情', () => {
@@ -74,6 +75,8 @@ test('海滩重逢时瑞德操控、安迪等候；独自修船时隐藏额外�
   assert.deepEqual(arrival, { x: 0, z: 10 });
   assert.deepEqual(transitionOrientation(null, 'beach', 0, 0), { yaw: 0, facing: Math.PI });
   assert.equal(heroId({ ending: 'three', events: [] }), 'andy');
+  assert.match(sceneNoteFor(world.config, { ending: 'three' }), /安迪.*新的生活/);
+  assert.match(sceneNoteFor(world.config, { ending: 'one' }), /老朋友/);
   const hidden = beachHiddenProps({ ending: 'three' });
   assert.deepEqual(hidden, ['andy']);
   assert.equal(canStand(andy.position.x, andy.position.z, world.config.size, world.colliders), false);
