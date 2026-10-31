@@ -130,6 +130,7 @@ export class WorldView {
     if (this.environmentOnly) this.orbit.update();
     else {
       const speed = this.controls.update(dt, this.world);
+      this.hero.userData.mixer?.setMoving?.(speed > .05);
       this.heroVisual.userData.animate(this.elapsed, speed / 3.3);
     }
     this.world.animations.forEach(anchor => anchor.userData.animate(this.elapsed, 0));

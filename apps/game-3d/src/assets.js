@@ -60,6 +60,27 @@ export async function replaceAsset(anchor, entry) {
   anchor.userData.replaced = true;
   const mixer = gltf.animations.length ? new THREE.AnimationMixer(model) : null;
   if (mixer) mixer.clipAction(gltf.animations[0]).play();
+  if (mixer && (entry.walkUrl || Number.isInteger(entry.walkAnimation))) {
+    let walking = gltf;
+    if (entry.walkUrl) {
+      validateModelEntry({ url: entry.walkUrl });
+      walking = await loader.loadAsync(entry.walkUrl);
+    }
+    const idle = mixer.clipAction(gltf.animations[0]);
+    const clip = walking.animations[entry.walkAnimation ?? 0];
+    const walk = clip && mixer.clipAction(clip);
+    if (walk) {
+      let moving = false;
+      mixer.setMoving = value => {
+        if (moving === value) return;
+        moving = value;
+        const next = value ? walk : idle;
+        const previous = value ? idle : walk;
+        previous.fadeOut(.2);
+        next.reset().fadeIn(.2).play();
+      };
+    }
+  }
   anchor.userData.mixer = mixer;
   return mixer;
 }
