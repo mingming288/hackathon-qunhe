@@ -162,7 +162,8 @@ export class WorldView {
 
   position() { return { x: this.hero.position.x, z: this.hero.position.z }; }
   pause() { this.controls.keys.clear(); this.stage?.release(); }
-  resetCamera(yaw = 0, preserveKeys = false) {
+  // 未指定方向时从人物背后看向其前方；场景预览仍使用默认视角。
+  resetCamera(yaw = this.environmentOnly ? 0 : this.hero.rotation.y + Math.PI, preserveKeys = false) {
     this.controls.reset({ preserveKeys, preserveView: preserveKeys });
     this.controls.yaw = yaw;
     if (this.environmentOnly && this.world) {

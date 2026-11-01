@@ -31,7 +31,7 @@ function setup(context) {
   const controls = new ThirdPersonController(camera, player, canvas);
   const world = { config: { size: [100, 100] }, colliders: [], animations: [], portals: [] };
   const view = Object.assign(Object.create(WorldView.prototype), {
-    last: 0, elapsed: 0, savedAt: 0, world, controls, hero: player, camera,
+    last: 0, elapsed: 0, savedAt: 0, world, controls, hero: player, camera, canvas,
     heroVisual: { userData: { animate() {} } }, environmentOnly: false,
     enabled: () => true, orbit: {}, mixers: [], interactions: [], labels: [],
     button: { hidden: true }, renderer: { render() {} }, onAutosave() {},
@@ -39,6 +39,18 @@ function setup(context) {
   });
   return { controls, player, camera, world, view, canvas, browserWindow, browserDocument };
 }
+
+test('重置镜头时位于人物身后并朝向人物前方', context => {
+  const { player, camera, controls, view } = setup(context);
+  for (const facing of [0, Math.PI / 2, Math.PI, -Math.PI / 2]) {
+    player.rotation.y = facing;
+    view.resetCamera();
+    const forward = new THREE.Vector3(Math.sin(facing), 0, Math.cos(facing));
+    const cameraOffset = camera.position.clone().sub(player.position).setY(0).normalize();
+    assert.ok(cameraOffset.dot(forward) < -.999999);
+    assert.ok(Math.abs(Math.sin(controls.yaw - facing - Math.PI)) < 1e-9);
+  }
+});
 
 function key(browserWindow, canvas, type, code) {
   const event = new Event(type, { cancelable: true });
