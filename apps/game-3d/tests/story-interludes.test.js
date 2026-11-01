@@ -1,8 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createGame, getTask, advance, restoreGame } from '../src/story.js';
-import { OPENING, storyInterlude } from '../src/story-interludes.js';
+import { OPENING, storyInterlude, pendingInterlude } from '../src/story-interludes.js';
 import { EVIDENCE } from '../src/story-data.js';
+import { GAME_KEY, loadGame, saveGame } from '../src/save.js';
 
 test('新游戏开场介绍人物和可探索目标，瑞德线索说明橡树约定', () => {
   assert.match(OPENING.lines.join(''), /安迪/);
@@ -31,4 +32,20 @@ test('雨夜后的三种分支分别解释人物与下一地点，不改变分�
     assert.match(storyInterlude('breathe', { ending }, []).lines.join(''), text);
   }
   assert.equal(storyInterlude('meetRed', { ending: null }, []), null);
+});
+
+test('未读开场和时间跳跃可以从存档恢复，过期或伪造的说明会忽略', () => {
+  const values = new Map(), storage = { getItem: key => values.get(key) || null, setItem: (key, value) => values.set(key, value) };
+  let game = createGame();
+  saveGame(storage, game, { x: 0, z: 0 }, 'opening');
+  assert.equal(loadGame(storage).pendingStory, 'opening');
+  assert.equal(pendingInterlude('opening', loadGame(storage).game).title, '高墙之内');
+  while (game.step !== 'drawMap') { const task = getTask(game); game = advance(game, task.id, task.scene).game; }
+  saveGame(storage, game, { x: 0, z: 0 }, 'dumpSoil1');
+  assert.match(pendingInterlude(loadGame(storage).pendingStory, game).title, /二十年后/);
+  saveGame(storage, game, { x: 0, z: 0 }, 'opening');
+  assert.equal(loadGame(storage).pendingStory, undefined);
+  const record = JSON.parse(values.get(GAME_KEY)); record.pendingStory = '<恶意内容>';
+  values.set(GAME_KEY, JSON.stringify(record));
+  assert.equal(loadGame(storage).pendingStory, undefined);
 });

@@ -35,3 +35,16 @@ export function storyInterlude(actionId, game, automatic) {
   }
   return null;
 }
+
+// 只恢复与当前剧情检查点一致的说明，不从存档中直接渲染任意文本。
+export function pendingInterlude(id, game) {
+  if (id === 'opening' && game.step === 'inspectWall') return OPENING;
+  if (id === 'dumpSoil1' && game.step === 'drawMap' && game.events.includes('restYears'))
+    return storyInterlude(id, game, [{ id: 'restYears' }]);
+  if (id === 'sideRecover' && game.step === 'drawMap' && game.events.includes('sideYears'))
+    return storyInterlude(id, game, [{ id: 'sideYears' }]);
+  const endingSteps = { one: 'oneBox', two: 'twoCompare', three: 'threeBank' };
+  if (id === 'breathe' && game.events.includes('breathe') && game.step === endingSteps[game.ending])
+    return storyInterlude(id, game, []);
+  return null;
+}

@@ -6,7 +6,7 @@ import { readModelCatalog } from './assets.js';
 import { WorldView } from './world-view.js';
 import { Dialogue } from './dialogue.js';
 import { createGame, getTask, getActions, advance, enterScene, travelRule, heroId, visibleInventory, did, officeHiddenProps, oakHiddenProps, beachHiddenProps, medicalHiddenProps } from './story.js';
-import { ITEM_NAMES } from './story-data.js';
+import { ITEM_NAMES, TASKS } from './story-data.js';
 import { loadGame, saveGame, backupGame, loadPreview, savePreview } from './save.js';
 import { guidanceFor, sceneNoteFor } from './guidance.js';
 import { EarlyPlay } from './early-play.js';
@@ -14,12 +14,13 @@ import { SceneLoadGate } from './scene-load-gate.js';
 import { prepareTravel } from './scene-transition.js';
 import { RainAmbience } from './rain-ambience.js';
 import { evidenceReview } from './evidence-review.js';
-import { OPENING, storyInterlude } from './story-interludes.js';
+import { storyInterlude, pendingInterlude } from './story-interludes.js';
 import rainUrl from '../../../Beyond the wall/音效/四秒雨声.opus';
 
 const $ = id => document.getElementById(id);
 const atlas = $('atlas'), menu = $('menu');
 let mode = 'menu', game = null, gameLocation = null, view, catalog = {}, sceneId = 'cell', noticeTimer, atlasView, earlyPlay;
+let pendingStory = null, storyOpen = false;
 const rainAmbience = new RainAmbience(new Audio(rainUrl));
 const sceneLoad = new SceneLoadGate();
 const storage = { getItem: key => localStorage.getItem(key), setItem: (key, value) => localStorage.setItem(key, value) };
@@ -36,10 +37,30 @@ function store(callback) {
 function saveCurrent() {
   if (!view?.world) return;
   if (mode === 'game') {
-    gameLocation = view.position(); store(() => saveGame(storage, game, gameLocation));
+    gameLocation = view.position(); store(() => saveGame(storage, game, gameLocation, pendingStory));
   } else if (mode === 'explore') store(() => savePreview(storage, sceneId, view.position()));
 }
-const dialogue = new Dialogue(() => view?.canvas.focus());
+const dialogue = new Dialogue(() => {
+  if (storyOpen) { storyOpen = false; pendingStory = null; saveCurrent(); }
+  view?.canvas.focus();
+});
+
+function showPendingStory() {
+  const interlude = pendingInterlude(pendingStory, game);
+  if (!interlude) { pendingStory = null; return false; }
+  storyOpen = true;
+  dialogue.open(interlude.title, interlude.lines, [{ label: pendingStory === 'opening' ? '开始探索' : '继续故事', run: () => {} }]);
+  return true;
+}
+
+function showEnding() {
+  const ending = TASKS.find(task => task.finish === game.finished);
+  if (!ending) return;
+  dialogue.open('结局 · ' + game.finished, ending.lines, [
+    { label: '返回游戏菜单', run: openMenu },
+    { label: '查看全部场景', run: openAtlas }
+  ]);
+}
 
 function renderScene(id, options = {}) {
   const revision = sceneLoad.begin(mode === 'game');
@@ -76,18 +97,14 @@ function completeAction(action) {
     const previousScene = game.scene;
     const result = advance(game, action.id, sceneId);
     game = result.game;
+    const interlude = storyInterlude(action.id, game, result.automatic);
+    pendingStory = interlude ? action.id : null;
     if (game.scene !== previousScene || view.heroId !== heroId(game)) renderScene(game.scene, previousScene === 'pipeNetwork' && game.scene === 'rain' ? { from: previousScene } : {});
     else { refresh(); saveCurrent(); }
-    const interlude = storyInterlude(action.id, game, result.automatic);
     const message = action.result || result.automatic.findLast(item => item.result)?.result;
-    if (interlude) dialogue.open(interlude.title, interlude.lines, [{ label: '继续故事', run: () => {} }]);
+    if (interlude) showPendingStory();
     else if (message) notify(message);
-    if (game.finished) {
-      dialogue.open('结局 · ' + game.finished, action.lines, [
-        { label: '返回游戏菜单', run: openMenu },
-        { label: '查看全部场景', run: openAtlas }
-      ]);
-    }
+    if (game.finished) showEnding();
   } catch (error) { notify(error.message); }
 }
 
@@ -179,11 +196,12 @@ function resume() {
   if (!game) return;
   mode = 'game'; if (menu.open) menu.close(); if (atlas.open) atlas.close();
   renderScene(game.scene, { location: gameLocation });
+  if (!showPendingStory() && game.finished) showEnding();
 }
 function startNew() {
-  store(() => backupGame(storage)); game = createGame(); gameLocation = null; mode = 'game'; menu.close();
+  store(() => backupGame(storage)); game = createGame(); gameLocation = null; pendingStory = 'opening'; mode = 'game'; menu.close();
   renderScene(game.scene);
-  dialogue.open(OPENING.title, OPENING.lines, [{ label: '开始探索', run: () => notify('先靠近后墙，观察松动的砂浆。') }]);
+  showPendingStory();
 }
 function buildAtlas() {
   atlasView = createAtlas({ getCatalog: () => catalog, getScene: () => sceneId, onScene: explore,
@@ -213,7 +231,7 @@ async function start() {
     }
   });
   try { catalog = await readModelCatalog(); } catch (error) { notify(error.message); }
-  try { const saved = loadGame(storage); if (saved) { game = saved.game; gameLocation = saved.location; } }
+  try { const saved = loadGame(storage); if (saved) { game = saved.game; gameLocation = saved.location; pendingStory = saved.pendingStory || null; } }
   catch { notify('已有游戏记录无法恢复，已保留原文件。可以查看场景或重新开始。'); }
   renderScene('cell');
   $('open-atlas').addEventListener('click', openAtlas);
