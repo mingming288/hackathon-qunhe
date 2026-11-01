@@ -77,17 +77,18 @@ export class ThirdPersonController {
     return distance;
   }
 
-  update(dt, world) {
+  update(dt, world, automatic = null) {
     const x = Number(this.keys.has('KeyD') || this.keys.has('ArrowRight')) - Number(this.keys.has('KeyA') || this.keys.has('ArrowLeft'));
     const z = Number(this.keys.has('KeyS') || this.keys.has('ArrowDown')) - Number(this.keys.has('KeyW') || this.keys.has('ArrowUp'));
-    const moving = this.enabled() && (x || z);
+    const moving = this.enabled() && (x || z || automatic);
     // 载入时输入会临时停用，但仍按住方向键时应保留避障前的移动方向。
     if (!x && !z) this.motionYaw = null;
     const beforeX = this.player.position.x, beforeZ = this.player.position.z;
     if (moving) {
       // 一次连续按键使用同一参照方向，避免跟随转镜头时人物绕圈。
-      if (this.motionYaw === null) this.motionYaw = this.yaw;
-      const direction = this.direction.set(x, 0, z).normalize().applyAxisAngle(this.up, this.motionYaw ?? this.yaw);
+      if (!automatic && this.motionYaw === null) this.motionYaw = this.yaw;
+      const direction = automatic ? this.direction.set(automatic.x, 0, automatic.z).normalize()
+        : this.direction.set(x, 0, z).normalize().applyAxisAngle(this.up, this.motionYaw ?? this.yaw);
       const speed = this.keys.has('ShiftLeft') || this.keys.has('ShiftRight') ? 5.2 : 3.3;
       moveWithCollision(this.player.position, direction.x * speed * dt, direction.z * speed * dt, world.config.size, world.colliders);
       const desired = Math.atan2(direction.x, direction.z);

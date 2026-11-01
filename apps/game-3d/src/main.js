@@ -252,9 +252,7 @@ async function start() {
   $('camera-reset').addEventListener('click', () => view.resetCamera());
   $('guide-help').addEventListener('click', () => {
     if (mode !== 'game' || !game || sceneLoad.active || earlyPlay.busy || dialogue.dialog.open) return;
-    const guide = earlyPlay.guide(guidanceFor(game));
-    notify(guide.target?.startsWith('exit:') ? guide.shortTitle + '，走近金色标记后自动进入。' : guide.place.replace(/^目标就在这里：/, ''));
-    view.canvas.focus();
+    view.walkTo();
   });
   $('open-journal').addEventListener('click', () => {
     if (mode !== 'game' || sceneLoad.active || earlyPlay.busy || dialogue.dialog.open || atlas.open || menu.open) return;
