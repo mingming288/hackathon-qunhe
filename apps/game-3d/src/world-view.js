@@ -3,22 +3,29 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { createWorld, disposeWorld } from './world.js';
 import { createActor } from './actor.js';
 import { ThirdPersonController } from './controller.js';
-import { replaceAsset } from './assets.js';
-import { entryPosition } from './navigation.js';
+import { replaceAsset, preloadModel } from './assets.js';
+import { entryPosition, transitionOrientation } from './navigation.js';
+import { CHARACTER_NAMES } from './kit.js';
+import { AutoTravel } from './auto-travel.js';
+import { revealPendingCharacters } from './scene-load-gate.js';
+import { goalDirection, pipeExitWaypoint } from './goal-direction.js';
+import { guideWaypoint } from './guide-route.js';
+import { SCENE_BY_ID } from './scenes.js';
 
 export class WorldView {
-  constructor({ canvas, labelRoot, interactButton, enabled, onAutosave, notify }) {
-    this.canvas = canvas; this.labelRoot = labelRoot; this.button = interactButton; this.notify = notify;
+  constructor({ canvas, labelRoot, interactButton, enabled, onAutosave, onAutoTravel = () => {}, notify }) {
+    this.canvas = canvas; this.labelRoot = labelRoot; this.button = interactButton; this.notify = notify; this.onAutoTravel = onAutoTravel;
     this.environmentOnly = false; this.enabled = enabled;
-    this.labels = []; this.mixers = []; this.interactions = []; this.version = 0; this.onAutosave = onAutosave;
+    this.labels = []; this.mixers = []; this.interactions = []; this.preloads = new Map(); this.version = 0; this.onAutosave = onAutosave;
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75)); this.renderer.setSize(innerWidth, innerHeight);
     this.renderer.shadowMap.enabled = true; this.renderer.shadowMap.type = THREE.PCFShadowMap;
+    this.renderer.localClippingEnabled = true;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace; this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.2;
+    this.renderer.toneMappingExposure = .95;
     this.scene = new THREE.Scene(); this.camera = new THREE.PerspectiveCamera(48, innerWidth / innerHeight, .1, 130);
-    this.scene.add(new THREE.HemisphereLight('#f9efda', '#7c8982', 2.3));
-    const sun = new THREE.DirectionalLight('#fff2d2', 3.2); sun.position.set(-15, 24, 12); sun.castShadow = true;
+    this.scene.add(new THREE.HemisphereLight('#ded9c7', '#4d5852', 1.8));
+    const sun = new THREE.DirectionalLight('#e5d5ad', 2.4); sun.position.set(-15, 24, 12); sun.castShadow = true;
     sun.shadow.mapSize.set(2048, 2048);
     Object.assign(sun.shadow.camera, { left: -30, right: 30, top: 30, bottom: -30 }); sun.shadow.normalBias = .035;
     this.scene.add(sun); this.setHero('andy');
@@ -53,28 +60,60 @@ export class WorldView {
     this.scene.add(this.hero); if (this.controls) this.controls.player = this.hero;
   }
 
-  show(config, { from = null, location = null, character = 'andy', catalog = {}, environmentOnly = false } = {}) {
+  preloadScene(config, catalog, character) {
+    const key = config.id + ':' + character;
+    if (this.preloads.has(key)) return this.preloads.get(key);
+    const pending = (async () => {
+      const world = createWorld(config);
+      try {
+        const entries = [...world.anchors, ...(world.vistaAnchors || [])].map(anchor =>
+          catalog[(anchor.userData.assetScope || config.id) + ':' + anchor.userData.assetKey] || catalog[anchor.userData.assetKey]);
+        entries.push(catalog[character]);
+        await Promise.allSettled(entries.filter(Boolean).map(preloadModel));
+      } finally { disposeWorld(world); }
+    })().catch(error => { this.preloads.delete(key); throw error; });
+    this.preloads.set(key, pending);
+    return pending;
+  }
+
+  show(config, { from = null, location = null, character = 'andy', catalog = {}, environmentOnly = false, seamless = false } = {}) {
+    const previousYaw = this.controls.yaw, previousFacing = this.hero.rotation.y;
+    const previousPosition = seamless ? this.position() : null;
     this.setStage(null);
     if (this.world) disposeWorld(this.world);
     this.environmentOnly = environmentOnly;
+    this.catalog = catalog;
     this.setHero(character); this.version++; this.mixers = [];
     this.hero.visible = !environmentOnly;
     this.world = createWorld(config, { includeCharacters: !environmentOnly, includeHelpers: !environmentOnly });
     this.baseColliders = [...this.world.colliders]; this.scene.add(this.world.root);
     this.scene.background = new THREE.Color(this.world.background); this.scene.fog = new THREE.Fog(this.world.fog, 35, 95);
-    const position = entryPosition(this.world, from, location);
-    this.hero.position.set(position.x, 0, position.z); this.hero.rotation.y = Math.PI;
+    const position = entryPosition(this.world, from, location, previousPosition);
+    const portal = this.world.portals.find(item => item.id === from)?.object.position;
+    const orientation = environmentOnly ? { yaw: 0, facing: Math.PI }
+      : transitionOrientation(from, config.id, previousYaw, previousFacing, { portal, position });
+    this.hero.position.set(position.x, 0, position.z); this.hero.rotation.y = orientation.facing;
+    this.autoTravel = new AutoTravel(position, this.world.portals);
     this.hero.scale.y = config.id === 'pipeNetwork' ? .72 : 1;
-    this.resetCamera();
+    this.resetCamera(orientation.yaw, seamless);
     this.interactions = []; this.current = null; this.button.hidden = true; this.goal = null;
     const version = this.version;
-    for (const anchor of [...this.world.anchors, ...(environmentOnly ? [] : [this.hero])]) {
-      const entry = catalog[anchor.userData.assetKey]; if (!entry) continue;
-      replaceAsset(anchor, entry).then(mixer => {
+    const loading = [];
+    for (const anchor of [...this.world.anchors, ...(this.world.vistaAnchors || []), ...(environmentOnly ? [] : [this.hero])]) {
+      const entry = catalog[(anchor.userData.assetScope || config.id) + ':' + anchor.userData.assetKey] || catalog[anchor.userData.assetKey]; if (!entry) continue;
+      const character = anchor === this.hero || Object.hasOwn(CHARACTER_NAMES, anchor.userData.assetKey);
+      if (character && !anchor.userData.replaced) anchor.userData.placeholder.visible = false;
+      const pending = replaceAsset(anchor, entry, () => version === this.version).then(mixer => {
         if (version === this.version) { if (mixer) this.mixers.push(mixer); this.stage?.sync(); }
-      }).catch(() => { if (version === this.version) this.notify('部分正式模型未载入，保留基础模型继续游戏。'); });
+      }).catch(() => { if (version === this.version) {
+        if (anchor.userData.mixer) this.mixers.push(anchor.userData.mixer);
+        if (!anchor.userData.replaced) anchor.userData.placeholder.visible = true;
+        this.notify(anchor.userData.replaced ? '人物动作未载入，可继续游戏，重新进入场景后会重试。' : '部分正式模型未载入，保留基础模型继续游戏。');
+      } });
+      loading.push(pending);
     }
     this.canvas.focus();
+    return Promise.all(loading);
   }
 
   anchor(target) {
@@ -82,19 +121,26 @@ export class WorldView {
       : this.world.anchors.find(item => item.userData.assetKey === target));
   }
 
+  revealPendingCharacters() {
+    const characters = this.world.anchors.filter(anchor => Object.hasOwn(CHARACTER_NAMES, anchor.userData.assetKey));
+    return revealPendingCharacters([...characters, this.hero]);
+  }
+
   setStage(stage) { this.stage?.dispose(); this.stage = stage; }
 
   configure({ interactions, goal, goalLabel = '当前目标', portalRules = {}, hidden = [] }) {
+    this.nextGuideAt = 0; this.guideWaypoint = null;
+    this.portalRules = portalRules;
     this.interactions = interactions.map(item => ({ ...item, object: this.anchor(item.target) })).filter(item => item.object);
     this.world.anchors.forEach(anchor => { anchor.visible = !hidden.includes(anchor.userData.assetKey); });
     this.stage?.sync();
-    this.world.colliders = [...this.baseColliders];
+    this.world.colliders = this.baseColliders.filter(collider => !hidden.includes(collider.assetKey));
     this.labelRoot.replaceChildren(); this.labels = [];
     if (this.environmentOnly) { this.goal = null; return; }
     this.goal = goal ? this.anchor(goal) : null;
     for (const portal of this.world.portals) {
       const locked = Boolean(portalRules[portal.id]);
-      portal.ring.material.color.set(locked ? '#8e9690' : '#d7b56b');
+      portal.ring.material.color.set(locked ? '#686b60' : '#b99755');
       if (portal.object !== this.goal) this.addLabel((locked ? '暂未开放 · ' : '进入 ') + portal.name + ' ↗', portal.object, portal.object.userData.labelHeight ?? 3.3);
     }
     this.world.anchors.filter(anchor => anchor.visible && anchor !== this.goal && anchor.userData.label).forEach(anchor => this.addLabel(anchor.userData.label, anchor, 2.9));
@@ -109,8 +155,9 @@ export class WorldView {
 
   position() { return { x: this.hero.position.x, z: this.hero.position.z }; }
   pause() { this.controls.keys.clear(); }
-  resetCamera() {
-    this.controls.reset();
+  resetCamera(yaw = 0, preserveKeys = false) {
+    this.controls.reset({ preserveKeys, preserveView: preserveKeys });
+    this.controls.yaw = yaw;
     if (this.environmentOnly && this.world) {
       const sphere = new THREE.Box3().setFromObject(this.world.root).getBoundingSphere(new THREE.Sphere());
       const verticalAngle = THREE.MathUtils.degToRad(this.camera.fov / 2);
@@ -122,7 +169,9 @@ export class WorldView {
       this.camera.far = Math.max(130, distance * 4); this.scene.fog = null;
       this.orbit.update();
     } else {
-      this.camera.position.copy(this.hero.position).add(new THREE.Vector3(0, 5, 7));
+      const target = this.hero.position.clone().add(new THREE.Vector3(0, 1.45, 0));
+      const pitch = this.controls.pitch, distance = this.controls.distance;
+      this.camera.position.copy(target).add(new THREE.Vector3(Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), Math.cos(yaw) * Math.cos(pitch)).multiplyScalar(distance));
       this.camera.far = 130;
     }
     this.camera.updateProjectionMatrix(); this.canvas.focus();
@@ -132,14 +181,28 @@ export class WorldView {
     const dt = Math.min((now - this.last) / 1000, .05); this.last = now; this.elapsed += dt;
     if (!this.world) return;
     this.orbit.enabled = this.environmentOnly && this.enabled();
+    let speed = 0;
     if (this.environmentOnly) this.orbit.update();
     else {
-      const speed = this.controls.update(dt, this.world);
+      speed = this.controls.update(dt, this.world);
       this.hero.userData.mixer?.setMoving?.(speed > .05);
       this.heroVisual.userData.animate(this.elapsed, speed / 3.3);
     }
     this.world.animations.forEach(anchor => anchor.userData.animate(this.elapsed, 0));
+    const version = this.version;
     this.stage?.updateFrame(dt, this.elapsed);
+    if (version !== this.version) return;
+    if (!this.environmentOnly) {
+      // 靠近开放入口时在后台准备相邻场景，减少实际过门时的等待。
+      if (this.controls.enabled()) {
+        const portal = this.world.portals.filter(item => !this.portalRules?.[item.id])
+          .map(item => ({ item, distance: Math.hypot(item.object.position.x - this.hero.position.x, item.object.position.z - this.hero.position.z) }))
+          .filter(item => item.distance < 7).sort((a, b) => a.distance - b.distance)[0]?.item;
+        if (portal) this.preloadScene(SCENE_BY_ID.get(portal.id), this.catalog, this.heroId).catch(() => {});
+      }
+      const next = this.autoTravel.next(this.hero.position, speed > .05, this.controls.enabled(), this.world.portals, this.portalRules);
+      if (next) { this.onAutoTravel(next); return; }
+    }
     this.mixers.forEach(mixer => mixer.update(dt));
     if (this.world.rain) {
       const positions = this.world.rain.geometry.attributes.position;
@@ -153,6 +216,23 @@ export class WorldView {
     this.button.hidden = !this.current || !this.controls.enabled();
     if (this.current) this.button.textContent = this.current.label + ' · 空格 / 点击';
     const projected = new THREE.Vector3();
+    const direction = document.getElementById('goal-direction');
+    if (direction) {
+      direction.hidden = this.environmentOnly || !this.goal || !this.goal.visible;
+      if (!direction.hidden) {
+        const target = this.goal.getWorldPosition(projected);
+        const pipeWaypoint = this.world.config.id === 'pipeNetwork' && this.goal === this.world.portals.find(portal => portal.id === 'rain')?.object
+          ? pipeExitWaypoint(this.hero.position) : null;
+        if (this.elapsed >= (this.nextGuideAt || 0)) {
+          const portal = this.world.portals.some(item => item.object === this.goal);
+          this.guideWaypoint = pipeWaypoint ? null : guideWaypoint(this.world, this.hero.position, target, portal ? 1.15 : 2.2);
+          this.nextGuideAt = this.elapsed + .35;
+        }
+        const waypoint = pipeWaypoint || this.guideWaypoint;
+        const text = goalDirection(this.hero.position, waypoint || target, this.controls.yaw, waypoint ? { nearDistance: 0, label: '绕过障碍' } : undefined);
+        if (direction.textContent !== text) direction.textContent = text;
+      }
+    }
     for (const { label, object, height } of this.labels) {
       object.getWorldPosition(projected); projected.y += height;
       const distance = projected.distanceTo(this.camera.position); projected.project(this.camera);

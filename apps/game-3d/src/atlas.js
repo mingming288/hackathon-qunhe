@@ -41,7 +41,7 @@ export function createAtlas({ getCatalog, getScene, onScene, onAsset }) {
     button.append(heading, element('span', 'atlas-card-description', description));
     const meta = element('span', 'atlas-card-meta');
     if (group) meta.append(element('span', 'atlas-kind', group));
-    meta.append(element('span', 'atlas-model-state' + (state === '已配置模型' ? ' configured' : ''), state));
+    meta.append(element('span', 'atlas-model-state' + (['已配置模型', '已内置建筑'].includes(state) ? ' configured' : ''), state));
     button.append(meta, element('span', 'atlas-card-foot', foot));
     button.addEventListener('click', action);
     return button;

@@ -1,10 +1,13 @@
 import * as THREE from 'three';
 import { moveWithCollision } from './movement.js';
 
+// 这些房间墙边留有侧向空间，可安全调整镜头；管网等狭窄场景维持原避墙方式。
+const SIDE_CAMERA_ROOMS = new Set(['cell', 'cellCorridor', 'library', 'office', 'solitary']);
+
 export class ThirdPersonController {
   constructor(camera, player, canvas) {
     this.camera = camera; this.player = player; this.keys = new Set();
-    this.yaw = 0; this.pitch = .4; this.distance = 7; this.drag = null;
+    this.yaw = 0; this.pitch = .55; this.distance = 7; this.drag = null; this.motionYaw = null;
     this.enabled = () => true;
     window.addEventListener('keydown', event => {
       if (!this.enabled() || event.target.closest('button, input, select')) return;
@@ -21,7 +24,9 @@ export class ThirdPersonController {
     });
     canvas.addEventListener('pointermove', event => {
       if (!this.drag || this.drag.id !== event.pointerId) return;
-      this.yaw -= (event.clientX - this.drag.x) * .006;
+      const turn = (event.clientX - this.drag.x) * .006;
+      this.yaw -= turn;
+      if (this.motionYaw !== null) this.motionYaw -= turn;
       this.pitch = THREE.MathUtils.clamp(this.pitch + (event.clientY - this.drag.y) * .004, .15, 1.05);
       this.drag.x = event.clientX; this.drag.y = event.clientY;
     });
@@ -42,8 +47,10 @@ export class ThirdPersonController {
     });
   }
 
-  reset() {
-    this.yaw = 0; this.pitch = .4; this.distance = 7; this.drag = null; this.keys.clear();
+  reset({ preserveKeys = false, preserveView = false } = {}) {
+    this.yaw = 0; this.drag = null; this.motionYaw = null;
+    if (!preserveView) { this.pitch = .55; this.distance = 7; }
+    if (!preserveKeys) this.keys.clear();
   }
 
   update(dt, world) {
@@ -51,9 +58,10 @@ export class ThirdPersonController {
     const x = Number(has('KeyD', 'ArrowRight')) - Number(has('KeyA', 'ArrowLeft'));
     const z = Number(has('KeyS', 'ArrowDown')) - Number(has('KeyW', 'ArrowUp'));
     const moving = this.enabled() && (x || z);
+    if (!moving) this.motionYaw = null;
     const before = this.player.position.clone();
     if (moving) {
-      const direction = new THREE.Vector3(x, 0, z).normalize().applyAxisAngle(new THREE.Vector3(0, 1, 0), this.yaw);
+      const direction = new THREE.Vector3(x, 0, z).normalize().applyAxisAngle(new THREE.Vector3(0, 1, 0), this.motionYaw ?? this.yaw);
       const speed = has('ShiftLeft', 'ShiftRight') ? 5.2 : 3.3;
       moveWithCollision(this.player.position, direction.x * speed * dt, direction.z * speed * dt, world.config.size, world.colliders);
       const desired = Math.atan2(direction.x, direction.z);
@@ -61,21 +69,36 @@ export class ThirdPersonController {
       this.player.rotation.y += angle * Math.min(1, dt * 13);
     }
     const target = this.player.position.clone().add(new THREE.Vector3(0, 1.45, 0));
-    const offset = new THREE.Vector3(Math.sin(this.yaw) * Math.cos(this.pitch), Math.sin(this.pitch), Math.cos(this.yaw) * Math.cos(this.pitch));
-    const ray = new THREE.Ray(target, offset);
-    let distance = this.distance;
-    const hit = new THREE.Vector3();
-    for (const collider of world.colliders) {
+    const boundsList = [];
+    for (const collider of [...world.colliders, ...(world.cameraColliders || [])]) {
       if (!collider.camera) continue;
-      const bounds = new THREE.Box3(
+      boundsList.push(new THREE.Box3(
         new THREE.Vector3(collider.x - collider.w / 2 - .2, 0, collider.z - collider.d / 2 - .2),
         new THREE.Vector3(collider.x + collider.w / 2 + .2, collider.h + .15, collider.z + collider.d / 2 + .2)
-      );
-      if (ray.intersectBox(bounds, hit)) distance = Math.min(distance, Math.max(1.3, hit.distanceTo(target) - .2));
+      ));
     }
+    const hit = new THREE.Vector3();
+    const distanceAt = yaw => {
+      const offset = new THREE.Vector3(Math.sin(yaw) * Math.cos(this.pitch), Math.sin(this.pitch), Math.cos(yaw) * Math.cos(this.pitch));
+      const ray = new THREE.Ray(target, offset); let distance = this.distance;
+      for (const bounds of boundsList) if (ray.intersectBox(bounds, hit)) distance = Math.min(distance, Math.max(.25, hit.distanceTo(target) - .2));
+      return distance;
+    };
+    let distance = distanceAt(this.yaw), rerouted = false;
+    // 镜头被挤进人物时转向可用的一侧；正在按住的方向保持到松键。
+    if (SIDE_CAMERA_ROOMS.has(world.config.id) && distance < 2) {
+      for (const angle of [Math.PI / 4, -Math.PI / 4, 3 * Math.PI / 4, -3 * Math.PI / 4, Math.PI / 2, -Math.PI / 2, Math.PI]) {
+        const candidate = this.yaw + angle, available = distanceAt(candidate);
+        if (available >= 3) {
+          if (moving && this.motionYaw == null) this.motionYaw = this.yaw;
+          this.yaw = candidate; distance = available; rerouted = true; break;
+        }
+      }
+    }
+    const offset = new THREE.Vector3(Math.sin(this.yaw) * Math.cos(this.pitch), Math.sin(this.pitch), Math.cos(this.yaw) * Math.cos(this.pitch));
     const desiredPosition = target.clone().addScaledVector(offset, distance);
     // 避墙时立即收近，离开遮挡后平滑拉远；保持角色外部的第三人称位置。
-    const alpha = this.camera.position.distanceTo(target) > distance ? 1 : 1 - Math.exp(-dt * 9);
+    const alpha = rerouted || this.camera.position.distanceTo(target) > distance ? 1 : 1 - Math.exp(-dt * 9);
     this.camera.position.lerp(desiredPosition, alpha); this.camera.lookAt(target);
     return before.distanceTo(this.player.position) / Math.max(dt, .001);
   }

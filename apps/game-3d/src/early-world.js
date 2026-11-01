@@ -1,8 +1,13 @@
 import * as THREE from 'three';
-import { createActor } from './actor.js';
+import { makeProp } from './kit.js';
+import { replaceAsset } from './assets.js';
+import { disposeWorld } from './world.js';
 import { canStand } from './movement.js';
 import { practiceComplete } from './practice-state.js';
 import { block, bookModel, lettering, disposePracticeObject } from './practice-geometry.js';
+import { createPipeDamage } from './pipe-damage.js';
+import { OfficeStage } from './office-stage.js';
+import { OfficeSafeStage } from './office-safe-stage.js';
 
 // 玩法附件只引用现有物件和入口，不修改建筑、陈设数据或碰撞布局。
 export class EarlyWorld {
@@ -12,6 +17,12 @@ export class EarlyWorld {
     const anchors = view.world.anchors;
     const find = key => anchors.find(anchor => anchor.userData.assetKey === key);
     this.desk = find('desk'); this.bed = find('bed');
+    const embroidery = find('embroidery');
+    if (view.world.config.id === 'office' && embroidery) this.office = new OfficeStage(embroidery, getGame().events.includes('openSafe'));
+    const safe = find('safe');
+    if (view.world.config.id === 'office' && safe) this.officeSafe = new OfficeSafeStage(safe, getGame().events.includes('swapLedger'));
+    const pipe = find('pipeTarget');
+    if (pipe && view.world.config.id === 'pipe') this.pipeDamage = createPipeDamage(pipe);
     const radio = find('radio');
     if (radio) {
       const indicator = this.point('radioRepaired', radio);
@@ -24,12 +35,21 @@ export class EarlyWorld {
         this.cellBook = bookModel('#6a7763', true); this.cellBook.scale.setScalar(.45);
         this.cellBook.position.copy(this.originalBible.position); this.cellBook.rotation.x = -Math.PI / 2; this.root.add(this.cellBook);
       }
-      const wall = this.point('wallClue', find('poster'), new THREE.Vector3(0, 0, .28));
+      const wall = this.point('wallClue', find('poster'), new THREE.Vector3(0, 0, -.12));
       if (wall) {
         for (let i = 0; i < 4; i++) block(wall, .035, .2, .035, Math.sin(i * 2) * .08, 1.3 + i * .18, 0, '#626d59');
         lettering(wall, '松动的砂浆', 0, 2.2, .05, 1.6, .25);
       }
-      this.guard = createActor({ shirt: '#657d81', hair: '#5f5049' }); this.guard.visible = false; this.root.add(this.guard);
+      this.guard = makeProp('guard'); this.guard.visible = false; view.world.root.add(this.guard);
+      if (view.catalog?.guard) {
+        const stageWorld = view.world;
+        this.guard.userData.placeholder.visible = false;
+        replaceAsset(this.guard, view.catalog.guard, () => view.world === stageWorld && this.guard?.parent).then(mixer => {
+          if (mixer && view.world === stageWorld && this.guard?.parent) view.mixers.push(mixer);
+        }).catch(() => {
+          if (view.world === stageWorld && this.guard?.parent) { this.guard.userData.placeholder.visible = true; this.notify('检查狱警模型未载入，暂用基础形象。'); }
+        });
+      }
       this.door = view.world.portals.find(portal => portal.id === 'cellCorridor')?.object.position.clone() || new THREE.Vector3();
       this.checkPoint = this.nearDesk();
     }
@@ -46,7 +66,15 @@ export class EarlyWorld {
   interactions() { return []; }
   sync() {
     const game = this.getGame();
+    this.office?.sync(game.events.includes('openSafe'));
+    this.officeSafe?.sync(game.events.includes('swapLedger'));
+    this.setPipeDamage(game.events.includes('smashPipe') ? 5 : (this.pipeDamageHits || 0));
     const wall = this.points.get('wallClue'); if (wall) wall.visible = game.step === 'inspectWall';
+    const poster = this.view.world.anchors.find(anchor => anchor.userData.assetKey === 'poster');
+    if (poster && this.view.world.config.id === 'cell') {
+      const hung = game.events.includes('hangPoster');
+      for (const visual of poster.children) visual.visible = hung && (visual !== poster.userData.placeholder || !poster.userData.replaced);
+    }
     const radio = this.points.get('radioRepaired'); if (radio) radio.visible = game.events.includes('repairRadio');
     if (this.cellBook) {
       // 正式外观仍由原资产入口加载；未接入时用能显示开合状态的玩法模型。
@@ -56,6 +84,8 @@ export class EarlyWorld {
       this.cellBook.userData.cover.rotation.y = 0;
     }
   }
+
+  setPipeDamage(hits) { this.pipeDamageHits = hits; this.pipeDamage?.setHits(hits); }
 
   guide(guide) {
     const game = this.getGame(), state = game.practice;
@@ -87,6 +117,8 @@ export class EarlyWorld {
   }
   updateFrame(dt, elapsed) {
     const game = this.getGame(), check = game.practice.inspection;
+    if (this.enabled()) this.office?.update(dt);
+    if (this.enabled()) this.officeSafe?.update(dt);
     if (game.step === 'finalDig' && this.view.world.config.id === 'dig' && this.enabled()) {
       const exit = this.view.world.portals.find(portal => portal.id === 'pipe')?.object;
       this.entryTime = exit && this.view.hero.position.distanceTo(exit.position) < 2.2 ? (this.entryTime || 0) + dt : 0;
@@ -107,6 +139,7 @@ export class EarlyWorld {
     const look = check.phase === 'search' ? this.desk.position : to;
     this.guard.rotation.y = Math.atan2(look.x - this.guard.position.x, look.z - this.guard.position.z);
     this.guard.userData.animate(elapsed, check.phase === 'search' ? 0 : .55);
+    this.guard.userData.mixer?.setMoving?.(check.phase !== 'search');
     this.update('inspection', { ...check, elapsed: time }, false);
     if (time < duration) return;
     if (check.phase === 'enter') { this.setInspection({ ...check, phase: 'search', elapsed: 0 }); this.notify('狱警正在查看桌上的书和物品。'); }
@@ -116,5 +149,9 @@ export class EarlyWorld {
       this.finish(check.unsafe ? 'riskInspection' : 'inspection');
     }
   }
-  dispose() { disposePracticeObject(this.root); }
+  dispose() {
+    if (this.guard) { disposeWorld({ root: this.guard }); this.guard = null; }
+    if (this.pipeDamage) disposePracticeObject(this.pipeDamage.root);
+    disposePracticeObject(this.root);
+  }
 }

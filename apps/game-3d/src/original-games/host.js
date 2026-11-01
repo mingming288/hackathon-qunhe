@@ -1,9 +1,10 @@
 import "./original.css";
 import { ORIGINAL_GAMES, isOriginalCompletion } from "./registry.js";
+import { bindPipeKeys } from "./pipe-keys.js";
 
 export class OriginalGameHost {
-  constructor({ finish, onClose, notify }) {
-    Object.assign(this, { finish, onClose, notify });
+  constructor({ finish, onClose, notify, onProgress = () => {} }) {
+    Object.assign(this, { finish, onClose, notify, onProgress });
     this.token = 0;
     this.dialog = document.createElement("dialog");
     this.dialog.className = "original-dialog";
@@ -26,6 +27,8 @@ export class OriginalGameHost {
   close() {
     this.token++;
     clearTimeout(this.timer);
+    this.unbindPipeKeys?.();
+    this.unbindPipeKeys = null;
     this.instance?.destroy();
     this.instance = null;
     this.root.replaceChildren();
@@ -39,7 +42,9 @@ export class OriginalGameHost {
     const token = ++this.token;
     let pending = false;
     this.dialog.querySelector("h2").textContent =
-      action.label + " · 原版小游戏";
+      (spec.kind === "store" ? "瑞德的超市工作" : action.label) +
+      (spec.kind === "pipeMaze" ? " · 方向键或字母键移动" : " · 原版小游戏");
+    this.dialog.classList.toggle("thunder-mode", spec.kind === "thunder");
     this.root.textContent = "正在打开…";
     this.dialog.showModal();
     const finish = (detail) => {
@@ -78,12 +83,14 @@ export class OriginalGameHost {
             if (isOriginalCompletion(spec, message)) finish(message.detail);
           },
         });
+        if (spec.kind === "pipeMaze") this.unbindPipeKeys = bindPipeKeys(window, () => this.instance?.api);
       } else if (spec.kind === "hide")
         this.instance = bundle.mountHide(this.root, { onComplete: finish });
       else if (["dig", "soil", "thunder"].includes(spec.kind))
         this.instance = bundle.mountTiming(this.root, {
           kind: spec.kind,
           onComplete: finish,
+          onProgress: (state) => this.onProgress(action.id, state),
         });
       else if (spec.kind === "store")
         this.instance = bundle.mountStore(this.root, {

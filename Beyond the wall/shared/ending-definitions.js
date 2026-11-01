@@ -854,7 +854,7 @@
                 return true;
               }
               place(bag) {
-                if (!this.held) return {ok:false,text:"先到传送带拿起一件商品。"};
+                if (!this.held) return {ok:false,text:"先到货架或冰柜拿起一件商品。"};
                 if (bag !== this.held.bag) {
                   const text = this.held.kind === "clean" ? "清洁用品应该分开放。" : "这样装会压坏商品。";
                   this.held = null;
@@ -956,7 +956,7 @@
                   const currentSpot=currentItem?productSpots[currentItem.name]:null;
                   const nearProduct=!!currentSpot&&Math.hypot(this.player.x-currentSpot.x,this.player.y-currentSpot.y)<46;
                   const nearBag=Math.hypot(this.player.x-230,this.player.y-218)<48||Math.hypot(this.player.x-315,this.player.y-218)<48;
-                  return nearProduct||nearBag;
+                  return this.bagging.held ? nearBag : nearProduct;
                 }
                 return false;
               }
@@ -1028,14 +1028,14 @@
                 const p=this.player;
                 const currentItem=this.bagging.current();
                 const currentSpot=currentItem?productSpots[currentItem.name]:null;
-                if (currentSpot&&Math.hypot(p.x-currentSpot.x,p.y-currentSpot.y)<46) {
+                if (!this.bagging.held&&currentSpot&&Math.hypot(p.x-currentSpot.x,p.y-currentSpot.y)<46) {
                   if (this.bagging.pick()) { showMessage(`拿起：${this.bagging.held.name}`,900); updateHud(); }
                   else showMessage(this.bagging.held?"手里已经拿着商品。":"这件商品已经拿走了。");
                   return;
                 }
-                let bag=-1;
-                if (Math.hypot(p.x-230,p.y-218)<48) bag=0;
-                if (Math.hypot(p.x-315,p.y-218)<48) bag=1;
+                const foodDistance=Math.hypot(p.x-230,p.y-218);
+                const cleanDistance=Math.hypot(p.x-315,p.y-218);
+                const bag=Math.min(foodDistance,cleanDistance)<48?(foodDistance<=cleanDistance?0:1):-1;
                 if (bag>=0) {
                   const result=this.bagging.place(bag);
                   showMessage(result.ok?"放置正确。":result.text,result.ok?800:1700);
@@ -1044,7 +1044,7 @@
                   updateHud();
                   return;
                 }
-                showMessage(currentItem?`靠近发光轮廓最亮的“${currentItem.name}”后按空格或轻点画面。`:"靠近购物袋或经理后按空格或轻点画面。");
+                showMessage(this.bagging.held?"拿着商品靠近对应的购物袋后按空格或轻点画面。":currentItem?`靠近发光轮廓最亮的“${currentItem.name}”后按空格或轻点画面。`:"靠近购物袋或经理后按空格或轻点画面。");
               }
               completeOrder() {
                 const finished=this.bagging.order;

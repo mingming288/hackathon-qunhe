@@ -57,7 +57,7 @@ export const DEDICATED_CHARACTERS = [
   { id: 'red', name: '瑞德', group: '核心人物', description: '主要对话人物与结局可操控人物；需要交谈、递物与工作动作。', note: '已接入骨骼模型，并配置待机与行走动画。' },
   { id: 'warden', name: '典狱长', group: '核心人物', description: '检查、办公室与调查结局中的重点人物。', note: '独立制作外观，统一基础骨骼规范。' },
   { id: 'brooks', name: '老布', group: '独立配角', description: '图书馆与情感叙事中的重要人物，突出年龄和体态差异。', note: '已接入骨骼模型，并配置待机与行走动画。' },
-  { id: 'tommy', name: '汤米', group: '独立配角', description: '关键证言人物，使用有辨识度的青年造型。', note: '已接入骨骼模型；当前模型暂无动画。' }
+  { id: 'tommy', name: '汤米', group: '独立配角', description: '关键证言人物，使用有辨识度的青年造型。', note: '已接入骨骼模型与共享待机动作。' }
 ];
 
 export const CHARACTER_TEMPLATES = [
@@ -86,7 +86,14 @@ export function propCatalog() {
   return [...records.values()];
 }
 
-export function assetState(id, catalog) { return catalog[id] ? '已配置模型' : '待接入模型'; }
+export function assetState(id, catalog, sceneId) {
+  if (catalog[id] || (sceneId && catalog[sceneId + ':' + id])) return '已配置模型';
+  if (id === 'medicalExterior-architecture') return '已内置建筑';
+  if (sceneId === 'evidence' && ['desk', 'ledger', 'letter', 'postbox', 'evidenceBoard'].includes(id)) return '已内置道具';
+  if (sceneId === 'operatingRoom' && ['medicalCart', 'operatingTable', 'lamp'].includes(id)) return '已内置道具';
+  if (!sceneId && Object.keys(catalog).some(key => key.endsWith(':' + id))) return '部分场景已配置';
+  return '待接入模型';
+}
 
 export function assetDetails(asset, catalog) {
   const state = assetState(asset.id, catalog);
@@ -108,7 +115,7 @@ export function sceneAssetDetails(scene, catalog) {
     '使用分类：' + sceneUsage(scene).name + '。' + sceneUsage(scene).reason,
     '需准备的状态：' + sceneUsage(scene).states,
     '建筑主体：' + assetState(scene.id + '-architecture', catalog) + '。校准门洞、地面、原点与整体比例。',
-    ...props.map(id => PROP_NAMES[id] + ' · ' + assetState(id, catalog)),
+    ...props.map(id => PROP_NAMES[id] + ' · ' + assetState(id, catalog, scene.id)),
     '人物在独立分类中管理，正式剧情保留人物身份、站位和任务关系。'
   ];
 }

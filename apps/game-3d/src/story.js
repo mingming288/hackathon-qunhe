@@ -3,10 +3,28 @@ import { SCENE_BY_ID } from './scenes.js';
 import { createPractice, completePractice, restorePractice } from './practice-state.js';
 
 export const did = (game, action) => game.events.includes(action);
+
+// 刺绣移开后才展示保险柜；典狱长离开后不再出现在办公室。
+export function officeHiddenProps(game) {
+  const hidden = did(game, 'openSafe') ? [] : ['safe'];
+  if (did(game, 'meetWarden') || did(game, 'riskInspection')) hidden.push('warden');
+  // 主线账本藏在柜中；备用路线的桌面记录在取走后消失。
+  if (!did(game, 'riskInspection') || did(game, 'sideRecover')) hidden.push('ledger');
+  return hidden;
+}
+export const oakHiddenProps = game => !did(game, 'oneOak') || did(game, 'oneBox') ? ['box'] : [];
+// 重逢路线由瑞德操控，安迪在海边等待；独自修船路线由安迪操控。
+export const beachHiddenProps = game => game.ending === 'one' ? [] : ['andy'];
+// 抓捕完成后人物及其碰撞都应离开调查现场。
+export const medicalHiddenProps = game => did(game, 'twoArrest') ? ['warden'] : [];
 export const getTask = game => TASK_BY_ID.get(game.step);
 export const isAlternate = game => did(game, 'riskInspection');
 export const isLate = game => did(game, 'restYears') || did(game, 'sideYears');
 export const heroId = game => game.ending === 'one' || (game.ending === 'three' && did(game, 'threeBoat')) ? 'red' : 'andy';
+// 故事记录保留全部道具，随身栏只展示当前人物持有的物品。
+export const visibleInventory = game => heroId(game) === 'red'
+  ? game.items.filter(item => ['letter', 'groceries'].includes(item))
+  : game.items.filter(item => item !== 'groceries');
 
 function initialState() {
   return { step: 'watchTv', events: [], items: [], evidence: [], observed: [], ending: null, finished: null, scene: 'livingRoom', practice: createPractice() };
@@ -28,8 +46,8 @@ export function getActions(game, scene) {
     result.push({ id: 'riskInspection', scene, target: scene === 'cell' ? 'bed' : 'guard', label: '风险选择：不藏石锤，接受检查', confirmLabel: '确认接受检查，石锤将被没收', lines: ['石锤还没藏好。现在接受检查，石锤会被没收，安迪会被送进禁闭室。', '可以返回，先完成藏锤任务；也可以选择这条备用路线。'], next: 'sideReprimand', autoScene: 'yard', consume: ['hammer'] });
   }
   if (did(game, 'repairRadio') || did(game, 'sideBrooks')) {
-    for (const [id, [place, name, label, lines]] of Object.entries(EVIDENCE)) {
-      if (place === scene && !game.evidence.includes(id)) result.push({ id: 'evidence:' + id, scene, target: id, label: '向' + name + '追问线索', lines, evidence: id, result: '已记录：' + label });
+    for (const [id, [place, name, label, lines, conversation = []]] of Object.entries(EVIDENCE)) {
+      if (place === scene && !game.evidence.includes(id)) result.push({ id: 'evidence:' + id, scene, target: id, label: '向' + name + '追问线索', lines: [...lines, ...conversation], evidence: id, result: '已记录：' + label });
     }
     if (scene === 'yard') {
       for (const [id, target, label] of [['nightTruck', 'guard', '旁听夜车与点名的消息'], ['dates', 'gate', '核对门口的车辆日期']]) {
@@ -92,8 +110,10 @@ export function travelRule(game, from, to) {
   if (from === 'dig' && to === 'pipe' && !did(game, 'finalDig')) return '通道还没有贯通。';
   if (from === 'pipe' && to === 'pipeNetwork' && !did(game, 'smashPipe')) return '先借雷声敲开管道。';
   if (from === 'pipeNetwork' && to === 'rain' && step !== 'pipeExit') return '还没到离开管网的时候。';
-  if (to === 'library' && !did(game, 'meetBrooks') && !alternate) return '先帮院子里的瑞德修好收音机，图书馆入口就会开放。';
-  if (to === 'office' && !did(game, 'drawMap') && !['sideSearch', 'sideHide', 'sideRecover'].includes(step)) return '现在还没有进入办公室的机会。';
+  if (to === 'library' && !did(game, 'meetBrooks') && !alternate) return did(game, 'repairRadio')
+    ? '先回院子向瑞德领取石锤，他会联系老布开放图书馆。'
+    : '先帮院子里的瑞德修好收音机，再向他领取石锤，图书馆入口就会开放。';
+  if (to === 'office' && !did(game, 'drawMap') && !['sideSearch', 'sideHide', 'sideRecover'].includes(step)) return alternate ? '先在禁闭结束后找老布，再等待办公室巡视开始。' : '先完成藏锤、海报和挖掘准备，再绘制管线地图，办公室才会开放。';
   if (to === 'solitary' && !['sideStone', 'sideWait'].includes(step)) return '禁闭室的铁门从外面锁着。';
   if (from === 'solitary' && !did(game, 'sideWait')) return '铁门还没有打开。';
   if (to === 'operatingRoom' && step !== 'twoMedical') return '这里不是一条能随意进出的道路。';

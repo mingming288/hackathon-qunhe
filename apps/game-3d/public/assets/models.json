@@ -1,32 +1,77 @@
 {
   "version": 1,
   "models": {
+    "livingRoom-architecture": { "url": "/assets/models/living-room-rebuilt.glb", "normalize": false },
+    "livingRoom:sofa": { "url": "/assets/models/living-sofa-rebuilt.glb", "normalize": false },
+    "livingRoom:television": { "url": "/assets/models/living-tv-rebuilt.glb", "normalize": false },
+    "livingRoom:table": { "url": "/assets/models/living-coffee-table.glb", "normalize": false },
+    "livingRoom:lamp": { "url": "/assets/models/living-floor-lamp.glb", "normalize": false },
+    "rain-architecture": { "url": "/assets/models/rain-exterior-rebuilt.glb", "normalize": false },
+    "rain:drain": { "url": "/assets/models/rain-drain-rebuilt.glb", "normalize": false },
+    "pipeNetwork-architecture": { "url": "/assets/models/pipe-network-rebuilt.glb", "normalize": false },
+    "pipe-architecture": { "url": "/assets/models/pipe-room-rebuilt.glb", "normalize": false },
+    "pipe:pipeTarget": { "url": "/assets/models/pipe-target-rebuilt.glb", "normalize": false },
+    "dig-architecture": { "url": "/assets/models/dig-rebuilt.glb", "normalize": false },
+    "office-architecture": { "url": "/assets/models/office-rebuilt.glb", "normalize": false },
+    "office:safe": { "url": "/assets/models/office-safe.glb", "normalize": false },
+    "office:embroidery": { "url": "/assets/models/office-embroidery.glb", "normalize": false },
+    "office:ledger": { "url": "/assets/models/office-ledger.glb", "normalize": false },
+    "office:desk": { "url": "/assets/models/desk-optimized.glb", "height": 1.3 },
+    "office:chair": { "url": "/assets/models/chair.glb", "height": 1.7 },
+    "cell-architecture": { "url": "/assets/models/cell-rebuilt.glb", "normalize": false },
+    "library-architecture": { "url": "/assets/models/library-rebuilt.glb", "normalize": false },
+    "solitary-architecture": { "url": "/assets/models/solitary-shell.glb", "normalize": false },
+    "solitary:mat": { "url": "/assets/models/solitary-mat.glb", "normalize": false },
+    "solitary:stone": { "url": "/assets/models/solitary-inscribed-stone.glb", "normalize": false },
+    "yard-architecture": { "url": "/assets/models/yard-rebuilt.glb", "normalize": false },
+    "yard:soilSpot": { "url": "/assets/models/rubble-optimized.glb", "height": 0.6 },
+    "yard:bench": { "url": "/assets/models/yard-bench.glb", "normalize": false },
+    "yard:radio": { "url": "/assets/models/yard-radio.glb", "normalize": false },
+    "operatingRoom-architecture": { "url": "/assets/models/operatingroom-shell.glb", "normalize": false },
+    "evidence-architecture": { "url": "/assets/models/evidence-shell.glb", "normalize": false },
+    "supermarket-architecture": { "url": "/assets/models/supermarket-shell.glb", "normalize": false },
+    "bank-architecture": { "url": "/assets/models/bank-shell.glb", "normalize": false },
+    "oak-architecture": { "url": "/assets/models/oak-shell.glb", "normalize": false },
+    "road-architecture": { "url": "/assets/models/road-shell.glb", "normalize": false },
+    "beach-architecture": { "url": "/assets/models/beach-shell.glb", "normalize": false },
+    "yard-library-exterior": { "url": "/assets/models/library-exterior-optimized.glb", "height": 6.2 },
+    "yard-office-exterior": { "url": "/assets/models/office-exterior-optimized.glb", "height": 8.6 },
+    "cellCorridor-architecture": { "url": "/assets/models/corridor-rebuilt.glb", "normalize": false },
+    "cell:poster": { "url": "/assets/models/cell-poster.glb", "normalize": false },
+    "cell:bed": { "url": "/assets/models/bed.glb", "height": 1.5 },
+    "cell:desk": { "url": "/assets/models/desk-optimized.glb", "height": 1.3 },
+    "cell:chair": { "url": "/assets/models/chair.glb", "height": 1.7 },
+    "library:shelf": { "url": "/assets/models/shelf-optimized.glb", "height": 3.5 },
+    "library:table": { "url": "/assets/models/table-optimized.glb", "height": 1.3 },
+    "hammer": { "url": "/assets/models/hammer-optimized.glb", "height": 0.13 },
+    "rubble": { "url": "/assets/models/rubble-optimized.glb", "height": 0.6 },
     "andy": {
-      "url": "/assets/models/andy-idle.glb",
+      "url": "/assets/models/andy-idle-optimized.glb",
       "height": 2.5,
       "rotationY": 0,
-      "walkUrl": "/assets/models/andy-walk.glb"
+      "walkUrl": "/assets/models/andy-walk-only.glb"
     },
     "red": {
-      "url": "/assets/models/red-idle-walk.glb",
+      "url": "/assets/models/red-optimized.glb",
       "height": 2.5,
       "rotationY": 0,
       "walkAnimation": 1
     },
     "brooks": {
-      "url": "/assets/models/brooks-idle-walk.glb",
+      "url": "/assets/models/brooks-idle-walk-optimized.glb",
       "height": 2.35,
       "rotationY": 0,
       "walkAnimation": 1
     },
     "warden": {
-      "url": "/assets/models/norton-idle-walk.glb",
+      "url": "/assets/models/norton-idle-walk-optimized.glb",
       "height": 2.55,
       "rotationY": 0,
       "walkAnimation": 1
     },
     "tommy": {
       "url": "/assets/models/tommy.glb",
+      "idleUrl": "/assets/models/andy-idle-only.glb",
       "height": 2.45,
       "rotationY": 0
     },
@@ -34,6 +79,10 @@
       "url": "/assets/models/hadley.glb",
       "height": 2.55,
       "rotationY": 0
-    }
+    },
+    "haywood": { "url": "/assets/models/prisoner302.glb", "idleUrl": "/assets/models/andy-idle-only.glb", "height": 2.45 },
+    "floyd": { "url": "/assets/models/tommy.glb", "idleUrl": "/assets/models/andy-idle-only.glb", "height": 2.4 },
+    "manager": { "url": "/assets/models/norton-idle-walk-optimized.glb", "height": 2.5, "walkAnimation": 1 },
+    "clerk": { "url": "/assets/models/norton-idle-walk-optimized.glb", "height": 2.45, "walkAnimation": 1 }
   }
 }

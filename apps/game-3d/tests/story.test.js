@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createGame, getTask, getActions, advance, enterScene, restoreGame, travelRule, resolveEnding } from '../src/story.js';
+import { createGame, getTask, getActions, advance, enterScene, restoreGame, travelRule, resolveEnding, visibleInventory } from '../src/story.js';
 import { TASKS, EVIDENCE } from '../src/story-data.js';
 import { SCENE_BY_ID } from '../src/scenes.js';
 import { nextDoor } from '../src/routes.js';
@@ -10,6 +10,7 @@ import { GAME_KEY, saveGame, loadGame, savePreview } from '../src/save.js';
 import { entryPosition } from '../src/navigation.js';
 import { guidanceFor } from '../src/guidance.js';
 import { EarlyWorld } from '../src/early-world.js';
+import { completionTasks } from '../src/original-games/registry.js';
 import * as THREE from 'three';
 
 function walk(game, target) {
@@ -31,7 +32,7 @@ function act(game, id = getTask(game).id) {
   assert.ok(guide.title && guide.purpose, '任务应说明目标和目的');
   if (!result.finished) {
     assert.equal(getTask(result).automatic, false, '自动过程不能再要求玩家逐次确认');
-    assert.ok(guide.target && guide.place && guide.action.includes('空格'), result.step + ' 应有可达目标、位置和明确操作');
+    assert.ok(guide.target && guide.place && (guide.action.includes('空格') || guide.action.includes('自动进入')), result.step + ' 应有可达目标、位置和明确操作');
   }
   return result;
 }
@@ -54,6 +55,32 @@ test('标准准备路线能按原结局规则贯通三个结局', () => {
   const one = play({ evidence: ['red'] }); assert.equal(one.finished, '相逢的海滩'); assert.equal(one.scene, 'beach');
   const two = play({ evidence: Object.keys(EVIDENCE) }); assert.equal(two.finished, '高墙下的名单'); assert.equal(two.scene, 'evidence');
   const three = play(); assert.equal(three.finished, '形同陌路'); assert.equal(three.scene, 'supermarket');
+});
+test('超市小游戏结束事件依次推进剩余任务，存档可恢复结局', () => {
+  let game = createGame();
+  while (game.step !== 'threeCollect') game = act(game);
+  const checkpoint = structuredClone(game);
+  for (const start of ['threeCollect', 'threeBag', 'threeAsk', 'threeDecide']) {
+    let state = checkpoint;
+    while (state.step !== start) state = act(state);
+    const before = state.events.length;
+    for (const id of completionTasks(start)) {
+      assert.equal(state.step, id);
+      assert.ok(getActions(state, 'supermarket').some(action => action.id === id));
+      state = advance(state, id, 'supermarket').game;
+    }
+    assert.equal(state.finished, '形同陌路');
+    assert.equal(state.events.length - before, completionTasks(start).length);
+    assert.deepEqual(restoreGame({ version: 2, events: state.events, scene: state.scene }), state);
+  }
+});
+test('切换瑞德后随身栏不显示安迪的工具，故事记录仍保留', () => {
+  const andy = { ending: 'three', events: [], items: ['hammer', 'poster', 'map', 'ledger'] };
+  const red = { ...andy, events: ['threeBoat'], items: [...andy.items, 'groceries'] };
+  assert.deepEqual(visibleInventory(andy), andy.items);
+  assert.deepEqual(visibleInventory(red), ['groceries']);
+  assert.deepEqual(visibleInventory({ ...red, ending: 'one', items: ['hammer', 'letter'] }), ['letter']);
+  assert.ok(red.items.includes('hammer'));
 });
 test('没收石锤后的备用路线仍可找回工具并通关', () => {
   const game = play({ alternate: true, evidence: ['red'] });
@@ -81,10 +108,12 @@ test('先观察墙面，修理后实际领取工具和圣经，藏锤后仍需�
   assert.equal(game.scene, 'cell'); assert.equal(game.step, 'inspectWall');
   game = act(game);
   assert.equal(game.step, 'meetRed');
+  assert.match(travelRule(game, 'yard', 'library'), /修好收音机，再向他领取石锤/);
   assert.equal(guidanceFor(game).target, 'exit:cellCorridor');
   assert.match(guidanceFor(game).place, /安迪的牢房 → 监区走廊 → 院子与监狱大门/);
   game = act(game); game = act(game);
   assert.equal(game.step, 'takeHammer'); assert.ok(!game.items.includes('hammer'));
+  assert.match(travelRule(game, 'yard', 'library'), /向瑞德领取石锤/);
   game = act(game);
   assert.equal(game.step, 'sortBooks'); assert.equal(travelRule(game, 'yard', 'library'), null);
   assert.equal(guidanceFor(game).target, 'exit:library');

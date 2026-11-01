@@ -5,6 +5,18 @@ import { clone } from 'three/addons/utils/SkeletonUtils.js';
 const loader = new GLTFLoader();
 const cache = new Map();
 
+function loadModel(url) {
+  if (!cache.has(url)) cache.set(url, loader.loadAsync(url).catch(error => { cache.delete(url); throw error; }));
+  return cache.get(url);
+}
+
+// 在离开当前场景前准备目标场景的模型和动作，复用正式加载缓存。
+export async function preloadModel(entry) {
+  validateModelEntry(entry);
+  const urls = [entry.url, entry.idleUrl, entry.walkUrl].filter(Boolean);
+  await Promise.all(urls.map(url => { validateModelEntry({ url }); return loadModel(url); }));
+}
+
 export function validateModelEntry(entry) {
   if (!entry || typeof entry.url !== 'string' || !entry.url.startsWith('/assets/models/')) {
     throw new Error('模型地址必须位于当前应用的 /assets/models/ 目录。');
@@ -32,17 +44,25 @@ export async function readModelCatalog() {
   return catalog.models;
 }
 
-export async function replaceAsset(anchor, entry) {
+export async function replaceAsset(anchor, entry, isCurrent = () => true) {
   validateModelEntry(entry);
-  if (anchor.userData.replaced) return anchor.userData.mixer || null;
-  if (!cache.has(entry.url)) {
-    const pending = loader.loadAsync(entry.url).catch(error => { cache.delete(entry.url); throw error; });
-    cache.set(entry.url, pending);
-  }
-  const gltf = await cache.get(entry.url);
-  if (!anchor.parent) return null; // 切换场景后，不再把旧的异步结果放入场景。
-  if (anchor.userData.replaced) return anchor.userData.mixer || null;
+  if (anchor.userData.replaced) return anchor.userData.loadAnimation?.() ?? anchor.userData.mixer ?? null;
+  const gltf = await loadModel(entry.url);
+  if (!anchor.parent || !isCurrent()) return null; // 切换场景后，不再把旧的异步结果放入场景。
+  if (anchor.userData.replaced) return anchor.userData.loadAnimation?.() ?? anchor.userData.mixer ?? null;
   const model = clone(gltf.scene);
+  // 正式模型与基础几何使用同一套光照；三维文件不会保存引擎的阴影开关。
+  model.traverse(node => {
+    if (!node.isMesh) return;
+    node.castShadow = node.receiveShadow = true;
+    if (anchor.userData.clipPlane) {
+      const clipped = material => {
+        const copy = material.clone(); copy.clippingPlanes = [anchor.userData.clipPlane];
+        copy.clipShadows = true; return copy;
+      };
+      node.material = Array.isArray(node.material) ? node.material.map(clipped) : clipped(node.material);
+    }
+  });
   model.rotation.y = entry.rotationY || 0;
   model.updateMatrixWorld(true);
   const box = new THREE.Box3().setFromObject(model);
@@ -55,32 +75,53 @@ export async function replaceAsset(anchor, entry) {
     model.position.set(-center.x, -box.min.y * scale, -center.z);
   }
   model.userData.externalAsset = true;
+  model.userData.ownsClippedMaterials = Boolean(anchor.userData.clipPlane);
   anchor.userData.placeholder.visible = false;
   anchor.add(model);
   anchor.userData.replaced = true;
-  const mixer = gltf.animations.length ? new THREE.AnimationMixer(model) : null;
-  if (mixer) mixer.clipAction(gltf.animations[0]).play();
-  if (mixer && (entry.walkUrl || Number.isInteger(entry.walkAnimation))) {
-    let walking = gltf;
-    if (entry.walkUrl) {
-      validateModelEntry({ url: entry.walkUrl });
-      walking = await loader.loadAsync(entry.walkUrl);
-    }
-    const idle = mixer.clipAction(gltf.animations[0]);
-    const clip = walking.animations[entry.walkAnimation ?? 0];
-    const walk = clip && mixer.clipAction(clip);
-    if (walk) {
-      let moving = false;
-      mixer.setMoving = value => {
-        if (moving === value) return;
-        moving = value;
-        const next = value ? walk : idle;
-        const previous = value ? idle : walk;
-        previous.fadeOut(.2);
-        next.reset().fadeIn(.2).play();
-      };
-    }
-  }
-  anchor.userData.mixer = mixer;
-  return mixer;
+  let mixer = null, idleClip = null, pending;
+  anchor.userData.loadAnimation = () => {
+    if (pending) return pending;
+    pending = (async () => {
+      if (!mixer) {
+        let idleGltf = gltf;
+        if (entry.idleUrl) {
+          validateModelEntry({ url: entry.idleUrl });
+          idleGltf = await loadModel(entry.idleUrl);
+          if (!idleGltf.animations.length) throw new Error('人物待机动作不存在。');
+        }
+        idleClip = idleGltf.animations[0]?.clone();
+        // 外部骨架比例可能不同，保留目标人物的位置，只复用关节旋转。
+        if (entry.idleUrl && idleClip) idleClip.tracks = idleClip.tracks.filter(track => track.name.endsWith('.quaternion'));
+        if (idleClip) {
+          mixer = new THREE.AnimationMixer(model);
+          anchor.userData.mixer = mixer;
+          mixer.clipAction(idleClip).play();
+        }
+      }
+      if (mixer && !mixer.setMoving && (entry.walkUrl || Number.isInteger(entry.walkAnimation))) {
+        let walking = gltf;
+        if (entry.walkUrl) {
+          validateModelEntry({ url: entry.walkUrl });
+          walking = await loadModel(entry.walkUrl);
+        }
+        const idle = mixer.clipAction(idleClip);
+        const clip = walking.animations[entry.walkAnimation ?? 0];
+        if (!clip) throw new Error('人物行走动作不存在。');
+        const walk = mixer.clipAction(clip);
+        let moving = false;
+        mixer.setMoving = value => {
+          if (moving === value) return;
+          moving = value;
+          const next = value ? walk : idle;
+          const previous = value ? idle : walk;
+          previous.fadeOut(.2);
+          next.reset().fadeIn(.2).play();
+        };
+      }
+      return mixer;
+    })().catch(error => { pending = null; throw error; });
+    return pending;
+  };
+  return anchor.userData.loadAnimation();
 }
