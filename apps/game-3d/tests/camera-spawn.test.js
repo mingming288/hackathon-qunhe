@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import { ThirdPersonController } from '../src/controller.js';
+import { ThirdPersonController, DEFAULT_PITCH } from '../src/controller.js';
 import { createWorld, disposeWorld } from '../src/world.js';
 import { SCENE_BY_ID } from '../src/scenes.js';
 import { canStand } from '../src/movement.js';
@@ -55,12 +55,14 @@ test('牢房墙边镜头转向可用空间，按住的移动方向不会突然�
   });
   controller.update(.016, world);
   const target = player.position.clone().add(new THREE.Vector3(0, 1.45, 0));
-  assert.ok(camera.position.distanceTo(target) >= 3, '镜头应退到能看见人物的位置');
+  assert.ok(camera.position.distanceTo(target) > 2, '贴墙时应立即恢复人物可见性');
   assert.notEqual(controller.yaw, 0);
   assert.equal(controller.motionYaw, 0);
   const x = player.position.x;
   controller.update(.016, world);
   assert.equal(player.position.x, x, '同一次按键不能因为避墙转向而横移');
+  for (let frame = 0; frame < 120; frame++) controller.update(1 / 60, world);
+  assert.ok(camera.position.distanceTo(target) >= 2.5, '镜头应逐渐退到能看见人物的位置');
   controller.keys.clear(); controller.update(.016, world);
   assert.equal(controller.motionYaw, null);
   disposeWorld(world);
@@ -88,8 +90,8 @@ test('图书馆、办公室和禁闭室入口墙边的镜头保持人物可见',
     const controller = controllerFor({
       camera, player, yaw: 0, pitch: .55, distance: 7, motionYaw: null, keys: new Set(), enabled: () => true,
     });
-    controller.update(.016, world);
-    assert.ok(camera.position.distanceTo(player.position.clone().add(new THREE.Vector3(0, 1.45, 0))) >= 3, id);
+    for (let frame = 0; frame < 120; frame++) controller.update(1 / 60, world);
+    assert.ok(camera.position.distanceTo(player.position.clone().add(new THREE.Vector3(0, 1.45, 0))) >= 2.5, id);
     disposeWorld(world);
   }
 });
@@ -118,8 +120,8 @@ test('牢房入口的走廊落点不会把镜头挤进主角', () => {
     camera, player, yaw: Math.PI / 2, pitch: .55, distance: 7, motionYaw: null,
     keys: new Set(), enabled: () => true,
   });
-  controller.update(.016, world);
-  assert.ok(camera.position.distanceTo(player.position.clone().add(new THREE.Vector3(0, 1.45, 0))) >= 3);
+  for (let frame = 0; frame < 120; frame++) controller.update(1 / 60, world);
+  assert.ok(camera.position.distanceTo(player.position.clone().add(new THREE.Vector3(0, 1.45, 0))) >= 2.5);
   disposeWorld(world);
 });
 
@@ -214,6 +216,6 @@ test('连续过门保留移动键和镜头设置，普通镜头重置恢复默�
   assert.equal(controller.drag, null);
   controller.reset();
   assert.equal(controller.keys.size, 0);
-  assert.equal(controller.pitch, .55);
+  assert.equal(controller.pitch, DEFAULT_PITCH);
   assert.equal(controller.distance, 7);
 });

@@ -32,6 +32,7 @@ dialog{border:1px solid #a98748a6;border-radius:5px;background:var(--paper);colo
 #quest-purpose{font-size:11px;color:#bbaf97}#quest-action{padding:9px 10px;background:transparent;border-left:2px solid #c5a45c;color:#f0dfb6}
 #inventory{padding-top:10px;border-top:1px solid #ae9a7055}#evidence-count{font-size:10px}
 #open-journal{pointer-events:auto;padding:7px 10px;font-size:11px;color:#ead7aa}
+#guide-help{padding:6px 10px;font-size:11px;color:#ead7aa;background:#27251dcc}
 .goal-label{background:#d3b36beF;border-color:#f1cf7b;color:#252015;font-weight:600}
 #menu{width:min(470px,90vw);padding:38px 42px}
 #menu h2{font-size:47px;letter-spacing:.16em;margin:17px 0}

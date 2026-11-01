@@ -52,6 +52,20 @@ test('重置镜头时位于人物身后并朝向人物前方', context => {
   }
 });
 
+test('手动环顾时镜头始终保持俯视角度', context => {
+  const { controls, canvas } = setup(context);
+  const pointer = (type, y) => {
+    const event = new Event(type);
+    Object.assign(event, { pointerId: 1, clientX: 0, clientY: y });
+    canvas.dispatchEvent(event);
+  };
+  assert.ok(Math.abs(controls.pitch - 50 * Math.PI / 180) < 1e-9);
+  pointer('pointerdown', 0); pointer('pointermove', -1000);
+  assert.ok(Math.abs(controls.pitch - Math.PI / 4) < 1e-9);
+  pointer('pointermove', 1000);
+  assert.ok(Math.abs(controls.pitch - Math.PI / 3) < 1e-9);
+});
+
 function key(browserWindow, canvas, type, code) {
   const event = new Event(type, { cancelable: true });
   Object.assign(event, { code, key: code });
@@ -59,15 +73,15 @@ function key(browserWindow, canvas, type, code) {
   browserWindow.dispatchEvent(event);
 }
 
-test('镜头平滑跟随人物方向，持续按键时人物沿直线移动', context => {
+test('镜头跟随人物位置但不随转身旋转，持续按键保持直线', context => {
   const { controls, player, camera, world } = setup(context);
   player.rotation.y = Math.PI;
   controls.keys.add('KeyD');
   for (let frame = 0; frame < 180; frame++) controls.update(1 / 60, world);
   assert.ok(player.position.x > 9 && Math.abs(player.position.z) < 1e-8);
-  const forward = new THREE.Vector3(Math.sin(player.rotation.y), 0, Math.cos(player.rotation.y));
   const offset = camera.position.clone().sub(player.position).setY(0).normalize();
-  assert.ok(offset.dot(forward) < -.99);
+  assert.ok(offset.distanceTo(new THREE.Vector3(0, 0, 1)) < 1e-9);
+  assert.equal(controls.yaw, 0);
 });
 
 test('walking starts, reverses and stops on the next frame', context => {
@@ -89,7 +103,7 @@ test('camera avoids walls immediately and eases back without delaying movement',
   world.cameraColliders = [{ x: 0, z: 3, w: 10, d: .2, h: 6, camera: true }];
   controls.update(1 / 60, world);
   const blockedDistance = camera.position.distanceTo(target());
-  assert.ok(blockedDistance < 3);
+  assert.ok(blockedDistance < 7 && camera.position.z < 3);
   world.cameraColliders = [];
   controls.keys.add('KeyS');
   controls.update(1 / 60, world);
@@ -98,6 +112,16 @@ test('camera avoids walls immediately and eases back without delaying movement',
   controls.reset();
   controls.update(0, world);
   assert.ok(Math.abs(camera.position.distanceTo(target()) - 7) < 1e-9);
+});
+
+test('一般遮挡时避墙转向平缓，人物移动方向保持稳定', context => {
+  const { controls, player, world } = setup(context);
+  world.config.id = 'cell';
+  world.cameraColliders = [{ x: 0, z: 1.7, w: 5, d: .2, h: 10, camera: true }];
+  controls.keys.add('KeyD');
+  controls.update(.016, world);
+  assert.ok(Math.abs(controls.yaw) <= 2.2 * .016 + 1e-9);
+  assert.ok(player.position.x > 0 && Math.abs(player.position.z) < 1e-9);
 });
 
 test('walking and sprinting cover the same distance at 60 through 5 fps', context => {

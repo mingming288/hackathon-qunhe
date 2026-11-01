@@ -152,6 +152,7 @@ function refresh() {
     const task = getTask(game);
     const baseGuide = guidanceFor(game), guide = earlyPlay.guide(baseGuide);
     $('quest-title').textContent = guide.title === baseGuide.title ? (guide.shortTitle || guide.title) : guide.title;
+    $('guide-help').hidden = !guide.target;
     $('quest-context').hidden = !earlyPlay.inspectionActive;
     $('quest-context').textContent = earlyPlay.inspectionActive ? '留在床边，离开会暂停检查。' : '';
     $('movement-hint').hidden = movementHintSeen || game.step !== 'inspectWall';
@@ -249,6 +250,12 @@ async function start() {
   $('close-atlas').addEventListener('click', () => { atlas.close(); view.canvas.focus(); });
   atlas.addEventListener('close', syncRain);
   $('camera-reset').addEventListener('click', () => view.resetCamera());
+  $('guide-help').addEventListener('click', () => {
+    if (mode !== 'game' || !game || sceneLoad.active || earlyPlay.busy || dialogue.dialog.open) return;
+    const guide = earlyPlay.guide(guidanceFor(game));
+    notify(guide.target?.startsWith('exit:') ? guide.shortTitle + '，走近金色标记后自动进入。' : guide.place.replace(/^目标就在这里：/, ''));
+    view.canvas.focus();
+  });
   $('open-journal').addEventListener('click', () => {
     if (mode !== 'game' || sceneLoad.active || earlyPlay.busy || dialogue.dialog.open || atlas.open || menu.open) return;
     view.pause(); dialogue.open('线索记录', investigationJournal(game));
