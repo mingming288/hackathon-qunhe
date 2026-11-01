@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { ThirdPersonController } from '../src/controller.js';
 import { WorldView } from '../src/world-view.js';
 import { AutoTravel } from '../src/auto-travel.js';
+import { NpcController } from '../src/npc-controller.js';
 
 function setup(context) {
   const browserWindow = new EventTarget();
@@ -87,7 +88,7 @@ test('镜头跟随人物位置但不随转身旋转，持续按键保持直线',
 test('walking starts, reverses and stops on the next frame', context => {
   const { controls, player, world, canvas, browserWindow } = setup(context);
   key(browserWindow, canvas, 'keydown', 'KeyW');
-  assert.ok(Math.abs(controls.update(1 / 60, world) - 3.3) < 1e-9);
+  assert.ok(Math.abs(controls.update(1 / 60, world) - 4.95) < 1e-9);
   assert.ok(player.position.z < 0);
   key(browserWindow, canvas, 'keyup', 'KeyW');
   key(browserWindow, canvas, 'keydown', 'KeyS');
@@ -132,7 +133,7 @@ test('walking and sprinting cover the same distance at 60 through 5 fps', contex
     for (const fps of [60, 30, 20, 15, 10, 5]) {
       player.position.set(0, 0, 0); view.last = 0;
       for (let frame = 1; frame <= fps; frame++) view.tick(frame * 1000 / fps);
-      assert.ok(Math.abs(-player.position.z - (sprint ? 5.2 : 3.3)) < 1e-9, `${fps} fps, sprint=${sprint}`);
+      assert.ok(Math.abs(-player.position.z - (sprint ? 7.8 : 4.95)) < 1e-9, `${fps} fps, sprint=${sprint}`);
     }
   }
 });
@@ -163,7 +164,7 @@ test('long stalls and hidden frames do not move the player or advance animations
   view.tick(5300);
   assert.deepEqual(player.position, position);
   view.tick(5400);
-  assert.ok(Math.abs(position.z - player.position.z - .33) < 1e-9);
+  assert.ok(Math.abs(position.z - player.position.z - .495) < 1e-9);
 });
 
 test('losing focus or hiding the page releases movement keys', context => {
@@ -175,4 +176,56 @@ test('losing focus or hiding the page releases movement keys', context => {
   browserDocument.hidden = true;
   browserDocument.dispatchEvent(new Event('visibilitychange'));
   assert.equal(controls.keys.size, 0);
+});
+
+test('render loop updates NPC movement and animation, respecting scene and story pauses', context => {
+  const { view, world } = setup(context);
+  const npc = new THREE.Group();
+  npc.position.set(4, 0, 0);
+  let walking = false, animationSpeed = 0;
+  npc.userData = {
+    assetKey: 'red',
+    mixer: { setMoving(value) { walking = value; } },
+    animate(elapsed, speed) { animationSpeed = speed; },
+  };
+  world.config.id = 'yard'; world.animations.push(npc);
+  view.npcs = new NpcController(world);
+  view.tick(100);
+  assert.ok(npc.position.x > 4);
+  assert.equal(walking, true);
+  assert.ok(animationSpeed > 0);
+  const position = npc.position.clone();
+  view.enabled = () => false;
+  view.tick(200);
+  assert.deepEqual(npc.position, position);
+  assert.equal(walking, false);
+  view.enabled = () => true;
+  view.stage = { active: true, updateFrame() {} };
+  view.tick(300);
+  assert.deepEqual(npc.position, position);
+  view.stage.active = false; view.stage.movementLocked = true;
+  view.tick(400);
+  assert.deepEqual(npc.position, position);
+  view.stage.movementLocked = false;
+  view.environmentOnly = true; view.orbit.update = () => {};
+  view.tick(500);
+  assert.deepEqual(npc.position, position);
+  view.environmentOnly = false;
+  view.tick(600);
+  assert.ok(npc.position.distanceTo(position) > .08);
+  assert.equal(walking, true);
+});
+
+
+test('自动指路保持世界方向并使用提升后的速度，暂停时停止', context => {
+  const { controls, player, world } = setup(context);
+  controls.yaw = Math.PI / 2;
+  const speed = controls.update(.1, world, { x: 1, z: 0 });
+  assert.ok(Math.abs(speed - 4.95) < 1e-9);
+  assert.ok(Math.abs(player.position.x - .495) < 1e-9);
+  assert.equal(player.position.z, 0);
+  const position = player.position.clone();
+  controls.enabled = () => false;
+  assert.equal(controls.update(.1, world, { x: 1, z: 0 }), 0);
+  assert.deepEqual(player.position, position);
 });

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { moveWithCollision } from './movement.js';
+import { MOVEMENT_SPEED_MULTIPLIER, moveWithCollision } from './movement.js';
 
 // 这些房间墙边留有侧向空间，可安全调整镜头；管网等狭窄场景维持原避墙方式。
 const SIDE_CAMERA_ROOMS = new Set(['cell', 'cellCorridor', 'library', 'office', 'solitary']);
@@ -89,7 +89,7 @@ export class ThirdPersonController {
       if (!automatic && this.motionYaw === null) this.motionYaw = this.yaw;
       const direction = automatic ? this.direction.set(automatic.x, 0, automatic.z).normalize()
         : this.direction.set(x, 0, z).normalize().applyAxisAngle(this.up, this.motionYaw ?? this.yaw);
-      const speed = this.keys.has('ShiftLeft') || this.keys.has('ShiftRight') ? 5.2 : 3.3;
+      const speed = (this.keys.has('ShiftLeft') || this.keys.has('ShiftRight') ? 5.2 : 3.3) * MOVEMENT_SPEED_MULTIPLIER;
       moveWithCollision(this.player.position, direction.x * speed * dt, direction.z * speed * dt, world.config.size, world.colliders);
       const desired = Math.atan2(direction.x, direction.z);
       const angle = Math.atan2(Math.sin(desired - this.player.rotation.y), Math.cos(desired - this.player.rotation.y));
