@@ -13,7 +13,7 @@ import { EarlyPlay } from './early-play.js';
 import { SceneLoadGate } from './scene-load-gate.js';
 import { prepareTravel } from './scene-transition.js';
 import { RainAmbience } from './rain-ambience.js';
-import { evidenceReview } from './evidence-review.js';
+import { evidenceReview, investigationJournal } from './evidence-review.js';
 import { storyInterlude, pendingInterlude } from './story-interludes.js';
 import rainUrl from '../../../Beyond the wall/音效/四秒雨声.opus';
 
@@ -238,6 +238,10 @@ async function start() {
   $('close-atlas').addEventListener('click', () => { atlas.close(); view.canvas.focus(); });
   atlas.addEventListener('close', syncRain);
   $('camera-reset').addEventListener('click', () => view.resetCamera());
+  $('open-journal').addEventListener('click', () => {
+    if (mode !== 'game' || sceneLoad.active || earlyPlay.busy || dialogue.dialog.open || atlas.open || menu.open) return;
+    view.pause(); dialogue.open('线索记录', investigationJournal(game));
+  });
   $('open-menu').addEventListener('click', openMenu);
   $('new-game').addEventListener('click', startNew); $('resume-game').addEventListener('click', resume);
   $('menu-atlas').addEventListener('click', openAtlas); $('return-game').addEventListener('click', resume);

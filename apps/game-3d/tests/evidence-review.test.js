@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { evidenceReview } from '../src/evidence-review.js';
+import { evidenceReview, investigationJournal } from '../src/evidence-review.js';
 import { createWorld, disposeWorld } from '../src/world.js';
 import { SCENE_BY_ID } from '../src/scenes.js';
 import * as THREE from 'three';
@@ -24,6 +24,20 @@ test('瑞德的约定在交谈时可见；调查前先介绍温顿与医疗机�
   assert.match(TASK_BY_ID.get('twoInvestigate').lines.join(''), /温顿.*机构/);
   assert.match(TASK_BY_ID.get('twoMedical').lines.join(''), /接收记录.*转运名单/);
   assert.match(TASK_BY_ID.get('twoArrest').lines.join(''), /另一组.*温顿/);
+});
+
+test('线索记录只展示已收集内容，并保留瑞德的私人约定', () => {
+  const empty = investigationJournal({ evidence: [], observed: [] }).join('\n');
+  assert.match(empty, /暂时还没有调查记录/);
+  assert.doesNotMatch(empty, /瑞德|老布|橡树/);
+  const game = { evidence: ['red'], observed: ['nightTruck'] };
+  const before = structuredClone(game), lines = investigationJournal(game).join('\n');
+  assert.match(lines, /线索 1\/5，旁听 1\/2/);
+  assert.match(lines, /瑞德.*结算日期/);
+  assert.match(lines, /夜车.*点名人数减少/);
+  assert.match(lines, /约定.*橡树/);
+  assert.doesNotMatch(lines, /老布|汤米|门口车辆/);
+  assert.deepEqual(game, before, '查看记录不能改变剧情进度');
 });
 
 test('证据板保留独立纸张、图钉和连线', () => {

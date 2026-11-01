@@ -1,4 +1,4 @@
-import { TASK_BY_ID, EVIDENCE } from './story-data.js';
+import { TASK_BY_ID, EVIDENCE, OBSERVATIONS } from './story-data.js';
 import { SCENE_BY_ID } from './scenes.js';
 import { createPractice, completePractice, restorePractice } from './practice-state.js';
 
@@ -50,8 +50,8 @@ export function getActions(game, scene) {
       if (place === scene && !game.evidence.includes(id)) result.push({ id: 'evidence:' + id, scene, target: id, label: '向' + name + '追问线索', lines: [...lines, ...conversation], evidence: id, result: '已记录：' + label });
     }
     if (scene === 'yard') {
-      for (const [id, target, label] of [['nightTruck', 'guard', '旁听夜车与点名的消息'], ['dates', 'gate', '核对门口的车辆日期']]) {
-        if (!game.observed.includes(id)) result.push({ id: 'observe:' + id, scene, target, label, lines: ['夜车的日期、转送的编号与减少的点名人数，留下了可以交叉核对的记录。'], observed: id });
+      for (const [id, observation] of Object.entries(OBSERVATIONS)) {
+        if (!game.observed.includes(id)) result.push({ id: 'observe:' + id, scene, target: observation.target, label: observation.label, lines: observation.lines, observed: id });
       }
     }
   }
