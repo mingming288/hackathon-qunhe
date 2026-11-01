@@ -21,6 +21,7 @@ const $ = id => document.getElementById(id);
 const atlas = $('atlas'), menu = $('menu');
 let mode = 'menu', game = null, gameLocation = null, view, catalog = {}, sceneId = 'cell', noticeTimer, atlasView, earlyPlay;
 let pendingStory = null, storyOpen = false;
+let movementHintSeen = false;
 const rainAmbience = new RainAmbience(new Audio(rainUrl));
 const sceneLoad = new SceneLoadGate();
 const storage = { getItem: key => localStorage.getItem(key), setItem: (key, value) => localStorage.setItem(key, value) };
@@ -147,11 +148,11 @@ function refresh() {
   }
   if (mode === 'game') {
     const task = getTask(game);
-    const guide = earlyPlay.guide(guidanceFor(game));
-    $('quest-title').textContent = guide.title;
-    $('quest-purpose').textContent = '目的：' + guide.purpose;
-    $('quest-place').textContent = guide.place;
-    $('quest-action').textContent = guide.action;
+    const baseGuide = guidanceFor(game), guide = earlyPlay.guide(baseGuide);
+    $('quest-title').textContent = guide.title === baseGuide.title ? (guide.shortTitle || guide.title) : guide.title;
+    $('quest-context').hidden = !earlyPlay.inspectionActive;
+    $('quest-context').textContent = earlyPlay.inspectionActive ? '留在床边，离开会暂停检查。' : '';
+    $('movement-hint').hidden = movementHintSeen || game.step !== 'inspectWall';
     $('inventory').textContent = '随身物品：' + (visibleInventory(game).map(id => ITEM_NAMES[id]).join('、') || '暂无');
     $('evidence-count').textContent = '可选调查（影响结局）：线索 ' + game.evidence.length + '/5 · 旁听 ' + game.observed.length + '/2';
     const grouped = new Map();
@@ -204,7 +205,7 @@ function resume() {
   if (!showPendingStory() && game.finished) showEnding();
 }
 function startNew() {
-  store(() => backupGame(storage)); game = createGame(); gameLocation = null; pendingStory = 'opening'; mode = 'game'; menu.close();
+  store(() => backupGame(storage)); game = createGame(); gameLocation = null; pendingStory = 'opening'; movementHintSeen = false; mode = 'game'; menu.close();
   renderScene(game.scene);
   showPendingStory();
 }
@@ -257,10 +258,16 @@ async function start() {
   });
   menu.addEventListener('cancel', event => { event.preventDefault(); if (game) resume(); });
   window.addEventListener('keydown', event => {
+    if (mode === 'game' && !menu.open && !dialogue.dialog.open && !atlas.open && !sceneLoad.active && /^(Arrow(Up|Down|Left|Right)|Key[WASD])$/.test(event.code)) {
+      movementHintSeen = true; $('movement-hint').hidden = true;
+    }
     if (earlyPlay.busy) return;
     if (event.code === 'Tab' && !atlas.open && !dialogue.dialog.open && !menu.open) { event.preventDefault(); openAtlas(); }
     if (event.code === 'Escape' && !atlas.open && !dialogue.dialog.open && !menu.open) openMenu();
   });
+  document.querySelectorAll('[data-move]').forEach(button => button.addEventListener('pointerdown', () => {
+    movementHintSeen = true; $('movement-hint').hidden = true;
+  }));
   window.addEventListener('pagehide', saveCurrent);
   $('menu-last-preview').addEventListener('click', () => {
     let saved; try { saved = loadPreview(storage); } catch { /* 预览记录损坏时使用牢房。 */ }

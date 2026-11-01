@@ -65,9 +65,10 @@ export function guidanceFor(game) {
   const nextName = here ? null : SCENE_BY_ID.get(route[1]).name;
   return {
     title: task.label, purpose,
+    shortTitle: here ? (task.id === 'inspectWall' ? '查看后墙的裂缝' : task.label) : '前往' + nextName,
     place: here ? '目标就在这里：' + local : '路线：' + route.map(id => SCENE_BY_ID.get(id).name).join(' → '),
     action: here ? (task.target.startsWith('exit:') ? '走近金色标记后自动进入。' : '靠近金色标记，按空格或点击下方按钮互动。') : '现在走到金色标记“' + nextName + '”，靠近后自动进入。到达目的地后：' + local,
     target: here ? task.target : 'exit:' + route[1],
-    marker: here ? task.label : '下一步：进入' + nextName
+    marker: here ? (task.id === 'inspectWall' ? '查看裂缝' : task.label) : '前往' + nextName
   };
 }

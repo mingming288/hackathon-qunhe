@@ -49,6 +49,15 @@ button:disabled{cursor:default;opacity:.4;transform:none}
 
 #goal-direction{color:#e5c576;font-weight:600}
 
+/* 游戏中只常驻下一步；物品和操作说明按需展开。 */
+body[data-mode="game"] .scene-caption p,body[data-mode="game"] .scene-status,body[data-mode="game"] .controls{display:none}
+body[data-mode="game"] .scene-caption{padding:10px 14px;bottom:25px}
+body[data-mode="game"] .scene-caption h1{font-size:20px;margin:7px 0 0}
+.quest-panel{width:min(300px,35vw);background:#1c201de0;border:1px solid #a9874866;border-top:2px solid #c5a45c;pointer-events:auto}
+.quest-details{font-size:11px;color:#c9bea8}
+.quest-details summary{cursor:pointer;color:#d8c9aa;padding:6px 0}
+#movement-hint{color:#f0dfb6}
+
 /* 启动画面保留独立的文字和按钮，背景只承担叙事氛围。 */
 #menu{width:100vw;max-width:none;height:100dvh;max-height:none;margin:0;padding:0;border:0;border-radius:0;background:linear-gradient(90deg,rgba(8,9,8,.94) 0%,rgba(8,9,8,.78) 28%,rgba(8,9,8,.18) 64%),url('/assets/menu-rain-v1.jpg') center/cover no-repeat;box-shadow:none}
 #menu::backdrop{background:#080908;backdrop-filter:none}

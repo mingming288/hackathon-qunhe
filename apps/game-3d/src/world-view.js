@@ -229,6 +229,12 @@ export class WorldView {
     if (this.current) this.button.textContent = this.current.label + ' · 空格 / 点击';
     const projected = new THREE.Vector3();
     const direction = document.getElementById('goal-direction');
+    const portalHint = document.getElementById('portal-hint');
+    if (portalHint) {
+      const portal = this.world.portals.find(item => item.object === this.goal);
+      portalHint.hidden = this.environmentOnly || !portal || Boolean(this.portalRules?.[portal.id]) ||
+        Math.hypot(portal.object.position.x - this.hero.position.x, portal.object.position.z - this.hero.position.z) > 2.8;
+    }
     if (direction) {
       direction.hidden = this.environmentOnly || !this.goal || !this.goal.visible;
       if (!direction.hidden) {
