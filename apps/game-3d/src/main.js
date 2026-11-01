@@ -11,7 +11,7 @@ import { loadGame, saveGame, backupGame, loadPreview, savePreview } from './save
 import { guidanceFor, sceneNoteFor } from './guidance.js';
 import { EarlyPlay } from './early-play.js';
 import { SceneLoadGate } from './scene-load-gate.js';
-import { fadeBeforeTravel } from './scene-transition.js';
+import { prepareTravel } from './scene-transition.js';
 import { RainAmbience } from './rain-ambience.js';
 import { evidenceReview } from './evidence-review.js';
 import rainUrl from '../../../Beyond the wall/音效/四秒雨声.opus';
@@ -49,7 +49,7 @@ function renderScene(id, options = {}) {
   $('scene-note').textContent = mode === 'game' ? sceneNoteFor(config, game) : environmentDescription(config);
   $('scene-count').textContent = String(SCENES.indexOf(config) + 1).padStart(2, '0') + ' / ' + SCENES.length;
   document.querySelectorAll('[data-scene]').forEach(button => button.classList.toggle('active', button.dataset.scene === id));
-  $('fade').classList.add('show');
+  $('fade').classList.toggle('show', !options.seamless);
   if (mode === 'game') {
     let finished = false;
     const finish = (timedOut = false) => { if (!finished) { finished = true; if (sceneLoad.finish(revision)) {
@@ -94,9 +94,10 @@ function travel(target) {
   try {
     const next = enterScene(game, target);
     view.pause();
-    fadeBeforeTravel({ gate: sceneLoad, fade: $('fade'),
+    prepareTravel({ gate: sceneLoad,
+      load: () => view.preloadScene(SCENE_BY_ID.get(target), catalog, heroId(next)),
       canTravel: () => mode === 'game' && game.scene === from && !menu.open && !atlas.open && !dialogue.dialog.open,
-      run: () => { game = next; renderScene(game.scene, { from }); } });
+      run: () => { game = next; renderScene(game.scene, { from, seamless: true }); } });
   } catch (error) { dialogue.open('这条路暂未开放', [error.message, guidanceFor(game).action]); view.pause(); }
 }
 

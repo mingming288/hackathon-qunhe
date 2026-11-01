@@ -4,7 +4,7 @@ import { moveWithCollision } from './movement.js';
 export class ThirdPersonController {
   constructor(camera, player, canvas) {
     this.camera = camera; this.player = player; this.keys = new Set();
-    this.yaw = 0; this.pitch = .4; this.distance = 7; this.drag = null;
+    this.yaw = 0; this.pitch = .55; this.distance = 7; this.drag = null;
     this.enabled = () => true;
     window.addEventListener('keydown', event => {
       if (!this.enabled() || event.target.closest('button, input, select')) return;
@@ -43,7 +43,7 @@ export class ThirdPersonController {
   }
 
   reset() {
-    this.yaw = 0; this.pitch = .4; this.distance = 7; this.drag = null; this.keys.clear();
+    this.yaw = 0; this.pitch = .55; this.distance = 7; this.drag = null; this.keys.clear();
   }
 
   update(dt, world) {

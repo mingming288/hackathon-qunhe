@@ -10,6 +10,13 @@ function loadModel(url) {
   return cache.get(url);
 }
 
+// 在离开当前场景前准备目标场景的模型和动作，复用正式加载缓存。
+export async function preloadModel(entry) {
+  validateModelEntry(entry);
+  const urls = [entry.url, entry.idleUrl, entry.walkUrl].filter(Boolean);
+  await Promise.all(urls.map(url => { validateModelEntry({ url }); return loadModel(url); }));
+}
+
 export function validateModelEntry(entry) {
   if (!entry || typeof entry.url !== 'string' || !entry.url.startsWith('/assets/models/')) {
     throw new Error('模型地址必须位于当前应用的 /assets/models/ 目录。');

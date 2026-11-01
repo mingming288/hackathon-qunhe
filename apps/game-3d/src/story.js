@@ -111,7 +111,7 @@ export function travelRule(game, from, to) {
   if (from === 'pipe' && to === 'pipeNetwork' && !did(game, 'smashPipe')) return '先借雷声敲开管道。';
   if (from === 'pipeNetwork' && to === 'rain' && step !== 'pipeExit') return '还没到离开管网的时候。';
   if (to === 'library' && !did(game, 'meetBrooks') && !alternate) return '先帮院子里的瑞德修好收音机，图书馆入口就会开放。';
-  if (to === 'office' && !did(game, 'drawMap') && !['sideSearch', 'sideHide', 'sideRecover'].includes(step)) return '现在还没有进入办公室的机会。';
+  if (to === 'office' && !did(game, 'drawMap') && !['sideSearch', 'sideHide', 'sideRecover'].includes(step)) return alternate ? '先在禁闭结束后找老布，再等待办公室巡视开始。' : '先完成藏锤、海报和挖掘准备，再绘制管线地图，办公室才会开放。';
   if (to === 'solitary' && !['sideStone', 'sideWait'].includes(step)) return '禁闭室的铁门从外面锁着。';
   if (from === 'solitary' && !did(game, 'sideWait')) return '铁门还没有打开。';
   if (to === 'operatingRoom' && step !== 'twoMedical') return '这里不是一条能随意进出的道路。';

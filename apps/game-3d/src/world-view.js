@@ -3,7 +3,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { createWorld, disposeWorld } from './world.js';
 import { createActor } from './actor.js';
 import { ThirdPersonController } from './controller.js';
-import { replaceAsset } from './assets.js';
+import { replaceAsset, preloadModel } from './assets.js';
 import { entryPosition, transitionOrientation } from './navigation.js';
 import { CHARACTER_NAMES } from './kit.js';
 import { AutoTravel } from './auto-travel.js';
@@ -56,6 +56,16 @@ export class WorldView {
     this.heroVisual = createActor(id === 'red' ? { skin: '#a67e60', shirt: '#8a9d80', hair: '#b8b7ad' } : {});
     this.hero.add(this.heroVisual); this.hero.userData = { assetKey: id, targetHeight: 2.5, placeholder: this.heroVisual };
     this.scene.add(this.hero); if (this.controls) this.controls.player = this.hero;
+  }
+
+  async preloadScene(config, catalog, character) {
+    const world = createWorld(config);
+    try {
+      const entries = [...world.anchors, ...(world.vistaAnchors || [])].map(anchor =>
+        catalog[(anchor.userData.assetScope || config.id) + ':' + anchor.userData.assetKey] || catalog[anchor.userData.assetKey]);
+      entries.push(catalog[character]);
+      await Promise.allSettled(entries.filter(Boolean).map(preloadModel));
+    } finally { disposeWorld(world); }
   }
 
   show(config, { from = null, location = null, character = 'andy', catalog = {}, environmentOnly = false } = {}) {
