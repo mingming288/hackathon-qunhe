@@ -7,6 +7,7 @@ import { practiceComplete } from './practice-state.js';
 import { block, bookModel, lettering, disposePracticeObject } from './practice-geometry.js';
 import { createPipeDamage } from './pipe-damage.js';
 import { OfficeStage } from './office-stage.js';
+import { OfficeSafeStage } from './office-safe-stage.js';
 
 // 玩法附件只引用现有物件和入口，不修改建筑、陈设数据或碰撞布局。
 export class EarlyWorld {
@@ -18,6 +19,8 @@ export class EarlyWorld {
     this.desk = find('desk'); this.bed = find('bed');
     const embroidery = find('embroidery');
     if (view.world.config.id === 'office' && embroidery) this.office = new OfficeStage(embroidery, getGame().events.includes('openSafe'));
+    const safe = find('safe');
+    if (view.world.config.id === 'office' && safe) this.officeSafe = new OfficeSafeStage(safe, getGame().events.includes('swapLedger'));
     const pipe = find('pipeTarget');
     if (pipe && view.world.config.id === 'pipe') this.pipeDamage = createPipeDamage(pipe);
     const radio = find('radio');
@@ -64,6 +67,7 @@ export class EarlyWorld {
   sync() {
     const game = this.getGame();
     this.office?.sync(game.events.includes('openSafe'));
+    this.officeSafe?.sync(game.events.includes('swapLedger'));
     this.setPipeDamage(game.events.includes('smashPipe') ? 5 : (this.pipeDamageHits || 0));
     const wall = this.points.get('wallClue'); if (wall) wall.visible = game.step === 'inspectWall';
     const poster = this.view.world.anchors.find(anchor => anchor.userData.assetKey === 'poster');
@@ -114,6 +118,7 @@ export class EarlyWorld {
   updateFrame(dt, elapsed) {
     const game = this.getGame(), check = game.practice.inspection;
     if (this.enabled()) this.office?.update(dt);
+    if (this.enabled()) this.officeSafe?.update(dt);
     if (game.step === 'finalDig' && this.view.world.config.id === 'dig' && this.enabled()) {
       const exit = this.view.world.portals.find(portal => portal.id === 'pipe')?.object;
       this.entryTime = exit && this.view.hero.position.distanceTo(exit.position) < 2.2 ? (this.entryTime || 0) + dt : 0;
