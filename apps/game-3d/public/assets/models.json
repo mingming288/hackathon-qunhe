@@ -46,7 +46,7 @@
     "hammer": { "url": "/assets/models/hammer-optimized.glb", "height": 0.13 },
     "rubble": { "url": "/assets/models/rubble-optimized.glb", "height": 0.6 },
     "andy": {
-      "url": "/assets/models/andy-idle.glb",
+      "url": "/assets/models/andy-idle-optimized.glb",
       "height": 2.5,
       "rotationY": 0,
       "walkUrl": "/assets/models/andy-walk-only.glb"
@@ -58,13 +58,13 @@
       "walkAnimation": 1
     },
     "brooks": {
-      "url": "/assets/models/brooks-idle-walk.glb",
+      "url": "/assets/models/brooks-idle-walk-optimized.glb",
       "height": 2.35,
       "rotationY": 0,
       "walkAnimation": 1
     },
     "warden": {
-      "url": "/assets/models/norton-idle-walk.glb",
+      "url": "/assets/models/norton-idle-walk-optimized.glb",
       "height": 2.55,
       "rotationY": 0,
       "walkAnimation": 1
@@ -82,7 +82,7 @@
     },
     "haywood": { "url": "/assets/models/prisoner302.glb", "idleUrl": "/assets/models/andy-idle-only.glb", "height": 2.45 },
     "floyd": { "url": "/assets/models/tommy.glb", "idleUrl": "/assets/models/andy-idle-only.glb", "height": 2.4 },
-    "manager": { "url": "/assets/models/norton-idle-walk.glb", "height": 2.5, "walkAnimation": 1 },
-    "clerk": { "url": "/assets/models/norton-idle-walk.glb", "height": 2.45, "walkAnimation": 1 }
+    "manager": { "url": "/assets/models/norton-idle-walk-optimized.glb", "height": 2.5, "walkAnimation": 1 },
+    "clerk": { "url": "/assets/models/norton-idle-walk-optimized.glb", "height": 2.45, "walkAnimation": 1 }
   }
 }
