@@ -9,12 +9,13 @@ import { CHARACTER_NAMES } from './kit.js';
 import { AutoTravel } from './auto-travel.js';
 import { revealPendingCharacters } from './scene-load-gate.js';
 import { goalDirection, pipeExitWaypoint } from './goal-direction.js';
+import { SCENE_BY_ID } from './scenes.js';
 
 export class WorldView {
   constructor({ canvas, labelRoot, interactButton, enabled, onAutosave, onAutoTravel = () => {}, notify }) {
     this.canvas = canvas; this.labelRoot = labelRoot; this.button = interactButton; this.notify = notify; this.onAutoTravel = onAutoTravel;
     this.environmentOnly = false; this.enabled = enabled;
-    this.labels = []; this.mixers = []; this.interactions = []; this.version = 0; this.onAutosave = onAutosave;
+    this.labels = []; this.mixers = []; this.interactions = []; this.preloads = new Map(); this.version = 0; this.onAutosave = onAutosave;
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75)); this.renderer.setSize(innerWidth, innerHeight);
     this.renderer.shadowMap.enabled = true; this.renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -58,17 +59,23 @@ export class WorldView {
     this.scene.add(this.hero); if (this.controls) this.controls.player = this.hero;
   }
 
-  async preloadScene(config, catalog, character) {
-    const world = createWorld(config);
-    try {
-      const entries = [...world.anchors, ...(world.vistaAnchors || [])].map(anchor =>
-        catalog[(anchor.userData.assetScope || config.id) + ':' + anchor.userData.assetKey] || catalog[anchor.userData.assetKey]);
-      entries.push(catalog[character]);
-      await Promise.allSettled(entries.filter(Boolean).map(preloadModel));
-    } finally { disposeWorld(world); }
+  preloadScene(config, catalog, character) {
+    const key = config.id + ':' + character;
+    if (this.preloads.has(key)) return this.preloads.get(key);
+    const pending = (async () => {
+      const world = createWorld(config);
+      try {
+        const entries = [...world.anchors, ...(world.vistaAnchors || [])].map(anchor =>
+          catalog[(anchor.userData.assetScope || config.id) + ':' + anchor.userData.assetKey] || catalog[anchor.userData.assetKey]);
+        entries.push(catalog[character]);
+        await Promise.allSettled(entries.filter(Boolean).map(preloadModel));
+      } finally { disposeWorld(world); }
+    })().catch(error => { this.preloads.delete(key); throw error; });
+    this.preloads.set(key, pending);
+    return pending;
   }
 
-  show(config, { from = null, location = null, character = 'andy', catalog = {}, environmentOnly = false } = {}) {
+  show(config, { from = null, location = null, character = 'andy', catalog = {}, environmentOnly = false, seamless = false } = {}) {
     const previousYaw = this.controls.yaw, previousFacing = this.hero.rotation.y;
     this.setStage(null);
     if (this.world) disposeWorld(this.world);
@@ -86,7 +93,7 @@ export class WorldView {
     this.hero.position.set(position.x, 0, position.z); this.hero.rotation.y = orientation.facing;
     this.autoTravel = new AutoTravel(position, this.world.portals);
     this.hero.scale.y = config.id === 'pipeNetwork' ? .72 : 1;
-    this.resetCamera(orientation.yaw);
+    this.resetCamera(orientation.yaw, seamless);
     this.interactions = []; this.current = null; this.button.hidden = true; this.goal = null;
     const version = this.version;
     const loading = [];
@@ -145,8 +152,8 @@ export class WorldView {
 
   position() { return { x: this.hero.position.x, z: this.hero.position.z }; }
   pause() { this.controls.keys.clear(); }
-  resetCamera(yaw = 0) {
-    this.controls.reset();
+  resetCamera(yaw = 0, preserveKeys = false) {
+    this.controls.reset({ preserveKeys });
     this.controls.yaw = yaw;
     if (this.environmentOnly && this.world) {
       const sphere = new THREE.Box3().setFromObject(this.world.root).getBoundingSphere(new THREE.Sphere());
@@ -183,6 +190,13 @@ export class WorldView {
     this.stage?.updateFrame(dt, this.elapsed);
     if (version !== this.version) return;
     if (!this.environmentOnly) {
+      // 靠近开放入口时在后台准备相邻场景，减少实际过门时的等待。
+      if (this.controls.enabled()) {
+        const portal = this.world.portals.filter(item => !this.portalRules?.[item.id])
+          .map(item => ({ item, distance: Math.hypot(item.object.position.x - this.hero.position.x, item.object.position.z - this.hero.position.z) }))
+          .filter(item => item.distance < 7).sort((a, b) => a.distance - b.distance)[0]?.item;
+        if (portal) this.preloadScene(SCENE_BY_ID.get(portal.id), this.catalog, this.heroId).catch(() => {});
+      }
       const next = this.autoTravel.next(this.hero.position, speed > .05, this.controls.enabled(), this.world.portals, this.portalRules);
       if (next) { this.onAutoTravel(next); return; }
     }

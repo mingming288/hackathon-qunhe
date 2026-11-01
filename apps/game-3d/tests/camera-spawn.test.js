@@ -133,3 +133,12 @@ test('瑞德进入超市时镜头位于门口上沿内侧', () => {
   assert.ok(camera.position.z < 11, '镜头不能穿过入口上沿');
   disposeWorld(world);
 });
+
+test('连续过门保留仍按住的移动键，普通镜头重置会清空输入', () => {
+  const controller = Object.assign(Object.create(ThirdPersonController.prototype), { keys: new Set(['ArrowUp']), drag: {} });
+  controller.reset({ preserveKeys: true });
+  assert.ok(controller.keys.has('ArrowUp'));
+  assert.equal(controller.drag, null);
+  controller.reset();
+  assert.equal(controller.keys.size, 0);
+});

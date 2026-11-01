@@ -54,7 +54,8 @@ function renderScene(id, options = {}) {
     let finished = false;
     const finish = (timedOut = false) => { if (!finished) { finished = true; if (sceneLoad.finish(revision)) {
       if (timedOut && view.revealPendingCharacters()) notify('人物模型仍在加载，暂时显示替代人物。');
-      view.pause(); $('fade').classList.remove('show');
+      if (!options.seamless) view.pause();
+      $('fade').classList.remove('show');
     } } };
     const timeout = setTimeout(() => finish(true), 8000);
     // 人物和环境都就绪后再揭开场景，避免建筑模型在玩家眼前突然替换。
@@ -93,7 +94,6 @@ function travel(target) {
   const from = game.scene;
   try {
     const next = enterScene(game, target);
-    view.pause();
     prepareTravel({ gate: sceneLoad,
       load: () => view.preloadScene(SCENE_BY_ID.get(target), catalog, heroId(next)),
       canTravel: () => mode === 'game' && game.scene === from && !menu.open && !atlas.open && !dialogue.dialog.open,

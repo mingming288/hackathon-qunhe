@@ -42,8 +42,9 @@ export class ThirdPersonController {
     });
   }
 
-  reset() {
-    this.yaw = 0; this.pitch = .55; this.distance = 7; this.drag = null; this.keys.clear();
+  reset({ preserveKeys = false } = {}) {
+    this.yaw = 0; this.pitch = .55; this.distance = 7; this.drag = null;
+    if (!preserveKeys) this.keys.clear();
   }
 
   update(dt, world) {
