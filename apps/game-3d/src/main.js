@@ -15,6 +15,7 @@ import { prepareTravel } from './scene-transition.js';
 import { RainAmbience } from './rain-ambience.js';
 import { evidenceReview, investigationJournal } from './evidence-review.js';
 import { storyInterlude, pendingInterlude } from './story-interludes.js';
+import { createMinimap } from './minimap.js';
 import rainUrl from '../../../Beyond the wall/音效/四秒雨声.opus';
 
 const $ = id => document.getElementById(id);
@@ -22,6 +23,7 @@ const atlas = $('atlas'), menu = $('menu');
 let mode = 'menu', game = null, gameLocation = null, view, catalog = {}, sceneId = 'cell', noticeTimer, atlasView, earlyPlay;
 let pendingStory = null, storyOpen = false;
 let movementHintSeen = false;
+let updateMinimap;
 const rainAmbience = new RainAmbience(new Audio(rainUrl));
 const sceneLoad = new SceneLoadGate();
 const storage = { getItem: key => localStorage.getItem(key), setItem: (key, value) => localStorage.setItem(key, value) };
@@ -180,6 +182,7 @@ function refresh() {
   }
   if (mode === 'game') interactions.unshift(...earlyPlay.interactions());
   view.configure({ interactions, goal, goalLabel, portalRules: rules, hidden });
+  updateMinimap?.setWorld(view.world);
 }
 
 function openAtlas() {
@@ -218,16 +221,18 @@ function buildAtlas() {
   });
 }
 async function start() {
+  updateMinimap = createMinimap(document.querySelector('.minimap'));
   window.addEventListener('pointerdown', () => rainAmbience.retry());
   window.addEventListener('keydown', () => rainAmbience.retry());
   document.addEventListener('visibilitychange', syncRain);
   buildAtlas();
   view = new WorldView({
     canvas: $('world'), labelRoot: $('floating-labels'), interactButton: $('interact'), notify, onAutosave: saveCurrent, onAutoTravel: travel,
-    enabled: () => mode !== 'menu' && !sceneLoad.active && !atlas.open && !dialogue.dialog.open && !menu.open && !earlyPlay?.busy
+    onMapUpdate: (hero, goal) => updateMinimap.update(hero, goal),
+    enabled: () => mode !== 'menu' && !document.querySelector('.minimap').open && !sceneLoad.active && !atlas.open && !dialogue.dialog.open && !menu.open && !earlyPlay?.busy
   });
   earlyPlay = new EarlyPlay({ view, getGame: () => game, notify,
-    enabled: () => mode === 'game' && !sceneLoad.active && !atlas.open && !dialogue.dialog.open && !menu.open && !earlyPlay.busy,
+    enabled: () => mode === 'game' && !document.querySelector('.minimap').open && !sceneLoad.active && !atlas.open && !dialogue.dialog.open && !menu.open && !earlyPlay.busy,
     setPractice: (practice, redraw, save) => { game = { ...game, practice }; if (redraw) refresh(); if (save) saveCurrent(); },
     complete: id => {
       const action = getActions(game, sceneId).find(item => item.id === id);
@@ -258,13 +263,17 @@ async function start() {
   });
   menu.addEventListener('cancel', event => { event.preventDefault(); if (game) resume(); });
   window.addEventListener('keydown', event => {
-    if (mode === 'game' && !menu.open && !dialogue.dialog.open && !atlas.open && !sceneLoad.active && /^(Arrow(Up|Down|Left|Right)|Key[WASD])$/.test(event.code)) {
+    if (mode === 'game' && !document.querySelector('.minimap').open && !menu.open && !dialogue.dialog.open && !atlas.open && !sceneLoad.active && /^(Arrow(Up|Down|Left|Right)|Key[WASD])$/.test(event.code)) {
       movementHintSeen = true; $('movement-hint').hidden = true;
     }
     if (earlyPlay.busy) return;
+    if (event.code === 'KeyM' && !event.repeat && mode !== 'menu' && !atlas.open && !dialogue.dialog.open && !menu.open) {
+      event.preventDefault(); const map = document.querySelector('.minimap'); map.open = !map.open;
+    }
     if (event.code === 'Tab' && !atlas.open && !dialogue.dialog.open && !menu.open) { event.preventDefault(); openAtlas(); }
     if (event.code === 'Escape' && !atlas.open && !dialogue.dialog.open && !menu.open) openMenu();
   });
+  document.querySelector('.minimap').addEventListener('toggle', () => { if (document.querySelector('.minimap').open) view.pause(); });
   document.querySelectorAll('[data-move]').forEach(button => button.addEventListener('pointerdown', () => {
     movementHintSeen = true; $('movement-hint').hidden = true;
   }));

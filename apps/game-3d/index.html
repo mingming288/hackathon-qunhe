@@ -9,7 +9,7 @@
 <body>
   <canvas id="world" tabindex="0" aria-label="墙的另一边第三人称三维场景，方向键移动，拖动旋转镜头，空格互动"></canvas>
   <header class="masthead">
-    <div class="brand"><span class="brand-mark" aria-hidden="true">Ⅲ</span><div><strong>墙的另一边</strong><span>十九处空间 · 同一个故事</span></div></div>
+    <details class="minimap"><summary><span class="minimap-title">地图 · <strong data-map-current></strong></span><span class="minimap-toggle">点击或按 M 展开 / 收起</span><svg viewBox="0 0 400 400" aria-hidden="true"></svg></summary><p>蓝色：人物　金色圆圈：当前目标　圆点：出入口</p><p class="map-accessible" data-map-accessible></p></details>
     <div class="top-actions"><button id="open-menu" type="button">游戏菜单</button><button id="return-game" type="button" hidden>返回游戏</button><button id="open-assets" type="button" hidden>资产清单</button><button id="camera-reset" type="button">重置镜头</button><button id="open-atlas" class="primary" type="button">场景总览 <span id="scene-count">01 / 19</span></button></div>
   </header>
   <aside class="scene-caption"><span id="chapter" class="eyebrow"></span><h1 id="scene-title"></h1><p id="scene-note"></p><div class="scene-status"><i></i><span id="mode-label">第三人称</span></div></aside>

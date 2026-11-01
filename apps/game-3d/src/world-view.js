@@ -13,8 +13,9 @@ import { guideWaypoint } from './guide-route.js';
 import { SCENE_BY_ID } from './scenes.js';
 
 export class WorldView {
-  constructor({ canvas, labelRoot, interactButton, enabled, onAutosave, onAutoTravel = () => {}, notify }) {
+  constructor({ canvas, labelRoot, interactButton, enabled, onAutosave, onAutoTravel = () => {}, onMapUpdate = () => {}, notify }) {
     this.canvas = canvas; this.labelRoot = labelRoot; this.button = interactButton; this.notify = notify; this.onAutoTravel = onAutoTravel;
+    this.onMapUpdate = onMapUpdate;
     this.environmentOnly = false; this.enabled = enabled;
     this.labels = []; this.mixers = []; this.interactions = []; this.preloads = new Map(); this.version = 0; this.onAutosave = onAutosave;
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
@@ -257,6 +258,7 @@ export class WorldView {
       label.hidden = !object.visible || projected.z < -1 || projected.z > 1 || Math.abs(projected.x) > 1.05 || Math.abs(projected.y) > 1.05 || distance > 30;
       if (!label.hidden) label.style.transform = 'translate(-50%,-50%) translate(' + (projected.x + 1) * innerWidth / 2 + 'px,' + (1 - projected.y) * innerHeight / 2 + 'px)';
     }
+    this.onMapUpdate?.(this.hero, this.goal);
     this.renderer.render(this.scene, this.camera);
     if (now - this.savedAt > 5000) { this.onAutosave(); this.savedAt = now; }
   }
