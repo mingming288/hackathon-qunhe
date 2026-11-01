@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { createWorld, disposeWorld } from './world.js';
 import { createActor } from './actor.js';
 import { ThirdPersonController } from './controller.js';
+import { NpcController } from './npc-controller.js';
 import { replaceAsset, preloadModel } from './assets.js';
 import { entryPosition, transitionOrientation } from './navigation.js';
 import { CHARACTER_NAMES } from './kit.js';
@@ -91,6 +92,7 @@ export class WorldView {
     this.setHero(character); this.version++; this.mixers = [];
     this.hero.visible = !environmentOnly;
     this.world = createWorld(config, { includeCharacters: !environmentOnly, includeHelpers: !environmentOnly });
+    this.npcs = new NpcController(this.world);
     this.baseColliders = [...this.world.colliders]; this.scene.add(this.world.root);
     this.scene.background = new THREE.Color(this.world.background); this.scene.fog = new THREE.Fog(this.world.fog, 35, 95);
     const position = entryPosition(this.world, from, location, previousPosition);
@@ -201,7 +203,8 @@ export class WorldView {
       this.hero.userData.mixer?.setMoving?.(speed > .05);
       this.heroVisual.userData.animate(this.elapsed, speed / 3.3);
     }
-    this.world.animations.forEach(anchor => anchor.userData.animate(this.elapsed, 0));
+    this.npcs?.update(dt, this.elapsed, this.hero.position,
+      this.enabled() && !this.environmentOnly && !this.stage?.active && !this.stage?.movementLocked);
     const version = this.version;
     this.stage?.updateFrame(dt, this.elapsed);
     if (version !== this.version) return;
