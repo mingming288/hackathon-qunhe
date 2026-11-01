@@ -1,5 +1,5 @@
 import { canStand } from './movement.js';
-import { YARD_ENTRANCES } from './yard-layout.js';
+import { YARD_BUILDINGS, YARD_ENTRANCES } from './yard-layout.js';
 import { SCENE_BY_ID } from './scenes.js';
 
 // 门、洞口和道路使用固定位置，正向/返回方向共用同一个入口标识。
@@ -35,6 +35,11 @@ export function transitionOrientation(from, to, yaw, facing, entry = null) {
   if ((from === 'cellCorridor' && to === 'yard') || (from === 'yard' && to === 'cellCorridor')) {
     return { yaw: yaw + Math.PI, facing: facing + Math.PI };
   }
+  const building = YARD_BUILDINGS.find(item => (from === 'yard' && to === item.id) || (from === item.id && to === 'yard'));
+  if (building) {
+    const rotation = from === 'yard' ? -building.rotation : building.rotation;
+    return { yaw: yaw + rotation, facing: facing + rotation };
+  }
   if (entry?.portal && entry?.position) {
     const dx = entry.portal.x - entry.position.x, dz = entry.portal.z - entry.position.z;
     if (Math.hypot(dx, dz) > .01) {
@@ -66,6 +71,13 @@ export function entryPosition(world, from, saved = null, previous = null) {
     }
     if (world.config.id === 'rain' && from === 'pipeNetwork') return { x: 0, z: -12.4 };
     if (world.config.id === 'evidence' && from === 'medicalExterior') return { x: 0, z: 3 };
+    if (world.config.id === 'yard') {
+      const building = YARD_BUILDINGS.find(item => item.id === from);
+      if (building) {
+        const [x, z] = YARD_ENTRANCES[from];
+        return { x: x + Math.sin(building.rotation) * 2.6, z: z + Math.cos(building.rotation) * 2.6 };
+      }
+    }
     const portal = world.portals.find(item => item.id === from);
     if (!portal) return null;
     const { x, z } = portal.object.position;

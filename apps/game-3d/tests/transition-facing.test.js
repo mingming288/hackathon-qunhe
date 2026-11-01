@@ -3,16 +3,19 @@ import assert from 'node:assert/strict';
 import { createWorld, disposeWorld } from '../src/world.js';
 import { SCENE_BY_ID } from '../src/scenes.js';
 import { entryPosition, transitionOrientation } from '../src/navigation.js';
+import { YARD_BUILDINGS } from '../src/yard-layout.js';
 
-test('从图书馆和办公室返回院子时，镜头跟随人物面向院内', () => {
+test('院子与建筑往返时保留方向，返回位置沿门前道路向外', () => {
   const yard = createWorld(SCENE_BY_ID.get('yard'));
-  for (const from of ['library', 'office']) {
+  for (const { id: from, rotation } of YARD_BUILDINGS) {
     const position = entryPosition(yard, from);
     const portal = yard.portals.find(item => item.id === from).object.position;
-    const { yaw, facing } = transitionOrientation(from, 'yard', 0, 0, { position, portal });
-    const outX = portal.x - position.x, outZ = portal.z - position.z;
-    assert.ok(Math.sin(yaw) * outX + Math.cos(yaw) * outZ > 0, '镜头位于入口一侧');
-    assert.ok(Math.sin(facing) * outX + Math.cos(facing) * outZ < 0, '人物面向院内');
+    assert.ok(Math.abs(position.x - portal.x - Math.sin(rotation) * 2.6) < 1e-9);
+    assert.ok(Math.abs(position.z - portal.z - Math.cos(rotation) * 2.6) < 1e-9);
+    const first = transitionOrientation('yard', from, .4, 1.2);
+    assert.equal(first.yaw, .4 - rotation); assert.equal(first.facing, 1.2 - rotation);
+    const back = transitionOrientation(from, 'yard', first.yaw, first.facing);
+    assert.ok(Math.abs(back.yaw - .4) < 1e-9 && Math.abs(back.facing - 1.2) < 1e-9);
   }
   disposeWorld(yard);
 });
