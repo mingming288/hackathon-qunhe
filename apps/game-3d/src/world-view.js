@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { createWorld, disposeWorld } from './world.js';
 import { createActor } from './actor.js';
 import { ThirdPersonController } from './controller.js';
+import { NpcController } from './npc-controller.js';
 import { replaceAsset, preloadModel } from './assets.js';
 import { entryPosition, transitionOrientation } from './navigation.js';
 import { CHARACTER_NAMES } from './kit.js';
@@ -10,11 +11,13 @@ import { AutoTravel } from './auto-travel.js';
 import { revealPendingCharacters } from './scene-load-gate.js';
 import { goalDirection, pipeExitWaypoint } from './goal-direction.js';
 import { guideWaypoint } from './guide-route.js';
+import { AutoWalk } from './auto-walk.js';
 import { SCENE_BY_ID } from './scenes.js';
 
 export class WorldView {
-  constructor({ canvas, labelRoot, interactButton, enabled, onAutosave, onAutoTravel = () => {}, notify }) {
+  constructor({ canvas, labelRoot, interactButton, enabled, onAutosave, onAutoTravel = () => {}, onMapUpdate = () => {}, notify }) {
     this.canvas = canvas; this.labelRoot = labelRoot; this.button = interactButton; this.notify = notify; this.onAutoTravel = onAutoTravel;
+    this.onMapUpdate = onMapUpdate;
     this.environmentOnly = false; this.enabled = enabled;
     this.labels = []; this.mixers = []; this.interactions = []; this.preloads = new Map(); this.version = 0; this.onAutosave = onAutosave;
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
@@ -23,28 +26,32 @@ export class WorldView {
     this.renderer.localClippingEnabled = true;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace; this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = .95;
-    this.scene = new THREE.Scene(); this.camera = new THREE.PerspectiveCamera(48, innerWidth / innerHeight, .1, 130);
+    this.scene = new THREE.Scene(); this.camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, .1, 130);
     this.scene.add(new THREE.HemisphereLight('#ded9c7', '#4d5852', 1.8));
     const sun = new THREE.DirectionalLight('#e5d5ad', 2.4); sun.position.set(-15, 24, 12); sun.castShadow = true;
     sun.shadow.mapSize.set(2048, 2048);
     Object.assign(sun.shadow.camera, { left: -30, right: 30, top: 30, bottom: -30 }); sun.shadow.normalBias = .035;
     this.scene.add(sun); this.setHero('andy');
     this.controls = new ThirdPersonController(this.camera, this.hero, canvas);
-    this.controls.enabled = () => enabled() && !this.environmentOnly;
+    this.controls.enabled = () => enabled() && !this.environmentOnly && !this.stage?.movementLocked;
     this.orbit = new OrbitControls(this.camera, canvas); this.orbit.enabled = false;
     this.orbit.enableDamping = true; this.orbit.minPolarAngle = .1; this.orbit.maxPolarAngle = Math.PI * .49;
     this.button.addEventListener('click', () => this.current?.run());
     window.addEventListener('keydown', event => {
       if (event.code === 'Space' && !event.repeat && enabled() && !event.target.closest('button, input')) {
-        event.preventDefault(); this.current?.run();
+        event.preventDefault();
+        if (!this.stage?.handleActionKey(true)) this.current?.run();
       }
     });
+    window.addEventListener('keyup', event => { if (event.code === 'Space') this.stage?.handleActionKey(false); });
+    window.addEventListener('blur', () => this.pause());
     window.addEventListener('resize', () => {
       this.camera.aspect = innerWidth / innerHeight; this.camera.updateProjectionMatrix();
       this.renderer.setSize(innerWidth, innerHeight);
     });
     canvas.addEventListener('webglcontextlost', event => { event.preventDefault(); notify('图形上下文中断，请重新载入页面。'); });
     this.last = performance.now(); this.elapsed = 0; this.savedAt = this.last;
+    document.addEventListener('visibilitychange', () => { this.last = null; this.pause(); });
     this.renderer.setAnimationLoop(now => this.tick(now));
   }
 
@@ -77,7 +84,8 @@ export class WorldView {
   }
 
   show(config, { from = null, location = null, character = 'andy', catalog = {}, environmentOnly = false, seamless = false } = {}) {
-    const previousYaw = this.controls.yaw, previousFacing = this.hero.rotation.y;
+    this.autoWalk = null;
+    const previousYaw = this.controls.yaw, previousFacing = this.hero.rotation.y, previousMotionYaw = this.controls.motionYaw;
     const previousPosition = seamless ? this.position() : null;
     this.setStage(null);
     if (this.world) disposeWorld(this.world);
@@ -86,6 +94,7 @@ export class WorldView {
     this.setHero(character); this.version++; this.mixers = [];
     this.hero.visible = !environmentOnly;
     this.world = createWorld(config, { includeCharacters: !environmentOnly, includeHelpers: !environmentOnly });
+    this.npcs = new NpcController(this.world);
     this.baseColliders = [...this.world.colliders]; this.scene.add(this.world.root);
     this.scene.background = new THREE.Color(this.world.background); this.scene.fog = new THREE.Fog(this.world.fog, 35, 95);
     const position = entryPosition(this.world, from, location, previousPosition);
@@ -96,6 +105,9 @@ export class WorldView {
     this.autoTravel = new AutoTravel(position, this.world.portals);
     this.hero.scale.y = config.id === 'pipeNetwork' ? .72 : 1;
     this.resetCamera(orientation.yaw, seamless);
+    if (seamless && previousMotionYaw !== null) {
+      this.controls.motionYaw = transitionOrientation(from, config.id, previousMotionYaw, previousFacing, { portal, position }).yaw;
+    }
     this.interactions = []; this.current = null; this.button.hidden = true; this.goal = null;
     const version = this.version;
     const loading = [];
@@ -141,21 +153,30 @@ export class WorldView {
     for (const portal of this.world.portals) {
       const locked = Boolean(portalRules[portal.id]);
       portal.ring.material.color.set(locked ? '#686b60' : '#b99755');
-      if (portal.object !== this.goal) this.addLabel((locked ? '暂未开放 · ' : '进入 ') + portal.name + ' ↗', portal.object, portal.object.userData.labelHeight ?? 3.3);
+      if (portal.object !== this.goal) this.addLabel((locked ? '暂未开放 · ' : '进入 ') + portal.name + ' ↗', portal.object, portal.object.userData.labelHeight ?? 3.3, '', !locked);
     }
-    this.world.anchors.filter(anchor => anchor.visible && anchor !== this.goal && anchor.userData.label).forEach(anchor => this.addLabel(anchor.userData.label, anchor, 2.9));
-    if (this.goal) this.addLabel(goalLabel + ' ↓', this.goal, this.goal.userData.labelHeight ?? 3.6, 'goal-label');
+    this.world.anchors.filter(anchor => anchor.visible && anchor !== this.goal && anchor.userData.label).forEach(anchor => this.addLabel(anchor.userData.label, anchor, 2.9, '', this.interactions.some(item => item.object === anchor)));
+    if (this.goal) this.addLabel(goalLabel + ' ↓', this.goal, this.goal.userData.labelHeight ?? 3.6, 'goal-label', true);
     for (const { object, text, height } of this.stage?.labels || []) this.addLabel(text, object, height);
   }
 
-  addLabel(text, object, height, extra = '') {
-    const label = document.createElement('span'); label.className = 'world-label ' + extra; label.textContent = text;
+  addLabel(text, object, height, extra = '', clickable = false) {
+    const label = document.createElement(clickable ? 'button' : 'span'); label.className = 'world-label ' + extra; label.textContent = text;
+    if (clickable) { label.type = 'button'; label.title = '点击自动走近'; label.addEventListener('click', () => this.walkTo(object)); }
     this.labelRoot.append(label); this.labels.push({ label, object, height });
   }
 
   position() { return { x: this.hero.position.x, z: this.hero.position.z }; }
-  pause() { this.controls.keys.clear(); }
-  resetCamera(yaw = 0, preserveKeys = false) {
+  pause() { this.autoWalk = null; this.controls.keys.clear(); this.stage?.release(); }
+  walkTo(object = this.goal) {
+    if (!object || !this.controls.enabled() || this.environmentOnly) return false;
+    const portal = this.world.portals.find(item => item.object === object);
+    if (portal && this.portalRules?.[portal.id]) { this.notify('这条路暂未开放。'); return false; }
+    this.pause(); this.autoWalk = new AutoWalk(object, Boolean(portal));
+    this.notify('正在走近目标，按方向键可取消。'); this.canvas.focus(); return true;
+  }
+  // 未指定方向时从人物背后看向其前方；场景预览仍使用默认视角。
+  resetCamera(yaw = this.environmentOnly ? 0 : this.hero.rotation.y + Math.PI, preserveKeys = false) {
     this.controls.reset({ preserveKeys, preserveView: preserveKeys });
     this.controls.yaw = yaw;
     if (this.environmentOnly && this.world) {
@@ -178,17 +199,33 @@ export class WorldView {
   }
 
   tick(now) {
-    const dt = Math.min((now - this.last) / 1000, .05); this.last = now; this.elapsed += dt;
+    const frameTime = this.last === null ? 0 : Math.max(0, (now - this.last) / 1000);
+    this.last = now;
+    if (document.hidden) { this.last = null; return; }
+    // Preserve movement speed during slow frames; discard long stalls and background time.
+    const dt = frameTime <= .25 ? frameTime : 0; this.elapsed += dt;
     if (!this.world) return;
     this.orbit.enabled = this.environmentOnly && this.enabled();
     let speed = 0;
     if (this.environmentOnly) this.orbit.update();
     else {
-      speed = this.controls.update(dt, this.world);
+      let automatic = null;
+      if (this.autoWalk && this.controls.enabled()) {
+        const manual = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'KeyW', 'KeyA', 'KeyS', 'KeyD'].some(key => this.controls.keys.has(key));
+        if (manual) { this.autoWalk = null; this.notify('已取消自动行走。'); }
+        else {
+          const portal = this.world.portals.find(item => item.object === this.autoWalk.object);
+          const result = this.autoWalk.update(this.world, this.hero.position, dt, portal && this.autoTravel.blocked.has(portal.id));
+          if (result.status === 'walking') automatic = result.direction;
+          else { this.autoWalk = null; this.notify(result.status === 'arrived' ? '已到达，按空格互动。' : '暂时无法到达，请手动绕过障碍。'); }
+        }
+      }
+      speed = this.controls.update(dt, this.world, automatic);
       this.hero.userData.mixer?.setMoving?.(speed > .05);
       this.heroVisual.userData.animate(this.elapsed, speed / 3.3);
     }
-    this.world.animations.forEach(anchor => anchor.userData.animate(this.elapsed, 0));
+    this.npcs?.update(dt, this.elapsed, this.hero.position,
+      this.enabled() && !this.environmentOnly && !this.stage?.active && !this.stage?.movementLocked);
     const version = this.version;
     this.stage?.updateFrame(dt, this.elapsed);
     if (version !== this.version) return;
@@ -217,6 +254,12 @@ export class WorldView {
     if (this.current) this.button.textContent = this.current.label + ' · 空格 / 点击';
     const projected = new THREE.Vector3();
     const direction = document.getElementById('goal-direction');
+    const portalHint = document.getElementById('portal-hint');
+    if (portalHint) {
+      const portal = this.world.portals.find(item => item.object === this.goal);
+      portalHint.hidden = this.environmentOnly || !portal || Boolean(this.portalRules?.[portal.id]) ||
+        Math.hypot(portal.object.position.x - this.hero.position.x, portal.object.position.z - this.hero.position.z) > 2.8;
+    }
     if (direction) {
       direction.hidden = this.environmentOnly || !this.goal || !this.goal.visible;
       if (!direction.hidden) {
@@ -236,9 +279,10 @@ export class WorldView {
     for (const { label, object, height } of this.labels) {
       object.getWorldPosition(projected); projected.y += height;
       const distance = projected.distanceTo(this.camera.position); projected.project(this.camera);
-      label.hidden = projected.z < -1 || projected.z > 1 || Math.abs(projected.x) > 1.05 || Math.abs(projected.y) > 1.05 || distance > 30;
+      label.hidden = !object.visible || projected.z < -1 || projected.z > 1 || Math.abs(projected.x) > 1.05 || Math.abs(projected.y) > 1.05 || distance > 30;
       if (!label.hidden) label.style.transform = 'translate(-50%,-50%) translate(' + (projected.x + 1) * innerWidth / 2 + 'px,' + (1 - projected.y) * innerHeight / 2 + 'px)';
     }
+    this.onMapUpdate?.(this.hero, this.goal);
     this.renderer.render(this.scene, this.camera);
     if (now - this.savedAt > 5000) { this.onAutosave(); this.savedAt = now; }
   }

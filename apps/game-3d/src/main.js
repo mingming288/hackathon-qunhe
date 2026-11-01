@@ -6,20 +6,24 @@ import { readModelCatalog } from './assets.js';
 import { WorldView } from './world-view.js';
 import { Dialogue } from './dialogue.js';
 import { createGame, getTask, getActions, advance, enterScene, travelRule, heroId, visibleInventory, did, officeHiddenProps, oakHiddenProps, beachHiddenProps, medicalHiddenProps } from './story.js';
-import { ITEM_NAMES } from './story-data.js';
+import { ITEM_NAMES, TASKS } from './story-data.js';
 import { loadGame, saveGame, backupGame, loadPreview, savePreview } from './save.js';
 import { guidanceFor, sceneNoteFor } from './guidance.js';
 import { EarlyPlay } from './early-play.js';
 import { SceneLoadGate } from './scene-load-gate.js';
 import { prepareTravel } from './scene-transition.js';
 import { RainAmbience } from './rain-ambience.js';
-import { evidenceReview } from './evidence-review.js';
-import { OPENING, storyInterlude } from './story-interludes.js';
+import { evidenceReview, investigationJournal } from './evidence-review.js';
+import { storyInterlude, pendingInterlude } from './story-interludes.js';
+import { createMinimap } from './minimap.js';
 import rainUrl from '../../../Beyond the wall/音效/四秒雨声.opus';
 
 const $ = id => document.getElementById(id);
 const atlas = $('atlas'), menu = $('menu');
 let mode = 'menu', game = null, gameLocation = null, view, catalog = {}, sceneId = 'cell', noticeTimer, atlasView, earlyPlay;
+let pendingStory = null, storyOpen = false;
+let movementHintSeen = false;
+let updateMinimap;
 const rainAmbience = new RainAmbience(new Audio(rainUrl));
 const sceneLoad = new SceneLoadGate();
 const storage = { getItem: key => localStorage.getItem(key), setItem: (key, value) => localStorage.setItem(key, value) };
@@ -36,10 +40,30 @@ function store(callback) {
 function saveCurrent() {
   if (!view?.world) return;
   if (mode === 'game') {
-    gameLocation = view.position(); store(() => saveGame(storage, game, gameLocation));
+    gameLocation = view.position(); store(() => saveGame(storage, game, gameLocation, pendingStory));
   } else if (mode === 'explore') store(() => savePreview(storage, sceneId, view.position()));
 }
-const dialogue = new Dialogue(() => view?.canvas.focus());
+const dialogue = new Dialogue(() => {
+  if (storyOpen) { storyOpen = false; pendingStory = null; saveCurrent(); }
+  view?.canvas.focus();
+});
+
+function showPendingStory() {
+  const interlude = pendingInterlude(pendingStory, game);
+  if (!interlude) { pendingStory = null; return false; }
+  storyOpen = true;
+  dialogue.open(interlude.title, interlude.lines, [{ label: pendingStory === 'opening' ? '开始探索' : '继续故事', run: () => {} }]);
+  return true;
+}
+
+function showEnding() {
+  const ending = TASKS.find(task => task.finish === game.finished);
+  if (!ending) return;
+  dialogue.open('结局 · ' + game.finished, ending.lines, [
+    { label: '返回游戏菜单', run: openMenu },
+    { label: '查看全部场景', run: openAtlas }
+  ]);
+}
 
 function renderScene(id, options = {}) {
   const revision = sceneLoad.begin(mode === 'game');
@@ -60,7 +84,11 @@ function renderScene(id, options = {}) {
     } } };
     const timeout = setTimeout(() => finish(true), 8000);
     // 人物和环境都就绪后再揭开场景，避免建筑模型在玩家眼前突然替换。
-    ready.then(() => { clearTimeout(timeout); setTimeout(() => finish(), 180); });
+    ready.then(() => {
+      clearTimeout(timeout);
+      // 走门过渡已预载场景，完成后立即恢复行走；其他载入保留遮罩缓冲。
+      if (options.seamless) finish(); else setTimeout(() => finish(), 180);
+    });
   } else setTimeout(() => { if (sceneLoad.finish(revision)) $('fade').classList.remove('show'); }, 180);
   refresh(); saveCurrent();
 }
@@ -68,7 +96,7 @@ function renderScene(id, options = {}) {
 function perform(action) {
   view.pause();
   if (earlyPlay.perform(action)) return;
-  dialogue.task(action.id === 'twoCompare' ? { ...action, lines: evidenceReview(game) } : action, () => completeAction(action));
+  dialogue.task(action.id === 'twoCompare' ? { ...action, lines: evidenceReview(game) } : action, () => completeAction(action), catalog);
 }
 
 function completeAction(action) {
@@ -76,24 +104,21 @@ function completeAction(action) {
     const previousScene = game.scene;
     const result = advance(game, action.id, sceneId);
     game = result.game;
+    const interlude = storyInterlude(action.id, game, result.automatic);
+    pendingStory = interlude ? action.id : null;
     if (game.scene !== previousScene || view.heroId !== heroId(game)) renderScene(game.scene, previousScene === 'pipeNetwork' && game.scene === 'rain' ? { from: previousScene } : {});
     else { refresh(); saveCurrent(); }
-    const interlude = storyInterlude(action.id, game, result.automatic);
     const message = action.result || result.automatic.findLast(item => item.result)?.result;
-    if (interlude) dialogue.open(interlude.title, interlude.lines, [{ label: '继续故事', run: () => {} }]);
+    if (interlude) showPendingStory();
     else if (message) notify(message);
-    if (game.finished) {
-      dialogue.open('结局 · ' + game.finished, action.lines, [
-        { label: '返回游戏菜单', run: openMenu },
-        { label: '查看全部场景', run: openAtlas }
-      ]);
-    }
+    if (game.finished) showEnding();
   } catch (error) { notify(error.message); }
 }
 
 function travel(target) {
   if (mode === 'explore') { saveCurrent(); renderScene(target, { from: sceneId }); return; }
   if (earlyPlay.inspectionActive) { notify('检查还没结束，请先站回床边等待。'); return; }
+  if (earlyPlay.nativeActive) { notify('请先完成躲藏，或停止当前劳作后再离开。'); return; }
   const from = game.scene;
   try {
     const next = enterScene(game, target);
@@ -125,11 +150,12 @@ function refresh() {
   }
   if (mode === 'game') {
     const task = getTask(game);
-    const guide = earlyPlay.guide(guidanceFor(game));
-    $('quest-title').textContent = guide.title;
-    $('quest-purpose').textContent = '目的：' + guide.purpose;
-    $('quest-place').textContent = guide.place;
-    $('quest-action').textContent = guide.action;
+    const baseGuide = guidanceFor(game), guide = earlyPlay.guide(baseGuide);
+    $('quest-title').textContent = guide.title === baseGuide.title ? (guide.shortTitle || guide.title) : guide.title;
+    $('guide-help').hidden = !guide.target;
+    $('quest-context').hidden = !earlyPlay.inspectionActive;
+    $('quest-context').textContent = earlyPlay.inspectionActive ? '留在床边，离开会暂停检查。' : '';
+    $('movement-hint').hidden = movementHintSeen || game.step !== 'inspectWall';
     $('inventory').textContent = '随身物品：' + (visibleInventory(game).map(id => ITEM_NAMES[id]).join('、') || '暂无');
     $('evidence-count').textContent = '可选调查（影响结局）：线索 ' + game.evidence.length + '/5 · 旁听 ' + game.observed.length + '/2';
     const grouped = new Map();
@@ -157,6 +183,7 @@ function refresh() {
   }
   if (mode === 'game') interactions.unshift(...earlyPlay.interactions());
   view.configure({ interactions, goal, goalLabel, portalRules: rules, hidden });
+  updateMinimap?.setWorld(view.world);
 }
 
 function openAtlas() {
@@ -179,11 +206,12 @@ function resume() {
   if (!game) return;
   mode = 'game'; if (menu.open) menu.close(); if (atlas.open) atlas.close();
   renderScene(game.scene, { location: gameLocation });
+  if (!showPendingStory() && game.finished) showEnding();
 }
 function startNew() {
-  store(() => backupGame(storage)); game = createGame(); gameLocation = null; mode = 'game'; menu.close();
+  store(() => backupGame(storage)); game = createGame(); gameLocation = null; pendingStory = 'opening'; movementHintSeen = false; mode = 'game'; menu.close();
   renderScene(game.scene);
-  dialogue.open(OPENING.title, OPENING.lines, [{ label: '开始探索', run: () => notify('先靠近后墙，观察松动的砂浆。') }]);
+  showPendingStory();
 }
 function buildAtlas() {
   atlasView = createAtlas({ getCatalog: () => catalog, getScene: () => sceneId, onScene: explore,
@@ -194,16 +222,18 @@ function buildAtlas() {
   });
 }
 async function start() {
+  updateMinimap = createMinimap(document.querySelector('.minimap'));
   window.addEventListener('pointerdown', () => rainAmbience.retry());
   window.addEventListener('keydown', () => rainAmbience.retry());
   document.addEventListener('visibilitychange', syncRain);
   buildAtlas();
   view = new WorldView({
     canvas: $('world'), labelRoot: $('floating-labels'), interactButton: $('interact'), notify, onAutosave: saveCurrent, onAutoTravel: travel,
-    enabled: () => mode !== 'menu' && !sceneLoad.active && !atlas.open && !dialogue.dialog.open && !menu.open && !earlyPlay?.busy
+    onMapUpdate: (hero, goal) => updateMinimap.update(hero, goal),
+    enabled: () => mode !== 'menu' && !document.querySelector('.minimap').open && !sceneLoad.active && !atlas.open && !dialogue.dialog.open && !menu.open && !earlyPlay?.busy
   });
   earlyPlay = new EarlyPlay({ view, getGame: () => game, notify,
-    enabled: () => mode === 'game' && !sceneLoad.active && !atlas.open && !dialogue.dialog.open && !menu.open && !earlyPlay.busy,
+    enabled: () => mode === 'game' && !document.querySelector('.minimap').open && !sceneLoad.active && !atlas.open && !dialogue.dialog.open && !menu.open && !earlyPlay.busy,
     setPractice: (practice, redraw, save) => { game = { ...game, practice }; if (redraw) refresh(); if (save) saveCurrent(); },
     complete: id => {
       const action = getActions(game, sceneId).find(item => item.id === id);
@@ -213,13 +243,21 @@ async function start() {
     }
   });
   try { catalog = await readModelCatalog(); } catch (error) { notify(error.message); }
-  try { const saved = loadGame(storage); if (saved) { game = saved.game; gameLocation = saved.location; } }
+  try { const saved = loadGame(storage); if (saved) { game = saved.game; gameLocation = saved.location; pendingStory = saved.pendingStory || null; } }
   catch { notify('已有游戏记录无法恢复，已保留原文件。可以查看场景或重新开始。'); }
   renderScene('cell');
   $('open-atlas').addEventListener('click', openAtlas);
   $('close-atlas').addEventListener('click', () => { atlas.close(); view.canvas.focus(); });
   atlas.addEventListener('close', syncRain);
   $('camera-reset').addEventListener('click', () => view.resetCamera());
+  $('guide-help').addEventListener('click', () => {
+    if (mode !== 'game' || !game || sceneLoad.active || earlyPlay.busy || dialogue.dialog.open) return;
+    view.walkTo();
+  });
+  $('open-journal').addEventListener('click', () => {
+    if (mode !== 'game' || sceneLoad.active || earlyPlay.busy || dialogue.dialog.open || atlas.open || menu.open) return;
+    view.pause(); dialogue.open('线索记录', investigationJournal(game));
+  });
   $('open-menu').addEventListener('click', openMenu);
   $('new-game').addEventListener('click', startNew); $('resume-game').addEventListener('click', resume);
   $('menu-atlas').addEventListener('click', openAtlas); $('return-game').addEventListener('click', resume);
@@ -230,9 +268,20 @@ async function start() {
   });
   menu.addEventListener('cancel', event => { event.preventDefault(); if (game) resume(); });
   window.addEventListener('keydown', event => {
+    if (mode === 'game' && !document.querySelector('.minimap').open && !menu.open && !dialogue.dialog.open && !atlas.open && !sceneLoad.active && /^(Arrow(Up|Down|Left|Right)|Key[WASD])$/.test(event.code)) {
+      movementHintSeen = true; $('movement-hint').hidden = true;
+    }
+    if (earlyPlay.busy) return;
+    if (event.code === 'KeyM' && !event.repeat && mode !== 'menu' && !atlas.open && !dialogue.dialog.open && !menu.open) {
+      event.preventDefault(); const map = document.querySelector('.minimap'); map.open = !map.open;
+    }
     if (event.code === 'Tab' && !atlas.open && !dialogue.dialog.open && !menu.open) { event.preventDefault(); openAtlas(); }
     if (event.code === 'Escape' && !atlas.open && !dialogue.dialog.open && !menu.open) openMenu();
   });
+  document.querySelector('.minimap').addEventListener('toggle', () => { if (document.querySelector('.minimap').open) view.pause(); });
+  document.querySelectorAll('[data-move]').forEach(button => button.addEventListener('pointerdown', () => {
+    movementHintSeen = true; $('movement-hint').hidden = true;
+  }));
   window.addEventListener('pagehide', saveCurrent);
   $('menu-last-preview').addEventListener('click', () => {
     let saved; try { saved = loadPreview(storage); } catch { /* 预览记录损坏时使用牢房。 */ }

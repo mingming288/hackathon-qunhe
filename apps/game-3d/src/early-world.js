@@ -8,10 +8,11 @@ import { block, bookModel, lettering, disposePracticeObject } from './practice-g
 import { createPipeDamage } from './pipe-damage.js';
 import { OfficeStage } from './office-stage.js';
 import { OfficeSafeStage } from './office-safe-stage.js';
+import { NativeMechanics } from './native-mechanics.js';
 
 // 玩法附件只引用现有物件和入口，不修改建筑、陈设数据或碰撞布局。
 export class EarlyWorld {
-  constructor(view, { getGame, update, finish, notify, enabled }) {
+  constructor(view, { getGame, update = () => {}, finish = () => {}, notify = () => {}, enabled = () => true, createTimingRules }) {
     Object.assign(this, { view, getGame, update, finish, notify, enabled });
     this.root = new THREE.Group(); view.world.root.add(this.root); this.points = new Map();
     const anchors = view.world.anchors;
@@ -53,6 +54,7 @@ export class EarlyWorld {
       this.door = view.world.portals.find(portal => portal.id === 'cellCorridor')?.object.position.clone() || new THREE.Vector3();
       this.checkPoint = this.nearDesk();
     }
+    this.native = new NativeMechanics(view, { root: this.root, getGame, update, finish, notify, enabled, createTimingRules });
     this.sync();
   }
   point(id, source, offset = new THREE.Vector3()) {
@@ -64,6 +66,11 @@ export class EarlyWorld {
   anchor(id) { return this.points.get(id); }
   get labels() { return []; }
   interactions() { return []; }
+  start(action) { return this.native.start(action); }
+  handleActionKey(down) { return this.native.handleActionKey(down); }
+  release() { this.native.release(); }
+  get active() { return this.native.active; }
+  get movementLocked() { return this.native.movementLocked; }
   sync() {
     const game = this.getGame();
     this.office?.sync(game.events.includes('openSafe'));
@@ -83,6 +90,7 @@ export class EarlyWorld {
       this.originalBible.visible = available && Boolean(this.originalBible.userData.replaced);
       this.cellBook.userData.cover.rotation.y = 0;
     }
+    this.native?.sync();
   }
 
   setPipeDamage(hits) { this.pipeDamageHits = hits; this.pipeDamage?.setHits(hits); }
@@ -116,6 +124,8 @@ export class EarlyWorld {
     this.update('inspection', state, true); this.guard.visible = state.phase !== 'idle' && state.phase !== 'passed';
   }
   updateFrame(dt, elapsed) {
+    this.native.updateFrame(dt, elapsed);
+    if (this.disposed) return;
     const game = this.getGame(), check = game.practice.inspection;
     if (this.enabled()) this.office?.update(dt);
     if (this.enabled()) this.officeSafe?.update(dt);
@@ -150,6 +160,8 @@ export class EarlyWorld {
     }
   }
   dispose() {
+    this.disposed = true;
+    this.native.dispose();
     if (this.guard) { disposeWorld({ root: this.guard }); this.guard = null; }
     if (this.pipeDamage) disposePracticeObject(this.pipeDamage.root);
     disposePracticeObject(this.root);

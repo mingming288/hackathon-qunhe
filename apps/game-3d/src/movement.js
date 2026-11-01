@@ -1,3 +1,5 @@
+export const MOVEMENT_SPEED_MULTIPLIER = 1.5;
+
 // 当前基础版采用平地圆形角色与矩形障碍；台阶/多层关卡出现时再扩展高度判定。
 export function canStand(x, z, bounds, colliders, radius = 0.36) {
   if (Math.abs(x) + radius > bounds[0] / 2 || Math.abs(z) + radius > bounds[1] / 2) return false;

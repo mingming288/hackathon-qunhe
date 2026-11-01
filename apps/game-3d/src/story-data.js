@@ -65,7 +65,7 @@ export const TASKS = [
   task('sideRest', 'cell', 'bed', '回牢房休息，等到巡视日', 'sideSearch', ['你记住老布的话，等待第二天的机会。']),
   task('sideSearch', 'office', 'desk', '翻找办公室的转运记录', 'sideHide', ['记录中的姓名对不上监狱名册。门外响起了脚步声，快躲到窗帘后。']),
   task('sideHide', 'office', 'curtain', '躲过办公室巡查', 'sideRecover', ['你等到典狱长和狱警离开。再把书桌翻一遍。']),
-  task('sideRecover', 'office', 'desk', '找回石锤，带走转运记录', 'sideYears', ['文件夹底下，是被没收的石锤和伪造的名单。你终于重新握住了自己的计划。'], { grant: ['hammer', 'ledger'] }),
+  task('sideRecover', 'office', 'desk', '找回石锤，带走转运记录', 'askPoster', ['文件夹底下，是被没收的石锤和伪造的名单。先找瑞德要一张海报，再准备墙后的通道。'], { grant: ['hammer', 'ledger'] }),
   task('sideYears', 'cell', 'bed', '继续准备，等待最后一夜', 'redAfterYears', ['你把证据收好。多年准备，终于走到了最后一夜。']),
   task('oneOak', 'oak', 'oak', '瑞德：寻找石墙尽头的橡树', 'oneBox', ['就是这棵树。树根旁有一块深色石头。']),
   task('oneBox', 'oak', 'box', '打开铁盒，读安迪留下的信', 'oneBus', ['瑞德：', '如果你找到了这封信，说明你已经走出了高墙。沿着海岸向南走，我会在海边的小镇等你。', '这里有一条旧船，足够我们慢慢修好。希望有一天，你能亲眼看看那片海。', '你的朋友，安迪'], { challenge: 'oak', grant: ['letter'] }),
@@ -95,4 +95,9 @@ export const EVIDENCE = {
   tommy: ['yard', '汤米', '失踪者转移证言', ['汤米：转移档案没有接收方盖章。那晚被带走的人，再也没有回来。']],
   haywood: ['yard', '海伍德', '夜车车牌与日期', ['海伍德：夜车尾牌是417。六月十二日、七月三日、七月十九日，我都见过它。']],
   floyd: ['yard', '弗洛伊德', '铜质转送牌', ['弗洛伊德：这块牌刻着D-17和后门的夜间时刻。拿走，别让人发现。']]
+};
+
+export const OBSERVATIONS = {
+  nightTruck: { target: 'guard', label: '旁听夜车与点名的消息', lines: ['狱警：夜车开走后，点名的人数又少了几个。名单上写着转移，可没人见过接收的回执。'], journal: '夜车驶离后点名人数减少，转移记录缺少接收回执。' },
+  dates: { target: 'gate', label: '核对门口的车辆日期', lines: ['门口的出入记录显示，几次夜车出发的日期与账目结算日期相近。'], journal: '门口车辆的夜间出入日期与账目结算日期相近。' },
 };

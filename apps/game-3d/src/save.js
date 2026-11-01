@@ -1,4 +1,5 @@
 import { restoreGame } from './story.js';
+import { pendingInterlude } from './story-interludes.js';
 
 export const GAME_KEY = 'beyond-walls-3d-story-v1';
 export const PREVIEW_KEY = 'beyond-walls-3d-scenes-v1';
@@ -14,11 +15,13 @@ export function loadGame(storage) {
   if (!record) return null;
   const game = restoreGame(record);
   const location = record.scene === game.scene ? record.location : null;
-  return { game, location: location && Number.isFinite(location.x) && Number.isFinite(location.z) ? location : null };
+  const result = { game, location: location && Number.isFinite(location.x) && Number.isFinite(location.z) ? location : null };
+  if (pendingInterlude(record.pendingStory, game)) result.pendingStory = record.pendingStory;
+  return result;
 }
 
-export function saveGame(storage, game, location) {
-  storage.setItem(GAME_KEY, JSON.stringify({ version: 2, events: game.events, scene: game.scene, practice: game.practice, location }));
+export function saveGame(storage, game, location, pendingStory = null) {
+  storage.setItem(GAME_KEY, JSON.stringify({ version: 2, events: game.events, scene: game.scene, practice: game.practice, location, pendingStory }));
 }
 
 export function backupGame(storage) {

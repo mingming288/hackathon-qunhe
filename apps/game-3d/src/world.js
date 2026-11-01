@@ -52,7 +52,9 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     if (anchor.userData.label) dimensions = [1, 1];
     if (dimensions) {
       const rotated = Math.abs(Math.sin(angle)) > .7;
-      world.colliders.push({ x, z, w: dimensions[rotated ? 1 : 0], d: dimensions[rotated ? 0 : 1], h: anchor.userData.targetHeight, camera: false, assetKey: kind });
+      const collider = { x, z, w: dimensions[rotated ? 1 : 0], d: dimensions[rotated ? 0 : 1], h: anchor.userData.targetHeight, camera: false, assetKey: kind };
+      world.colliders.push(collider);
+      if (Object.hasOwn(CHARACTER_NAMES, kind)) anchor.userData.collider = collider;
     }
     return anchor;
   }
