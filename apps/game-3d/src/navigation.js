@@ -1,5 +1,6 @@
 import { canStand } from './movement.js';
 import { YARD_ENTRANCES } from './yard-layout.js';
+import { SCENE_BY_ID } from './scenes.js';
 
 // 门、洞口和道路使用固定位置，正向/返回方向共用同一个入口标识。
 export const PORTALS = {
@@ -21,6 +22,11 @@ export const PORTALS = {
   medicalExterior: { evidence: [0, 14.6], operatingRoom: [0, -11.2] }
 };
 
+// 按两侧实际门洞对齐，供远景和过门落点共同使用。
+export function cellDoorTransform() {
+  return { x: 6.1 + (SCENE_BY_ID.get('cell').size[1] / 2 - .3), z: -PORTALS.cell.cellCorridor[0] };
+}
+
 // 院子与走廊的出口相对，跨越时对视角和人物朝向做相同的坐标变换。
 export function transitionOrientation(from, to, yaw, facing, entry = null) {
   if (from === 'pipeNetwork' && to === 'rain') return { yaw: Math.PI, facing: 0 };
@@ -41,6 +47,17 @@ export function transitionOrientation(from, to, yaw, facing, entry = null) {
 
 export function entryPosition(world, from, saved = null, previous = null) {
   const candidate = saved || (() => {
+    if (previous && ((from === 'cell' && world.config.id === 'cellCorridor') || (from === 'cellCorridor' && world.config.id === 'cell'))) {
+      const sourcePortal = PORTALS[from][world.config.id];
+      if (Math.hypot(previous.x - sourcePortal[0], previous.z - sourcePortal[1]) < 1.25) {
+        const transform = cellDoorTransform();
+        // 门洞两侧的镜头碰撞体略宽于行走边界，落点需留在碰撞体内侧。
+        const mapped = from === 'cell'
+          ? { x: Math.min(transform.x - previous.z, 5.3), z: previous.x + transform.z }
+          : { x: previous.z - transform.z, z: Math.min(transform.x - previous.x, 5.6) };
+        if (canStand(mapped.x, mapped.z, world.config.size, world.colliders)) return mapped;
+      }
+    }
     // 走廊和院子的远景共用半周旋转坐标；过门时沿用人物位置，避免跳到门内深处。
     if (previous && ((from === 'cellCorridor' && world.config.id === 'yard') || (from === 'yard' && world.config.id === 'cellCorridor'))) {
       const offset = PORTALS.cellCorridor.yard[1] + PORTALS.yard.cellCorridor[1];

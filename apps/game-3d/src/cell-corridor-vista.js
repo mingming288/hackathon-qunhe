@@ -1,15 +1,9 @@
 import * as THREE from 'three';
-import { PORTALS } from './navigation.js';
+import { cellDoorTransform } from './navigation.js';
 import { SCENE_BY_ID } from './scenes.js';
 import { addCorridorDetails } from './corridor-details.js';
 
-// 两处标记位于门洞内外，按实际门洞位置对齐，而非重合两个标记。
-export function cellDoorTransform() {
-  const cellDoorX = PORTALS.cell.cellCorridor[0];
-  const cellWallZ = SCENE_BY_ID.get('cell').size[1] / 2 - .3;
-  const corridorWallX = 6.1;
-  return { x: corridorWallX + cellWallZ, z: -cellDoorX };
-}
+export { cellDoorTransform } from './navigation.js';
 
 function asset(root, anchors, key, position, clipPlane) {
   const anchor = new THREE.Group(), placeholder = new THREE.Group(); anchor.add(placeholder);

@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { moveWithCollision } from './movement.js';
 
 // 这些房间墙边留有侧向空间，可安全调整镜头；管网等狭窄场景维持原避墙方式。
-const SIDE_CAMERA_ROOMS = new Set(['cell', 'library', 'office', 'solitary']);
+const SIDE_CAMERA_ROOMS = new Set(['cell', 'cellCorridor', 'library', 'office', 'solitary']);
 
 export class ThirdPersonController {
   constructor(camera, player, canvas) {

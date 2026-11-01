@@ -88,6 +88,19 @@ test('沿走廊行走时镜头不能越过两侧墙顶或门洞', () => {
   disposeWorld(world);
 });
 
+test('牢房入口的走廊落点不会把镜头挤进主角', () => {
+  const world = createWorld(SCENE_BY_ID.get('cellCorridor'));
+  const player = new THREE.Group(); player.position.set(5.3, 0, 0);
+  const camera = new THREE.PerspectiveCamera(); camera.position.set(12, 5, 0);
+  const controller = Object.assign(Object.create(ThirdPersonController.prototype), {
+    camera, player, yaw: Math.PI / 2, pitch: .55, distance: 7, motionYaw: null,
+    keys: new Set(), enabled: () => true,
+  });
+  controller.update(.016, world);
+  assert.ok(camera.position.distanceTo(player.position.clone().add(new THREE.Vector3(0, 1.45, 0))) >= 3);
+  disposeWorld(world);
+});
+
 test('从挖掘通道进入砸管处时，镜头不会越过入口门楣', async () => {
   const { entryPosition, transitionOrientation } = await import('../src/navigation.js');
   const world = createWorld(SCENE_BY_ID.get('pipe'));
