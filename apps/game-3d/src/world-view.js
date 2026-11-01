@@ -30,21 +30,25 @@ export class WorldView {
     Object.assign(sun.shadow.camera, { left: -30, right: 30, top: 30, bottom: -30 }); sun.shadow.normalBias = .035;
     this.scene.add(sun); this.setHero('andy');
     this.controls = new ThirdPersonController(this.camera, this.hero, canvas);
-    this.controls.enabled = () => enabled() && !this.environmentOnly;
+    this.controls.enabled = () => enabled() && !this.environmentOnly && !this.stage?.movementLocked;
     this.orbit = new OrbitControls(this.camera, canvas); this.orbit.enabled = false;
     this.orbit.enableDamping = true; this.orbit.minPolarAngle = .1; this.orbit.maxPolarAngle = Math.PI * .49;
     this.button.addEventListener('click', () => this.current?.run());
     window.addEventListener('keydown', event => {
       if (event.code === 'Space' && !event.repeat && enabled() && !event.target.closest('button, input')) {
-        event.preventDefault(); this.current?.run();
+        event.preventDefault();
+        if (!this.stage?.handleActionKey(true)) this.current?.run();
       }
     });
+    window.addEventListener('keyup', event => { if (event.code === 'Space') this.stage?.handleActionKey(false); });
+    window.addEventListener('blur', () => this.pause());
     window.addEventListener('resize', () => {
       this.camera.aspect = innerWidth / innerHeight; this.camera.updateProjectionMatrix();
       this.renderer.setSize(innerWidth, innerHeight);
     });
     canvas.addEventListener('webglcontextlost', event => { event.preventDefault(); notify('图形上下文中断，请重新载入页面。'); });
     this.last = performance.now(); this.elapsed = 0; this.savedAt = this.last;
+    document.addEventListener('visibilitychange', () => { this.last = null; this.pause(); });
     this.renderer.setAnimationLoop(now => this.tick(now));
   }
 
@@ -154,7 +158,7 @@ export class WorldView {
   }
 
   position() { return { x: this.hero.position.x, z: this.hero.position.z }; }
-  pause() { this.controls.keys.clear(); }
+  pause() { this.controls.keys.clear(); this.stage?.release(); }
   resetCamera(yaw = 0, preserveKeys = false) {
     this.controls.reset({ preserveKeys, preserveView: preserveKeys });
     this.controls.yaw = yaw;
@@ -178,7 +182,11 @@ export class WorldView {
   }
 
   tick(now) {
-    const dt = Math.min((now - this.last) / 1000, .05); this.last = now; this.elapsed += dt;
+    const frameTime = this.last === null ? 0 : Math.max(0, (now - this.last) / 1000);
+    this.last = now;
+    if (document.hidden) { this.last = null; return; }
+    // Preserve movement speed during slow frames; discard long stalls and background time.
+    const dt = frameTime <= .25 ? frameTime : 0; this.elapsed += dt;
     if (!this.world) return;
     this.orbit.enabled = this.environmentOnly && this.enabled();
     let speed = 0;
@@ -236,7 +244,7 @@ export class WorldView {
     for (const { label, object, height } of this.labels) {
       object.getWorldPosition(projected); projected.y += height;
       const distance = projected.distanceTo(this.camera.position); projected.project(this.camera);
-      label.hidden = projected.z < -1 || projected.z > 1 || Math.abs(projected.x) > 1.05 || Math.abs(projected.y) > 1.05 || distance > 30;
+      label.hidden = !object.visible || projected.z < -1 || projected.z > 1 || Math.abs(projected.x) > 1.05 || Math.abs(projected.y) > 1.05 || distance > 30;
       if (!label.hidden) label.style.transform = 'translate(-50%,-50%) translate(' + (projected.x + 1) * innerWidth / 2 + 'px,' + (1 - projected.y) * innerHeight / 2 + 'px)';
     }
     this.renderer.render(this.scene, this.camera);

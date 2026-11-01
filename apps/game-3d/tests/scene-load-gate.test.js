@@ -14,6 +14,10 @@ test('加载场景期间角色不移动，旧加载完成不能解除新场景�
   const player = new THREE.Group(); player.position.set(0, 0, 3);
   const controller = Object.assign(Object.create(ThirdPersonController.prototype), {
     camera: new THREE.PerspectiveCamera(), player, yaw: 0, pitch: .4, distance: 7,
+    followDistance: null, motionYaw: null,
+    up: new THREE.Vector3(0, 1, 0), direction: new THREE.Vector3(),
+    target: new THREE.Vector3(), offset: new THREE.Vector3(),
+    ray: new THREE.Ray(), hit: new THREE.Vector3(), bounds: new THREE.Box3(),
     keys: new Set(['KeyW']), enabled: () => !gate.active,
   });
   controller.update(.1, world);

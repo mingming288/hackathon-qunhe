@@ -57,13 +57,13 @@ export const DEDICATED_CHARACTERS = [
   { id: 'red', name: '瑞德', group: '核心人物', description: '主要对话人物与结局可操控人物；需要交谈、递物与工作动作。', note: '已接入骨骼模型，并配置待机与行走动画。' },
   { id: 'warden', name: '典狱长', group: '核心人物', description: '检查、办公室与调查结局中的重点人物。', note: '独立制作外观，统一基础骨骼规范。' },
   { id: 'brooks', name: '老布', group: '独立配角', description: '图书馆与情感叙事中的重要人物，突出年龄和体态差异。', note: '已接入骨骼模型，并配置待机与行走动画。' },
-  { id: 'tommy', name: '汤米', group: '独立配角', description: '关键证言人物，使用有辨识度的青年造型。', note: '已接入骨骼模型与共享待机动作。' }
+  { id: 'tommy', name: '汤米', group: '独立配角', description: '关键证言人物，使用有辨识度的青年造型。', note: '已接入骨骼模型，并配置待机与行走动画。' }
 ];
 
 export const CHARACTER_TEMPLATES = [
-  { id: 'prisoner-template', name: '通用囚犯', group: '通用模板', description: '用于海伍德、弗洛伊德与背景囚犯。', note: '共用基础身体与动作，通过发型、肤色、服装细节区分；姓名、对白与证据各自保留。' },
+  { id: 'prisoner-template', name: '通用囚犯', group: '通用模板', description: '用于海伍德、弗洛伊德与背景囚犯。', note: '已接入囚犯 5827 骨骼模型，配置待机与行走动画；海伍德与弗洛伊德共用外观，姓名、对白与证据各自保留。' },
   { id: 'uniform-template', name: '通用制服人员', group: '通用模板', description: '用于狱警、警员与押送人员。', note: '共用身体与动作，分别配置制服、帽子与装备。' },
-  { id: 'civilian-template', name: '通用市民', group: '通用模板', description: '用于超市经理、银行职员、顾客及部分结局人物。', note: '通过工作服、外套、年龄和发型形成不同身份。' }
+  { id: 'civilian-template', name: '通用市民', group: '通用模板', description: '用于超市经理、银行职员、顾客及部分结局人物。', note: '已接入棕衣布帽市民骨骼模型，配置待机与行走动画；超市经理与银行职员共用外观，保留各自的剧情身份。' }
 ];
 
 export function environmentDescription(scene) { return ENVIRONMENTS[scene.id]; }

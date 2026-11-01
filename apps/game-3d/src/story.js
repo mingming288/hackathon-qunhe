@@ -7,7 +7,7 @@ export const did = (game, action) => game.events.includes(action);
 // 刺绣移开后才展示保险柜；典狱长离开后不再出现在办公室。
 export function officeHiddenProps(game) {
   const hidden = did(game, 'openSafe') ? [] : ['safe'];
-  if (did(game, 'meetWarden') || did(game, 'riskInspection')) hidden.push('warden');
+  if (did(game, 'meetWarden') || did(game, 'riskInspection') || did(game, 'sideHide') || game.step === 'sideHide') hidden.push('warden');
   // 主线账本藏在柜中；备用路线的桌面记录在取走后消失。
   if (!did(game, 'riskInspection') || did(game, 'sideRecover')) hidden.push('ledger');
   return hidden;
@@ -104,7 +104,7 @@ export function travelRule(game, from, to) {
   if (from === 'livingRoom') return '先到电视前，开始这段故事。';
   if (['watchTv', 'arrival', 'wakeMedical'].includes(step)) return '先完成眼前的剧情。';
   if (to === 'dig') {
-    if (!did(game, 'hangPoster') && !alternate) return '还没有准备好海报后的入口。';
+    if (!did(game, 'hangPoster')) return '还没有准备好海报后的入口。';
     if (!['firstDig', 'finalDig', 'smashPipe'].includes(step)) return '先完成当前的准备，再进入通道。';
   }
   if (from === 'dig' && to === 'pipe' && !did(game, 'finalDig')) return '通道还没有贯通。';
@@ -149,6 +149,17 @@ export function restoreGame(record) {
   let game = initialState();
   for (const id of record.events) {
     if (typeof id !== 'string') throw new Error('任务事件格式不正确。');
+    // 旧备用路线直接跳到多年后；为旧记录补入当时已略过的准备事件。
+    if (game.step === 'askPoster' && did(game, 'sideRecover') && ['sideYears', 'redAfterYears'].includes(id)) {
+      for (const bridgeId of ['askPoster', 'hangPoster', 'firstDig', 'dumpSoil1', 'dumpSoil2', 'dumpSoil3', 'restYears']) {
+        const bridge = TASK_BY_ID.get(bridgeId);
+        game = applyAction(game, bridgeId, bridge.scene).game;
+      }
+    }
+    if (id === 'sideYears' && game.step === 'redAfterYears' && did(game, 'sideRecover') && !did(game, id)) {
+      game.events.push(id);
+      continue;
+    }
     // 旧版已借到锤子或离开牢房时，不强制重做新增的观察与交付。
     if (record.version === 1 && ['inspectWall', 'takeHammer'].includes(game.step) && id !== game.step) {
       const bridge = getTask(game); game = applyAction(game, bridge.id, bridge.scene).game;

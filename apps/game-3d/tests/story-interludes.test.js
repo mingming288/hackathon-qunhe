@@ -15,13 +15,14 @@ test('两条准备路线的时间跳跃有衔接，记录仍按原剧情恢复',
     let game = createGame();
     while (game.step !== 'sortBooks') { const t = getTask(game); game = advance(game, t.id, t.scene).game; }
     if (alternate) game = advance(game, 'riskInspection', 'yard').game;
-    let result;
+    let result, actionId;
     while (game.step !== 'drawMap') {
-      const t = getTask(game); result = advance(game, t.id, t.scene); game = result.game;
+      const t = getTask(game); actionId = t.id; result = advance(game, actionId, t.scene); game = result.game;
     }
-    const beat = storyInterlude(alternate ? 'sideRecover' : 'dumpSoil1', game, result.automatic);
+    const beat = storyInterlude(actionId, game, result.automatic);
     assert.match(beat.title, /二十年后/);
-    assert.match(beat.lines.join(''), alternate ? /找回石锤/ : /碎土/);
+    assert.match(beat.lines.join(''), /碎土/);
+    if (alternate) assert.ok(game.events.includes('sideRecover') && game.events.includes('hangPoster'));
     assert.deepEqual(restoreGame({ version: 2, events: game.events, scene: game.scene }), game);
   }
 });

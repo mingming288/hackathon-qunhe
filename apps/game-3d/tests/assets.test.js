@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { replaceAsset } from '../src/assets.js';
@@ -10,6 +11,25 @@ function anchor() {
   root.add(result); result.add(placeholder);
   result.userData = { placeholder, targetHeight: 2 };
   return result;
+}
+
+async function animationModel(filename) {
+  const source = readFileSync(new URL('../public/assets/models/' + filename, import.meta.url));
+  const originalLength = source.readUInt32LE(12);
+  const json = JSON.parse(source.subarray(20, 20 + originalLength));
+  // Keep the real rig and clips, without requiring browser texture APIs in Node.
+  for (const node of json.nodes) { delete node.mesh; delete node.skin; }
+  json.meshes = []; json.materials = []; json.textures = []; json.images = [];
+  const text = Buffer.from(JSON.stringify(json));
+  const jsonLength = Math.ceil(text.length / 4) * 4;
+  const binary = source.subarray(20 + originalLength);
+  const glb = Buffer.alloc(20 + jsonLength + binary.length, 0x20);
+  glb.writeUInt32LE(0x46546c67, 0); glb.writeUInt32LE(2, 4); glb.writeUInt32LE(glb.length, 8);
+  glb.writeUInt32LE(jsonLength, 12); glb.writeUInt32LE(0x4e4f534a, 16);
+  text.copy(glb, 20); binary.copy(glb, 20 + jsonLength);
+  const model = await new GLTFLoader().parseAsync(glb.buffer, '');
+  model.scene.add(new THREE.Mesh(new THREE.BoxGeometry(1, 2, 1)));
+  return model;
 }
 
 test('正式模型及缓存副本参与阴影，落地缩放不改变缓存源模型', async context => {
@@ -176,4 +196,80 @@ test('共享待机动作加载失败时保留人物模型，并在重新进入�
   assert.ok(await replaceAsset(target, entry));
   assert.equal(attempts, 2);
   assert.equal(target.children.length, 2);
+});
+
+test('actual Andy walk stays in place across four loops while the controller moves forward', async context => {
+  const idle = await animationModel('andy-idle.glb');
+  const walking = await animationModel('andy-walk.glb');
+  const originals = [idle, walking].flatMap(gltf => gltf.animations.flatMap(clip => clip.tracks.map(track => track.values.slice())));
+  context.mock.method(GLTFLoader.prototype, 'loadAsync', async url => url.endsWith('walk.glb') ? walking : idle);
+  const target = anchor();
+  const mixer = await replaceAsset(target, {
+    url: '/assets/models/rebound-idle.glb', walkUrl: '/assets/models/rebound-walk.glb', height: 2,
+  });
+  const hips = target.children[1].getObjectByName('mixamorigHips');
+  const bindPosition = idle.scene.getObjectByName('mixamorigHips').position;
+  mixer.update(.25);
+  let previous = hips.getWorldPosition(new THREE.Vector3()).z;
+  let minimumStep = Infinity;
+  mixer.setMoving(true);
+  for (let frame = 0; frame < 330; frame++) {
+    target.position.z += 3.3 / 60;
+    mixer.update(1 / 60);
+    const current = hips.getWorldPosition(new THREE.Vector3()).z;
+    minimumStep = Math.min(minimumStep, current - previous);
+    previous = current;
+  }
+  assert.ok(minimumStep > 0, 'walking must never snap backward at a loop boundary; minimum step: ' + minimumStep);
+  assert.ok(Math.abs(hips.position.x - bindPosition.x) < 1e-6);
+  assert.ok(Math.abs(hips.position.z - bindPosition.z) < 1e-6);
+  const remaining = [idle, walking].flatMap(gltf => gltf.animations.flatMap(clip => clip.tracks.map(track => track.values)));
+  remaining.forEach((values, index) => assert.deepEqual(values, originals[index], 'cached source clips must stay unchanged'));
+});
+
+test('idle and walk share a root baseline while vertical motion and other tracks remain animated', async context => {
+  const scene = new THREE.Group(), armature = new THREE.Group(), hips = new THREE.Bone(), foot = new THREE.Bone();
+  hips.name = 'Hips'; foot.name = 'Foot'; hips.position.set(.125, 1, -.25);
+  scene.add(armature); armature.add(hips); hips.add(foot);
+  const prop = new THREE.Mesh(new THREE.BoxGeometry(1, 2, 1)); prop.name = 'Prop'; scene.add(prop);
+  const idle = new THREE.AnimationClip('idle', 1, [
+    new THREE.VectorKeyframeTrack('Hips.position', [0, 1], [0, 1, 0, .2, 1.1, .3]),
+  ]);
+  const walking = new THREE.AnimationClip('walk', 1, [
+    new THREE.VectorKeyframeTrack('Hips.position', [0, .5, 1], [0, 1, 0, .5, 1.2, 1, 1, 1, 2]),
+    new THREE.VectorKeyframeTrack('Foot.position', [0, 1], [0, -1, 0, .3, -.8, .5]),
+    new THREE.QuaternionKeyframeTrack('Foot.quaternion', [0, 1], [0, 0, 0, 1, 0, Math.SQRT1_2, 0, Math.SQRT1_2]),
+    new THREE.VectorKeyframeTrack('Prop.position', [0, 1], [0, 0, 0, 1, 2, 3]),
+  ]);
+  context.mock.method(GLTFLoader.prototype, 'loadAsync', async () => ({ scene, animations: [idle, walking] }));
+  const target = anchor();
+  const mixer = await replaceAsset(target, { url: '/assets/models/in-place-combined.glb', walkAnimation: 1 });
+  const model = target.children[1], root = model.getObjectByName('Hips');
+  const baseline = () => {
+    assert.ok(Math.abs(root.position.x - hips.position.x) < 1e-6, 'idle and walk must use the bind X');
+    assert.ok(Math.abs(root.position.z - hips.position.z) < 1e-6, 'idle and walk must use the bind Z');
+  };
+  mixer.update(.3); baseline();
+  assert.ok(Math.abs(root.position.y - idle.tracks[0].createInterpolant().evaluate(.3)[1]) < 1e-6);
+  mixer.setMoving(true);
+  for (let frame = 0; frame < 18; frame++) { mixer.update(1 / 60); baseline(); }
+  for (const track of walking.tracks) {
+    const binding = THREE.PropertyBinding.parseTrackName(track.name);
+    const animated = model.getObjectByName(binding.nodeName)[binding.propertyName].toArray();
+    const expected = track.createInterpolant().evaluate(.3);
+    for (let index = 0; index < expected.length; index++) {
+      if (binding.nodeName === 'Hips' && index !== 1) continue;
+      assert.ok(Math.abs(animated[index] - expected[index]) < 1e-6, track.name + ' must retain its animation');
+    }
+  }
+  mixer.setMoving(false);
+  for (let frame = 0; frame < 18; frame++) { mixer.update(1 / 60); baseline(); }
+
+  const ordinary = anchor();
+  const ordinaryMixer = await replaceAsset(ordinary, { url: '/assets/models/ordinary-animation.glb' });
+  ordinaryMixer.update(.3);
+  const expected = idle.tracks[0].createInterpolant().evaluate(.3);
+  ordinary.children[1].getObjectByName('Hips').position.toArray().forEach((value, index) => {
+    assert.ok(Math.abs(value - expected[index]) < 1e-6, 'non-locomotion assets must retain their root translation');
+  });
 });
