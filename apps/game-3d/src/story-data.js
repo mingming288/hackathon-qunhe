@@ -68,7 +68,7 @@ export const TASKS = [
   task('sideRecover', 'office', 'desk', '找回石锤，带走转运记录', 'sideYears', ['文件夹底下，是被没收的石锤和伪造的名单。你终于重新握住了自己的计划。'], { grant: ['hammer', 'ledger'] }),
   task('sideYears', 'cell', 'bed', '继续准备，等待最后一夜', 'redAfterYears', ['你把证据收好。多年准备，终于走到了最后一夜。']),
   task('oneOak', 'oak', 'oak', '瑞德：寻找石墙尽头的橡树', 'oneBox', ['就是这棵树。树根旁有一块深色石头。']),
-  task('oneBox', 'oak', 'box', '打开铁盒，读安迪留下的信', 'oneBus', ['铁盒里有安迪留下的指引。你决定去赴这个约。'], { challenge: 'oak', grant: ['letter'] }),
+  task('oneBox', 'oak', 'box', '打开铁盒，读安迪留下的信', 'oneBus', ['瑞德：', '如果你找到了这封信，说明你已经走出了高墙。沿着海岸向南走，我会在海边的小镇等你。', '这里有一条旧船，足够我们慢慢修好。希望有一天，你能亲眼看看那片海。', '你的朋友，安迪'], { challenge: 'oak', grant: ['letter'] }),
   task('oneBus', 'road', 'bus', '踏上前往海岸的旅程', 'oneMeet', ['小镇和树影从车窗外退去。前方是那片约定中的海。'], { challenge: 'route', autoScene: 'beach' }),
   task('oneMeet', 'beach', 'andy', '走向安迪，与老友重逢', null, ['在海边，安迪等到了瑞德。你们终于可以把未来交还给自己。'], { finish: '相逢的海滩' }),
   task('twoCompare', 'evidence', 'evidenceBoard', '核对名单、证言和转运记录', 'twoMail', ['编号、日期和车辆记录彼此印证。消失的人并没有被正常转移。']),

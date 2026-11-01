@@ -202,7 +202,9 @@ async function start() {
     setPractice: (practice, redraw, save) => { game = { ...game, practice }; if (redraw) refresh(); if (save) saveCurrent(); },
     complete: id => {
       const action = getActions(game, sceneId).find(item => item.id === id);
-      if (action) completeAction(action);
+      if (action?.id === 'oneBox') {
+        dialogue.open('安迪的信', action.lines, [{ label: '收好信，前往海岸', run: () => completeAction(action) }]);
+      } else if (action) completeAction(action);
     }
   });
   try { catalog = await readModelCatalog(); } catch (error) { notify(error.message); }
