@@ -1,6 +1,8 @@
 import { OriginalGameHost } from "./original-games/host.js";
 import { ORIGINAL_GAMES, completionTasks } from "./original-games/registry.js";
 import { EarlyWorld } from "./early-world.js";
+import { createTimingRules } from "virtual:original-rules";
+import { sanitizeBlueprint } from "./practice-state.js";
 
 export class EarlyPlay {
   constructor({ view, getGame, setPractice, complete, notify, enabled }) {
@@ -19,7 +21,8 @@ export class EarlyPlay {
       onProgress: (id, state) => {
         if (id === 'smashPipe') view.stage?.setPipeDamage(state.failed ? 0 : state.smashSuccessCount);
       },
-      finish: (id) => {
+      finish: (id, detail) => {
+        if (id === 'drawMap') this.change('blueprint', sanitizeBlueprint(detail));
         // 超市原版包含收集、排序、三位顾客与请示，全部完成后再写入对应剧情事件。
         for (const task of completionTasks(id))
           if (getGame()?.step === task) complete(task);
@@ -34,6 +37,7 @@ export class EarlyPlay {
       this.getGame()?.practice.inspection.phase,
     );
   }
+  get nativeActive() { return Boolean(this.view.stage?.active); }
   attach() {
     this.view.setStage(
       new EarlyWorld(this.view, {
@@ -42,6 +46,7 @@ export class EarlyPlay {
         finish: this.complete,
         notify: this.notify,
         enabled: this.enabled,
+        createTimingRules,
       }),
     );
   }
@@ -54,6 +59,7 @@ export class EarlyPlay {
     if (refresh) this.view.canvas.focus();
   }
   perform(action) {
+    if (this.view.stage?.start(action)) return true;
     if (this.inspectionActive) {
       this.notify("检查正在进行，请先站回床边，等狱警离开。");
       return true;

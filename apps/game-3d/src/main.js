@@ -111,6 +111,7 @@ function completeAction(action) {
 function travel(target) {
   if (mode === 'explore') { saveCurrent(); renderScene(target, { from: sceneId }); return; }
   if (earlyPlay.inspectionActive) { notify('检查还没结束，请先站回床边等待。'); return; }
+  if (earlyPlay.nativeActive) { notify('请先完成躲藏，或停止当前劳作后再离开。'); return; }
   const from = game.scene;
   try {
     const next = enterScene(game, target);
@@ -252,6 +253,7 @@ async function start() {
   });
   menu.addEventListener('cancel', event => { event.preventDefault(); if (game) resume(); });
   window.addEventListener('keydown', event => {
+    if (earlyPlay.busy) return;
     if (event.code === 'Tab' && !atlas.open && !dialogue.dialog.open && !menu.open) { event.preventDefault(); openAtlas(); }
     if (event.code === 'Escape' && !atlas.open && !dialogue.dialog.open && !menu.open) openMenu();
   });

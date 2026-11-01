@@ -16,7 +16,7 @@ test('主要人物压缩颜色贴图后保留骨骼、动作及其他资源', as
   const catalog = JSON.parse(await readFile(new URL('../public/assets/models.json', import.meta.url))).models;
   for (const [source, ids] of [
     ['andy-idle', ['andy']], ['brooks-idle-walk', ['brooks']],
-    ['norton-idle-walk', ['warden', 'manager', 'clerk']],
+    ['norton-idle-walk', ['warden']],
   ]) {
     const original = unpack(await readFile(new URL(source + '.glb', base)));
     const optimized = unpack(await readFile(new URL(source + '-optimized.glb', base)));

@@ -8,6 +8,10 @@ export class ThirdPersonController {
   constructor(camera, player, canvas) {
     this.camera = camera; this.player = player; this.keys = new Set();
     this.yaw = 0; this.pitch = .55; this.distance = 7; this.drag = null; this.motionYaw = null;
+    this.followDistance = null;
+    this.up = new THREE.Vector3(0, 1, 0); this.direction = new THREE.Vector3();
+    this.target = new THREE.Vector3(); this.offset = new THREE.Vector3();
+    this.ray = new THREE.Ray(); this.hit = new THREE.Vector3(); this.bounds = new THREE.Box3();
     this.enabled = () => true;
     window.addEventListener('keydown', event => {
       if (!this.enabled() || event.target.closest('button, input, select')) return;
@@ -51,38 +55,40 @@ export class ThirdPersonController {
     this.yaw = 0; this.drag = null; this.motionYaw = null;
     if (!preserveView) { this.pitch = .55; this.distance = 7; }
     if (!preserveKeys) this.keys.clear();
+    this.followDistance = null;
+  }
+
+  obstacleDistance(colliders, distance) {
+    for (const collider of colliders || []) {
+      if (!collider.camera) continue;
+      this.bounds.min.set(collider.x - collider.w / 2 - .2, 0, collider.z - collider.d / 2 - .2);
+      this.bounds.max.set(collider.x + collider.w / 2 + .2, collider.h + .15, collider.z + collider.d / 2 + .2);
+      if (this.ray.intersectBox(this.bounds, this.hit)) {
+        distance = Math.min(distance, Math.max(.25, this.hit.distanceTo(this.target) - .2));
+      }
+    }
+    return distance;
   }
 
   update(dt, world) {
-    const has = (...keys) => keys.some(key => this.keys.has(key));
-    const x = Number(has('KeyD', 'ArrowRight')) - Number(has('KeyA', 'ArrowLeft'));
-    const z = Number(has('KeyS', 'ArrowDown')) - Number(has('KeyW', 'ArrowUp'));
+    const x = Number(this.keys.has('KeyD') || this.keys.has('ArrowRight')) - Number(this.keys.has('KeyA') || this.keys.has('ArrowLeft'));
+    const z = Number(this.keys.has('KeyS') || this.keys.has('ArrowDown')) - Number(this.keys.has('KeyW') || this.keys.has('ArrowUp'));
     const moving = this.enabled() && (x || z);
     if (!moving) this.motionYaw = null;
-    const before = this.player.position.clone();
+    const beforeX = this.player.position.x, beforeZ = this.player.position.z;
     if (moving) {
-      const direction = new THREE.Vector3(x, 0, z).normalize().applyAxisAngle(new THREE.Vector3(0, 1, 0), this.motionYaw ?? this.yaw);
-      const speed = has('ShiftLeft', 'ShiftRight') ? 5.2 : 3.3;
+      const direction = this.direction.set(x, 0, z).normalize().applyAxisAngle(this.up, this.motionYaw ?? this.yaw);
+      const speed = this.keys.has('ShiftLeft') || this.keys.has('ShiftRight') ? 5.2 : 3.3;
       moveWithCollision(this.player.position, direction.x * speed * dt, direction.z * speed * dt, world.config.size, world.colliders);
       const desired = Math.atan2(direction.x, direction.z);
       const angle = Math.atan2(Math.sin(desired - this.player.rotation.y), Math.cos(desired - this.player.rotation.y));
       this.player.rotation.y += angle * Math.min(1, dt * 13);
     }
-    const target = this.player.position.clone().add(new THREE.Vector3(0, 1.45, 0));
-    const boundsList = [];
-    for (const collider of [...world.colliders, ...(world.cameraColliders || [])]) {
-      if (!collider.camera) continue;
-      boundsList.push(new THREE.Box3(
-        new THREE.Vector3(collider.x - collider.w / 2 - .2, 0, collider.z - collider.d / 2 - .2),
-        new THREE.Vector3(collider.x + collider.w / 2 + .2, collider.h + .15, collider.z + collider.d / 2 + .2)
-      ));
-    }
-    const hit = new THREE.Vector3();
+    const target = this.target.copy(this.player.position); target.y += 1.45;
     const distanceAt = yaw => {
-      const offset = new THREE.Vector3(Math.sin(yaw) * Math.cos(this.pitch), Math.sin(this.pitch), Math.cos(yaw) * Math.cos(this.pitch));
-      const ray = new THREE.Ray(target, offset); let distance = this.distance;
-      for (const bounds of boundsList) if (ray.intersectBox(bounds, hit)) distance = Math.min(distance, Math.max(.25, hit.distanceTo(target) - .2));
-      return distance;
+      const offset = this.offset.set(Math.sin(yaw) * Math.cos(this.pitch), Math.sin(this.pitch), Math.cos(yaw) * Math.cos(this.pitch));
+      this.ray.set(target, offset);
+      return this.obstacleDistance(world.cameraColliders, this.obstacleDistance(world.colliders, this.distance));
     };
     let distance = distanceAt(this.yaw), rerouted = false;
     // 镜头被挤进人物时转向可用的一侧；正在按住的方向保持到松键。
@@ -95,11 +101,11 @@ export class ThirdPersonController {
         }
       }
     }
-    const offset = new THREE.Vector3(Math.sin(this.yaw) * Math.cos(this.pitch), Math.sin(this.pitch), Math.cos(this.yaw) * Math.cos(this.pitch));
-    const desiredPosition = target.clone().addScaledVector(offset, distance);
-    // 避墙时立即收近，离开遮挡后平滑拉远；保持角色外部的第三人称位置。
-    const alpha = rerouted || this.camera.position.distanceTo(target) > distance ? 1 : 1 - Math.exp(-dt * 9);
-    this.camera.position.lerp(desiredPosition, alpha); this.camera.lookAt(target);
-    return before.distanceTo(this.player.position) / Math.max(dt, .001);
+    const offset = this.offset.set(Math.sin(this.yaw) * Math.cos(this.pitch), Math.sin(this.pitch), Math.cos(this.yaw) * Math.cos(this.pitch));
+    // Follow translation immediately; only smooth the distance when leaving an obstruction.
+    this.followDistance = rerouted || this.followDistance === null || this.followDistance > distance
+      ? distance : THREE.MathUtils.lerp(this.followDistance, distance, 1 - Math.exp(-dt * 9));
+    this.camera.position.copy(target).addScaledVector(offset, this.followDistance); this.camera.lookAt(target);
+    return Math.hypot(this.player.position.x - beforeX, this.player.position.z - beforeZ) / Math.max(dt, .001);
   }
 }

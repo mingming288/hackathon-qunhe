@@ -17,6 +17,22 @@ export async function preloadModel(entry) {
   await Promise.all(urls.map(url => { validateModelEntry({ url }); return loadModel(url); }));
 }
 
+function inPlaceClip(source, model) {
+  const clip = source.clone();
+  for (const track of clip.tracks) {
+    const binding = THREE.PropertyBinding.parseTrackName(track.name);
+    if (binding.propertyName !== 'position' || track.getValueSize() !== 3) continue;
+    const bone = THREE.PropertyBinding.findNode(model, binding.nodeName);
+    if (!bone?.isBone || bone.parent?.isBone) continue;
+    // The controller owns horizontal travel; keep vertical bob and the cached clip intact.
+    for (let index = 0; index < track.values.length; index += 3) {
+      track.values[index] = bone.position.x;
+      track.values[index + 2] = bone.position.z;
+    }
+  }
+  return clip;
+}
+
 export function validateModelEntry(entry) {
   if (!entry || typeof entry.url !== 'string' || !entry.url.startsWith('/assets/models/')) {
     throw new Error('模型地址必须位于当前应用的 /assets/models/ 目录。');
@@ -79,6 +95,7 @@ export async function replaceAsset(anchor, entry, isCurrent = () => true) {
   anchor.userData.placeholder.visible = false;
   anchor.add(model);
   anchor.userData.replaced = true;
+  const hasWalk = entry.walkUrl || Number.isInteger(entry.walkAnimation);
   let mixer = null, idleClip = null, pending;
   anchor.userData.loadAnimation = () => {
     if (pending) return pending;
@@ -90,7 +107,8 @@ export async function replaceAsset(anchor, entry, isCurrent = () => true) {
           idleGltf = await loadModel(entry.idleUrl);
           if (!idleGltf.animations.length) throw new Error('人物待机动作不存在。');
         }
-        idleClip = idleGltf.animations[0]?.clone();
+        const source = idleGltf.animations[0];
+        idleClip = source ? (hasWalk ? inPlaceClip(source, model) : source.clone()) : null;
         // 外部骨架比例可能不同，保留目标人物的位置，只复用关节旋转。
         if (entry.idleUrl && idleClip) idleClip.tracks = idleClip.tracks.filter(track => track.name.endsWith('.quaternion'));
         if (idleClip) {
@@ -99,7 +117,7 @@ export async function replaceAsset(anchor, entry, isCurrent = () => true) {
           mixer.clipAction(idleClip).play();
         }
       }
-      if (mixer && !mixer.setMoving && (entry.walkUrl || Number.isInteger(entry.walkAnimation))) {
+      if (mixer && !mixer.setMoving && hasWalk) {
         let walking = gltf;
         if (entry.walkUrl) {
           validateModelEntry({ url: entry.walkUrl });
@@ -108,7 +126,7 @@ export async function replaceAsset(anchor, entry, isCurrent = () => true) {
         const idle = mixer.clipAction(idleClip);
         const clip = walking.animations[entry.walkAnimation ?? 0];
         if (!clip) throw new Error('人物行走动作不存在。');
-        const walk = mixer.clipAction(clip);
+        const walk = mixer.clipAction(inPlaceClip(clip, model));
         let moving = false;
         mixer.setMoving = value => {
           if (moving === value) return;
