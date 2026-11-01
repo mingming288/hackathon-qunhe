@@ -39,8 +39,14 @@ export function transitionOrientation(from, to, yaw, facing, entry = null) {
   return { yaw: 0, facing: Math.PI };
 }
 
-export function entryPosition(world, from, saved = null) {
+export function entryPosition(world, from, saved = null, previous = null) {
   const candidate = saved || (() => {
+    // 走廊和院子的远景共用半周旋转坐标；过门时沿用人物位置，避免跳到门内深处。
+    if (previous && ((from === 'cellCorridor' && world.config.id === 'yard') || (from === 'yard' && world.config.id === 'cellCorridor'))) {
+      const offset = PORTALS.cellCorridor.yard[1] + PORTALS.yard.cellCorridor[1];
+      const mapped = { x: -previous.x, z: offset - previous.z };
+      if (Number.isFinite(mapped.x) && Number.isFinite(mapped.z) && canStand(mapped.x, mapped.z, world.config.size, world.colliders)) return mapped;
+    }
     if (world.config.id === 'rain' && from === 'pipeNetwork') return { x: 0, z: -12.4 };
     if (world.config.id === 'evidence' && from === 'medicalExterior') return { x: 0, z: 3 };
     const portal = world.portals.find(item => item.id === from);

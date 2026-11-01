@@ -77,6 +77,7 @@ export class WorldView {
 
   show(config, { from = null, location = null, character = 'andy', catalog = {}, environmentOnly = false, seamless = false } = {}) {
     const previousYaw = this.controls.yaw, previousFacing = this.hero.rotation.y;
+    const previousPosition = seamless ? this.position() : null;
     this.setStage(null);
     if (this.world) disposeWorld(this.world);
     this.environmentOnly = environmentOnly;
@@ -86,7 +87,7 @@ export class WorldView {
     this.world = createWorld(config, { includeCharacters: !environmentOnly, includeHelpers: !environmentOnly });
     this.baseColliders = [...this.world.colliders]; this.scene.add(this.world.root);
     this.scene.background = new THREE.Color(this.world.background); this.scene.fog = new THREE.Fog(this.world.fog, 35, 95);
-    const position = entryPosition(this.world, from, location);
+    const position = entryPosition(this.world, from, location, previousPosition);
     const portal = this.world.portals.find(item => item.id === from)?.object.position;
     const orientation = environmentOnly ? { yaw: 0, facing: Math.PI }
       : transitionOrientation(from, config.id, previousYaw, previousFacing, { portal, position });

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import { createWorld, disposeWorld } from '../src/world.js';
 import { SCENE_BY_ID } from '../src/scenes.js';
-import { PORTALS, transitionOrientation } from '../src/navigation.js';
+import { PORTALS, entryPosition, transitionOrientation } from '../src/navigation.js';
 import { corridorYardTransform } from '../src/corridor-yard-vista.js';
 
 test('走廊与院子的入口在远景坐标中对齐，视野不被补景墙遮挡', () => {
@@ -64,4 +64,17 @@ test('院子与走廊往返时视角和人物方向使用同一坐标变换', ()
   assert.ok(Math.abs(Math.sin(back.yaw - .42)) < 1e-9);
   assert.ok(Math.abs(Math.sin(back.facing - 1.2)) < 1e-9);
   assert.deepEqual(transitionOrientation('cell', 'cellCorridor', .42, 1.2), { yaw: .42 - Math.PI / 2, facing: 1.2 - Math.PI / 2 });
+});
+
+test('走廊和院子过门时人物落点与两侧远景坐标一致，非法位置回退到安全入口', () => {
+  const corridor = createWorld(SCENE_BY_ID.get('cellCorridor'));
+  const yard = createWorld(SCENE_BY_ID.get('yard'));
+  const forward = { x: .4, z: 11.55 };
+  const arrival = entryPosition(yard, 'cellCorridor', null, forward);
+  assert.ok(Math.abs(arrival.x + .4) < 1e-9 && Math.abs(arrival.z - 17.95) < 1e-9);
+  const returning = { x: -.4, z: 15.65 };
+  const back = entryPosition(corridor, 'yard', null, returning);
+  assert.ok(Math.abs(back.x - .4) < 1e-9 && Math.abs(back.z - 13.85) < 1e-9);
+  assert.deepEqual(entryPosition(yard, 'cellCorridor', null, { x: 100, z: 0 }), entryPosition(yard, 'cellCorridor'));
+  disposeWorld(corridor); disposeWorld(yard);
 });
