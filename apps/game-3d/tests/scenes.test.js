@@ -37,6 +37,21 @@ test('监区走廊两侧门洞可接近，门洞之间的墙垛阻挡通行', ()
   disposeWorld(world);
 });
 
+test('图书馆、办公室和禁闭室的前墙阻挡建筑背面，同时保留入口触发范围', () => {
+  for (const [id, outside, approach] of [
+    ['library', [4, 9.7], [0, 7.9]],
+    ['office', [4, 8.9], [0, 7]],
+    ['solitary', [0, 4.5], [-2.7, 3.7]],
+  ]) {
+    const world = createWorld(SCENE_BY_ID.get(id));
+    const portal = world.portals.find(item => item.id === (id === 'solitary' ? 'cellCorridor' : 'yard'));
+    assert.equal(canStand(...outside, world.config.size, world.colliders), false, id);
+    assert.ok(canStand(...approach, world.config.size, world.colliders), id);
+    assert.ok(Math.hypot(approach[0] - portal.object.position.x, approach[1] - portal.object.position.z) < 1.2, id);
+    disposeWorld(world);
+  }
+});
+
 test('全部十九组场景可以构造，出生点安全，出入口可通过行走抵达', () => {
   assert.equal(SCENES.length, 19); assert.equal(SCENE_BY_ID.size, 19);
   for (const config of SCENES) {

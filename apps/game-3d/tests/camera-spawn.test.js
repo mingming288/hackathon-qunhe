@@ -57,6 +57,21 @@ test('牢房墙边镜头转向可用空间，按住的移动方向不会突然�
   disposeWorld(world);
 });
 
+test('图书馆、办公室和禁闭室入口墙边的镜头保持人物可见', () => {
+  for (const [id, z] of [['library', 9.1], ['office', 8.35], ['solitary', 3.95]]) {
+    const world = createWorld(SCENE_BY_ID.get(id)), player = new THREE.Group();
+    player.position.set(0, 0, z);
+    assert.ok(canStand(0, z, world.config.size, world.colliders), id);
+    const camera = new THREE.PerspectiveCamera(); camera.position.set(0, 5, z + 6);
+    const controller = Object.assign(Object.create(ThirdPersonController.prototype), {
+      camera, player, yaw: 0, pitch: .55, distance: 7, motionYaw: null, keys: new Set(), enabled: () => true,
+    });
+    controller.update(.016, world);
+    assert.ok(camera.position.distanceTo(player.position.clone().add(new THREE.Vector3(0, 1.45, 0))) >= 3, id);
+    disposeWorld(world);
+  }
+});
+
 test('沿走廊行走时镜头不能越过两侧墙顶或门洞', () => {
   const world = createWorld(SCENE_BY_ID.get('cellCorridor'));
   for (const yaw of [-Math.PI / 2, Math.PI / 2]) for (const z of [0, 5.6, 11.2]) {

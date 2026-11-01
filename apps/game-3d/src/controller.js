@@ -1,6 +1,9 @@
 import * as THREE from 'three';
 import { moveWithCollision } from './movement.js';
 
+// 这些房间墙边留有侧向空间，可安全调整镜头；管网等狭窄场景维持原避墙方式。
+const SIDE_CAMERA_ROOMS = new Set(['cell', 'library', 'office', 'solitary']);
+
 export class ThirdPersonController {
   constructor(camera, player, canvas) {
     this.camera = camera; this.player = player; this.keys = new Set();
@@ -83,8 +86,8 @@ export class ThirdPersonController {
     };
     let distance = distanceAt(this.yaw), rerouted = false;
     // 镜头被挤进人物时转向可用的一侧；正在按住的方向保持到松键。
-    if (world.config.id === 'cell' && distance < 2) {
-      for (const angle of [Math.PI / 4, -Math.PI / 4, Math.PI / 2, -Math.PI / 2, 3 * Math.PI / 4, -3 * Math.PI / 4, Math.PI]) {
+    if (SIDE_CAMERA_ROOMS.has(world.config.id) && distance < 2) {
+      for (const angle of [Math.PI / 4, -Math.PI / 4, 3 * Math.PI / 4, -3 * Math.PI / 4, Math.PI / 2, -Math.PI / 2, Math.PI]) {
         const candidate = this.yaw + angle, available = distanceAt(candidate);
         if (available >= 3) {
           if (moving && this.motionYaw == null) this.motionYaw = this.yaw;

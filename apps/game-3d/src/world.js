@@ -113,10 +113,13 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     obstacle(8.4, 4, .6, 0, -4.3);
     obstacle(.6, 4, 9, -3.45, 0);
     obstacle(.6, 4, 9, 3.95, 0);
+    // 门口在墙内侧即可触发；限制人物走出实际建筑背面。
+    world.colliders.push({ x: .25, z: 4.6, w: 7.4, d: .4, h: 4, camera: true });
   } else if (config.id === 'library') {
     obstacle(21.6, 4, .5, 0, -10);
     obstacle(.5, 4, 20, -10.75, 0);
     obstacle(.5, 4, 20, 10.75, 0);
+    world.colliders.push({ x: 0, z: 9.8, w: 21.5, d: .4, h: 4, camera: true });
   } else if (config.id === 'operatingRoom') {
     obstacle(17.5, 4, .5, 0, -7.9);
     obstacle(.5, 4, 16, -8.8, 0);
@@ -141,6 +144,7 @@ export function createWorld(config, { includeCharacters = true, includeHelpers =
     const sideWidth = (width - 4) / 2;
     obstacle(sideWidth, 2.1, .4, -(width + 4) / 4, depth / 2);
     obstacle(sideWidth, 2.1, .4, (width + 4) / 4, depth / 2);
+    if (config.id === 'office') world.colliders.push({ x: 0, z: 9, w: 20, d: .4, h: 4, camera: true });
     windowFrame(0, -depth / 2 + .25);
     if (config.id === 'livingRoom') {
       box(shell, 5.2, .035, 3.5, 0, .025, -.8, '#b5aa8c');
