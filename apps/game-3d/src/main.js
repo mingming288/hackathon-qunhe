@@ -81,7 +81,11 @@ function renderScene(id, options = {}) {
     } } };
     const timeout = setTimeout(() => finish(true), 8000);
     // 人物和环境都就绪后再揭开场景，避免建筑模型在玩家眼前突然替换。
-    ready.then(() => { clearTimeout(timeout); setTimeout(() => finish(), 180); });
+    ready.then(() => {
+      clearTimeout(timeout);
+      // 走门过渡已预载场景，完成后立即恢复行走；其他载入保留遮罩缓冲。
+      if (options.seamless) finish(); else setTimeout(() => finish(), 180);
+    });
   } else setTimeout(() => { if (sceneLoad.finish(revision)) $('fade').classList.remove('show'); }, 180);
   refresh(); saveCurrent();
 }

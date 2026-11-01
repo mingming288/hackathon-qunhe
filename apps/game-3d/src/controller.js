@@ -74,7 +74,8 @@ export class ThirdPersonController {
     const x = Number(this.keys.has('KeyD') || this.keys.has('ArrowRight')) - Number(this.keys.has('KeyA') || this.keys.has('ArrowLeft'));
     const z = Number(this.keys.has('KeyS') || this.keys.has('ArrowDown')) - Number(this.keys.has('KeyW') || this.keys.has('ArrowUp'));
     const moving = this.enabled() && (x || z);
-    if (!moving) this.motionYaw = null;
+    // 载入时输入会临时停用，但仍按住方向键时应保留避障前的移动方向。
+    if (!x && !z) this.motionYaw = null;
     const beforeX = this.player.position.x, beforeZ = this.player.position.z;
     if (moving) {
       const direction = this.direction.set(x, 0, z).normalize().applyAxisAngle(this.up, this.motionYaw ?? this.yaw);

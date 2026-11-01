@@ -81,7 +81,7 @@ export class WorldView {
   }
 
   show(config, { from = null, location = null, character = 'andy', catalog = {}, environmentOnly = false, seamless = false } = {}) {
-    const previousYaw = this.controls.yaw, previousFacing = this.hero.rotation.y;
+    const previousYaw = this.controls.yaw, previousFacing = this.hero.rotation.y, previousMotionYaw = this.controls.motionYaw;
     const previousPosition = seamless ? this.position() : null;
     this.setStage(null);
     if (this.world) disposeWorld(this.world);
@@ -100,6 +100,9 @@ export class WorldView {
     this.autoTravel = new AutoTravel(position, this.world.portals);
     this.hero.scale.y = config.id === 'pipeNetwork' ? .72 : 1;
     this.resetCamera(orientation.yaw, seamless);
+    if (seamless && previousMotionYaw !== null) {
+      this.controls.motionYaw = transitionOrientation(from, config.id, previousMotionYaw, previousFacing, { portal, position }).yaw;
+    }
     this.interactions = []; this.current = null; this.button.hidden = true; this.goal = null;
     const version = this.version;
     const loading = [];

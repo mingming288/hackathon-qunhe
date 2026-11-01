@@ -66,6 +66,19 @@ test('牢房墙边镜头转向可用空间，按住的移动方向不会突然�
   disposeWorld(world);
 });
 
+test('场景载入暂时禁止移动时保留按住的方向，松键后清除', () => {
+  const world = createWorld(SCENE_BY_ID.get('cell'));
+  const player = new THREE.Group(), camera = new THREE.PerspectiveCamera();
+  const controller = controllerFor({ camera, player, yaw: .8, pitch: .55, distance: 7,
+    motionYaw: .2, keys: new Set(['ArrowUp']), enabled: () => false });
+  controller.update(.016, world);
+  assert.equal(controller.motionYaw, .2);
+  assert.equal(player.position.length(), 0);
+  controller.keys.clear(); controller.update(.016, world);
+  assert.equal(controller.motionYaw, null);
+  disposeWorld(world);
+});
+
 test('图书馆、办公室和禁闭室入口墙边的镜头保持人物可见', () => {
   for (const [id, z] of [['library', 9.1], ['office', 8.35], ['solitary', 3.95]]) {
     const world = createWorld(SCENE_BY_ID.get(id)), player = new THREE.Group();
