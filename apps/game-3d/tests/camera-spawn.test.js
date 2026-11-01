@@ -36,6 +36,27 @@ test('靠近牢房出口的镜头不会被最小距离推入前墙', () => {
   disposeWorld(world);
 });
 
+test('牢房墙边镜头转向可用空间，按住的移动方向不会突然改变', () => {
+  const world = createWorld(SCENE_BY_ID.get('cell'));
+  const player = new THREE.Group(); player.position.set(0, 0, 5.3);
+  const camera = new THREE.PerspectiveCamera(); camera.position.set(0, 4, 12);
+  const controller = Object.assign(Object.create(ThirdPersonController.prototype), {
+    camera, player, yaw: 0, pitch: .55, distance: 7, motionYaw: null,
+    keys: new Set(['ArrowDown']), enabled: () => true,
+  });
+  controller.update(.016, world);
+  const target = player.position.clone().add(new THREE.Vector3(0, 1.45, 0));
+  assert.ok(camera.position.distanceTo(target) >= 3, '镜头应退到能看见人物的位置');
+  assert.notEqual(controller.yaw, 0);
+  assert.equal(controller.motionYaw, 0);
+  const x = player.position.x;
+  controller.update(.016, world);
+  assert.equal(player.position.x, x, '同一次按键不能因为避墙转向而横移');
+  controller.keys.clear(); controller.update(.016, world);
+  assert.equal(controller.motionYaw, null);
+  disposeWorld(world);
+});
+
 test('沿走廊行走时镜头不能越过两侧墙顶或门洞', () => {
   const world = createWorld(SCENE_BY_ID.get('cellCorridor'));
   for (const yaw of [-Math.PI / 2, Math.PI / 2]) for (const z of [0, 5.6, 11.2]) {
