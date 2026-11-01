@@ -9,6 +9,7 @@ import { CHARACTER_NAMES } from './kit.js';
 import { AutoTravel } from './auto-travel.js';
 import { revealPendingCharacters } from './scene-load-gate.js';
 import { goalDirection, pipeExitWaypoint } from './goal-direction.js';
+import { guideWaypoint } from './guide-route.js';
 import { SCENE_BY_ID } from './scenes.js';
 
 export class WorldView {
@@ -128,6 +129,7 @@ export class WorldView {
   setStage(stage) { this.stage?.dispose(); this.stage = stage; }
 
   configure({ interactions, goal, goalLabel = '当前目标', portalRules = {}, hidden = [] }) {
+    this.nextGuideAt = 0; this.guideWaypoint = null;
     this.portalRules = portalRules;
     this.interactions = interactions.map(item => ({ ...item, object: this.anchor(item.target) })).filter(item => item.object);
     this.world.anchors.forEach(anchor => { anchor.visible = !hidden.includes(anchor.userData.assetKey); });
@@ -219,9 +221,15 @@ export class WorldView {
       direction.hidden = this.environmentOnly || !this.goal || !this.goal.visible;
       if (!direction.hidden) {
         const target = this.goal.getWorldPosition(projected);
-        const waypoint = this.world.config.id === 'pipeNetwork' && this.goal === this.world.portals.find(portal => portal.id === 'rain')?.object
+        const pipeWaypoint = this.world.config.id === 'pipeNetwork' && this.goal === this.world.portals.find(portal => portal.id === 'rain')?.object
           ? pipeExitWaypoint(this.hero.position) : null;
-        const text = goalDirection(this.hero.position, waypoint || target, this.controls.yaw, waypoint ? { nearDistance: 0, label: '绕过隔墙' } : undefined);
+        if (this.elapsed >= (this.nextGuideAt || 0)) {
+          const portal = this.world.portals.some(item => item.object === this.goal);
+          this.guideWaypoint = pipeWaypoint ? null : guideWaypoint(this.world, this.hero.position, target, portal ? 1.15 : 2.2);
+          this.nextGuideAt = this.elapsed + .35;
+        }
+        const waypoint = pipeWaypoint || this.guideWaypoint;
+        const text = goalDirection(this.hero.position, waypoint || target, this.controls.yaw, waypoint ? { nearDistance: 0, label: '绕过障碍' } : undefined);
         if (direction.textContent !== text) direction.textContent = text;
       }
     }
