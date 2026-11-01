@@ -134,11 +134,15 @@ test('瑞德进入超市时镜头位于门口上沿内侧', () => {
   disposeWorld(world);
 });
 
-test('连续过门保留仍按住的移动键，普通镜头重置会清空输入', () => {
-  const controller = Object.assign(Object.create(ThirdPersonController.prototype), { keys: new Set(['ArrowUp']), drag: {} });
-  controller.reset({ preserveKeys: true });
+test('连续过门保留移动键和镜头设置，普通镜头重置恢复默认', () => {
+  const controller = Object.assign(Object.create(ThirdPersonController.prototype), { keys: new Set(['ArrowUp']), drag: {}, pitch: .8, distance: 10 });
+  controller.reset({ preserveKeys: true, preserveView: true });
   assert.ok(controller.keys.has('ArrowUp'));
+  assert.equal(controller.pitch, .8);
+  assert.equal(controller.distance, 10);
   assert.equal(controller.drag, null);
   controller.reset();
   assert.equal(controller.keys.size, 0);
+  assert.equal(controller.pitch, .55);
+  assert.equal(controller.distance, 7);
 });

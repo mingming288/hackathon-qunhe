@@ -153,7 +153,7 @@ export class WorldView {
   position() { return { x: this.hero.position.x, z: this.hero.position.z }; }
   pause() { this.controls.keys.clear(); }
   resetCamera(yaw = 0, preserveKeys = false) {
-    this.controls.reset({ preserveKeys });
+    this.controls.reset({ preserveKeys, preserveView: preserveKeys });
     this.controls.yaw = yaw;
     if (this.environmentOnly && this.world) {
       const sphere = new THREE.Box3().setFromObject(this.world.root).getBoundingSphere(new THREE.Sphere());
