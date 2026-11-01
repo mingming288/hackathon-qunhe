@@ -108,10 +108,12 @@ test('先观察墙面，修理后实际领取工具和圣经，藏锤后仍需�
   assert.equal(game.scene, 'cell'); assert.equal(game.step, 'inspectWall');
   game = act(game);
   assert.equal(game.step, 'meetRed');
+  assert.match(travelRule(game, 'yard', 'library'), /修好收音机，再向他领取石锤/);
   assert.equal(guidanceFor(game).target, 'exit:cellCorridor');
   assert.match(guidanceFor(game).place, /安迪的牢房 → 监区走廊 → 院子与监狱大门/);
   game = act(game); game = act(game);
   assert.equal(game.step, 'takeHammer'); assert.ok(!game.items.includes('hammer'));
+  assert.match(travelRule(game, 'yard', 'library'), /向瑞德领取石锤/);
   game = act(game);
   assert.equal(game.step, 'sortBooks'); assert.equal(travelRule(game, 'yard', 'library'), null);
   assert.equal(guidanceFor(game).target, 'exit:library');
