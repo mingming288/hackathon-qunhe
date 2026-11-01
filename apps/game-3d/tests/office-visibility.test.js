@@ -5,7 +5,7 @@ import { officeHiddenProps } from '../src/story.js';
 test('办公室的保险柜和人物外观随剧情事件恢复', () => {
   assert.deepEqual(officeHiddenProps({ events: [] }), ['safe', 'ledger']);
   assert.deepEqual(officeHiddenProps({ events: ['meetWarden'] }), ['safe', 'warden', 'ledger']);
-  assert.deepEqual(officeHiddenProps({ events: ['meetWarden', 'openSafe'] }), ['embroidery', 'warden', 'ledger']);
+  assert.deepEqual(officeHiddenProps({ events: ['meetWarden', 'openSafe'] }), ['warden', 'ledger']);
   assert.deepEqual(officeHiddenProps({ events: ['riskInspection', 'sideBrooks'] }), ['safe', 'warden']);
   assert.deepEqual(officeHiddenProps({ events: ['riskInspection', 'sideHide'] }), ['safe', 'warden']);
   assert.deepEqual(officeHiddenProps({ events: ['riskInspection', 'sideHide', 'sideRecover'] }), ['safe', 'warden', 'ledger']);

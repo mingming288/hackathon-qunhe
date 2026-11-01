@@ -24,6 +24,6 @@ test('办公室道具自包含并维持原剧情目标和显隐顺序', async ()
   assert.ok(Math.abs(embroidery.position.z + 7.4) < 2.7);
   assert.ok(Math.abs(safe.position.z + 7.4) < 2.7);
   assert.ok(officeHiddenProps({ events: [] }).includes('safe'));
-  assert.ok(officeHiddenProps({ events: ['openSafe'] }).includes('embroidery'));
+  assert.ok(!officeHiddenProps({ events: ['openSafe'] }).includes('embroidery'));
   disposeWorld(world);
 });
