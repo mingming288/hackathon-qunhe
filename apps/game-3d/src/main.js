@@ -14,6 +14,7 @@ import { SceneLoadGate } from './scene-load-gate.js';
 import { prepareTravel } from './scene-transition.js';
 import { RainAmbience } from './rain-ambience.js';
 import { evidenceReview } from './evidence-review.js';
+import { OPENING, storyInterlude } from './story-interludes.js';
 import rainUrl from '../../../Beyond the wall/音效/四秒雨声.opus';
 
 const $ = id => document.getElementById(id);
@@ -77,8 +78,10 @@ function completeAction(action) {
     game = result.game;
     if (game.scene !== previousScene || view.heroId !== heroId(game)) renderScene(game.scene, previousScene === 'pipeNetwork' && game.scene === 'rain' ? { from: previousScene } : {});
     else { refresh(); saveCurrent(); }
+    const interlude = storyInterlude(action.id, game, result.automatic);
     const message = action.result || result.automatic.findLast(item => item.result)?.result;
-    if (message) notify(message);
+    if (interlude) dialogue.open(interlude.title, interlude.lines, [{ label: '继续故事', run: () => {} }]);
+    else if (message) notify(message);
     if (game.finished) {
       dialogue.open('结局 · ' + game.finished, action.lines, [
         { label: '返回游戏菜单', run: openMenu },
@@ -179,7 +182,8 @@ function resume() {
 }
 function startNew() {
   store(() => backupGame(storage)); game = createGame(); gameLocation = null; mode = 'game'; menu.close();
-  renderScene(game.scene); notify('牢房的砂浆有些松动。先靠近后墙，观察裂缝，试试徒手能不能撬下来。');
+  renderScene(game.scene);
+  dialogue.open(OPENING.title, OPENING.lines, [{ label: '开始探索', run: () => notify('先靠近后墙，观察松动的砂浆。') }]);
 }
 function buildAtlas() {
   atlasView = createAtlas({ getCatalog: () => catalog, getScene: () => sceneId, onScene: explore,

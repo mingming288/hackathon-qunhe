@@ -90,7 +90,7 @@ export const TASKS = [
 export const TASK_BY_ID = new Map(TASKS.map(item => [item.id, item]));
 export const ITEM_NAMES = { hammer: '石锤', bible: '圣经', poster: '海报', soil: '碎土', map: '管网地图', ledger: '账本与记录', letter: '安迪的信', groceries: '四件商品' };
 export const EVIDENCE = {
-  red: ['yard', '瑞德', '空壳公司与结算日期', ['瑞德：三家公司的结算日期，和后门夜车出入的日期完全重合。']],
+  red: ['yard', '瑞德', '空壳公司与结算日期', ['瑞德：三家公司的结算日期，和后门夜车出入的日期完全重合。', '安迪：如果有一天你也走出去，去石墙尽头找那棵橡树。我会在那里给你留下消息。']],
   brooks: ['library', '老布', '转送登记页', ['老布：借阅证被划掉的人，没有归还记录，也没有出狱记录。把这页登记收好。']],
   tommy: ['yard', '汤米', '失踪者转移证言', ['汤米：转移档案没有接收方盖章。那晚被带走的人，再也没有回来。']],
   haywood: ['yard', '海伍德', '夜车车牌与日期', ['海伍德：夜车尾牌是417。六月十二日、七月三日、七月十九日，我都见过它。']],
