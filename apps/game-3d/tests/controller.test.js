@@ -59,16 +59,15 @@ function key(browserWindow, canvas, type, code) {
   browserWindow.dispatchEvent(event);
 }
 
-test('camera follows every walking direction without directional lag', context => {
+test('镜头平滑跟随人物方向，持续按键时人物沿直线移动', context => {
   const { controls, player, camera, world } = setup(context);
-  const offset = camera.position.clone().sub(player.position);
-  for (const code of ['KeyW', 'KeyS', 'KeyA', 'KeyD']) {
-    controls.keys.clear(); controls.keys.add(code);
-    for (let frame = 0; frame < 30; frame++) {
-      controls.update(1 / 60, world);
-      assert.ok(camera.position.clone().sub(player.position).distanceTo(offset) < 1e-9, code);
-    }
-  }
+  player.rotation.y = Math.PI;
+  controls.keys.add('KeyD');
+  for (let frame = 0; frame < 180; frame++) controls.update(1 / 60, world);
+  assert.ok(player.position.x > 9 && Math.abs(player.position.z) < 1e-8);
+  const forward = new THREE.Vector3(Math.sin(player.rotation.y), 0, Math.cos(player.rotation.y));
+  const offset = camera.position.clone().sub(player.position).setY(0).normalize();
+  assert.ok(offset.dot(forward) < -.99);
 });
 
 test('walking starts, reverses and stops on the next frame', context => {

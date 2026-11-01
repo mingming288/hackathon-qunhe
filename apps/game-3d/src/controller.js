@@ -78,6 +78,8 @@ export class ThirdPersonController {
     if (!x && !z) this.motionYaw = null;
     const beforeX = this.player.position.x, beforeZ = this.player.position.z;
     if (moving) {
+      // 一次连续按键使用同一参照方向，避免跟随转镜头时人物绕圈。
+      if (this.motionYaw === null) this.motionYaw = this.yaw;
       const direction = this.direction.set(x, 0, z).normalize().applyAxisAngle(this.up, this.motionYaw ?? this.yaw);
       const speed = this.keys.has('ShiftLeft') || this.keys.has('ShiftRight') ? 5.2 : 3.3;
       moveWithCollision(this.player.position, direction.x * speed * dt, direction.z * speed * dt, world.config.size, world.colliders);
@@ -91,6 +93,13 @@ export class ThirdPersonController {
       this.ray.set(target, offset);
       return this.obstacleDistance(world.cameraColliders, this.obstacleDistance(world.colliders, this.distance));
     };
+    if (moving && !this.drag && Math.hypot(this.player.position.x - beforeX, this.player.position.z - beforeZ) > .0001) {
+      const desired = this.player.rotation.y + Math.PI;
+      const angle = Math.atan2(Math.sin(desired - this.yaw), Math.cos(desired - this.yaw));
+      const candidate = this.yaw + angle * (1 - Math.exp(-dt * 3));
+      // 靠墙时让已有避障逻辑优先，避免镜头反复被墙推回。
+      if (distanceAt(candidate) >= 2) this.yaw = candidate;
+    }
     let distance = distanceAt(this.yaw), rerouted = false;
     // 镜头被挤进人物时转向可用的一侧；正在按住的方向保持到松键。
     if (SIDE_CAMERA_ROOMS.has(world.config.id) && distance < 2) {
