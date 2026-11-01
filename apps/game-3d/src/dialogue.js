@@ -23,7 +23,12 @@ export class Dialogue {
     if (!this.dialog.open) this.dialog.showModal();
   }
 
-  task(action, done) {
-    this.open(action.label, action.lines, action.challenge ? [] : [{ label: action.confirmLabel || (action.evidence ? '记录这条线索' : action.observed ? '记下这条记录' : '完成交谈'), run: done }]);
+  task(action, done, catalog = {}) {
+    const item = pickupItem(action);
+    const label = item ? (item === 'hammer' ? '收下石锤' : '收下圣经') : null;
+    this.open(action.label, action.lines, action.challenge ? [] : [{ label: action.confirmLabel || label || (action.evidence ? '记录这条线索' : action.observed ? '记下这条记录' : '完成交谈'), run: done }]);
+    if (item) this.cleanup = showItemPreview($('detail-copy'), item, catalog);
   }
 }
+import { pickupItem, showItemPreview } from './item-preview.js';
+

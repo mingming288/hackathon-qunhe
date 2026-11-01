@@ -96,7 +96,7 @@ function renderScene(id, options = {}) {
 function perform(action) {
   view.pause();
   if (earlyPlay.perform(action)) return;
-  dialogue.task(action.id === 'twoCompare' ? { ...action, lines: evidenceReview(game) } : action, () => completeAction(action));
+  dialogue.task(action.id === 'twoCompare' ? { ...action, lines: evidenceReview(game) } : action, () => completeAction(action), catalog);
 }
 
 function completeAction(action) {

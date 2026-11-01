@@ -44,6 +44,8 @@ button:disabled{cursor:default;opacity:.4;transform:none}
 #menu small{display:block;font-size:10px;line-height:1.8;color:#ada18b}
 #detail{max-height:85dvh;overflow:auto}
 #detail-copy p{font-size:13px;line-height:1.9;margin:11px 0;color:#d5cbb8}
+.pickup-preview{height:150px;display:grid;place-items:center;overflow:hidden;border:1px solid #a9874866;border-radius:4px;background:radial-gradient(ellipse,#6b593470,#171b18 70%);color:#efdbaf;font-size:18px}
+.pickup-preview canvas{display:block;max-width:100%;height:150px}
 #detail-actions{display:flex;gap:8px;flex-wrap:wrap}
 #detail-actions button{font-size:12px;flex:1 1 auto}
 #close-detail{font-size:11px;color:#baad95;background:transparent;margin-top:18px}
