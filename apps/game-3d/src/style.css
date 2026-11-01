@@ -16,7 +16,6 @@
 .scene-caption{position:fixed;left:25px;bottom:83px;max-width:420px;padding:20px 22px;background:transparent;border-left:2px solid #c5a45c;border-radius:2px;pointer-events:none;z-index:2;backdrop-filter:none}.eyebrow{font-size:11px;letter-spacing:.22em;color:#d1b573}.scene-caption h1{font-family:"Songti SC","SimSun",serif;font-weight:600;font-size:clamp(27px,3vw,43px);letter-spacing:.06em;line-height:1.25;margin:13px 0 12px}.scene-caption p{font-size:12px;line-height:1.9;margin:0;color:#d0c6b1;max-width:340px}.scene-status{margin-top:20px;font-size:10px;letter-spacing:.08em;color:#b9b39d;display:flex;gap:7px;align-items:center}.scene-status i{width:5px;height:5px;background:#d8b45d;border-radius:50%}
 .controls{position:fixed;bottom:0;left:0;right:0;display:flex;align-items:center;gap:25px;padding:21px 35px;font-size:10px;color:#d1c6af;background:linear-gradient(transparent,#151713ed);pointer-events:none;z-index:2}.controls b{letter-spacing:.1em;font-size:12px;margin-right:4px}.build-note{margin-left:auto;opacity:.75;font-size:10px}
 #floating-labels{position:fixed;inset:0;pointer-events:none;overflow:hidden}.world-label{position:absolute;top:0;left:0;white-space:nowrap;font-size:10px;padding:5px 9px;border:1px solid #b99b5a70;border-radius:2px;background:#1c201de8;backdrop-filter:blur(5px);color:#eee1c5;box-shadow:0 2px 12px #0000004d}
-button.world-label{pointer-events:auto;cursor:pointer}button.world-label:hover{background:#5c4c2f}
 .interaction{position:fixed;left:50%;bottom:104px;transform:translateX(-50%);z-index:4;background:#604b27f2;color:#fff1d0;border-color:#d8b45d;padding:13px 22px;font-size:12px;box-shadow:0 6px 22px #00000066;white-space:nowrap}.interaction:hover{background:#806330}
 .notice{position:fixed;top:110px;left:50%;transform:translate(-50%,-10px);opacity:0;pointer-events:none;transition:.2s;background:#29251df2;border:1px solid #a9874880;border-radius:3px;box-shadow:0 5px 25px #00000066;padding:13px 20px;font-size:12px;z-index:6;max-width:min(90vw,600px)}.notice.visible{opacity:1;transform:translate(-50%,0)}
 dialog{border:1px solid #a98748a6;border-radius:5px;background:var(--paper);color:var(--ink);box-shadow:0 30px 100px #000000b3}dialog::backdrop{background:#000000b3;backdrop-filter:blur(7px)}
@@ -44,8 +43,6 @@ button:disabled{cursor:default;opacity:.4;transform:none}
 #menu small{display:block;font-size:10px;line-height:1.8;color:#ada18b}
 #detail{max-height:85dvh;overflow:auto}
 #detail-copy p{font-size:13px;line-height:1.9;margin:11px 0;color:#d5cbb8}
-.pickup-preview{height:150px;display:grid;place-items:center;overflow:hidden;border:1px solid #a9874866;border-radius:4px;background:radial-gradient(ellipse,#6b593470,#171b18 70%);color:#efdbaf;font-size:18px}
-.pickup-preview canvas{display:block;max-width:100%;height:150px}
 #detail-actions{display:flex;gap:8px;flex-wrap:wrap}
 #detail-actions button{font-size:12px;flex:1 1 auto}
 #close-detail{font-size:11px;color:#baad95;background:transparent;margin-top:18px}
@@ -66,7 +63,7 @@ button:disabled{cursor:default;opacity:.4;transform:none}
 body[data-mode="game"] .scene-caption p,body[data-mode="game"] .scene-status,body[data-mode="game"] .controls{display:none}
 body[data-mode="game"] .scene-caption{padding:10px 14px;bottom:25px}
 body[data-mode="game"] .scene-caption h1{font-size:20px;margin:7px 0 0}
-.quest-panel{top:108px;left:auto;right:30px;transform:none;width:min(300px,30vw);padding:8px 14px;background:#1c201de0;border:0;border-left:1px solid #c5a45c;pointer-events:auto}
+.quest-panel{top:24px;left:50%;right:auto;transform:translateX(-50%);width:min(340px,30vw);padding:8px 14px;background:#1c201db8;border:0;border-left:1px solid #c5a45c;pointer-events:auto}
 .quest-panel h2{margin:5px 0;font-size:15px}.quest-panel p{margin:4px 0}
 @media(max-width:900px){.quest-panel{top:95px;left:auto;right:14px;transform:none;width:min(250px,48vw);background:#1c201de0}}
 .quest-details{font-size:11px;color:#c9bea8}

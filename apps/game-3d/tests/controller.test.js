@@ -215,17 +215,3 @@ test('render loop updates NPC movement and animation, respecting scene and story
   assert.ok(npc.position.distanceTo(position) > .08);
   assert.equal(walking, true);
 });
-
-
-test('自动指路保持世界方向并使用提升后的速度，暂停时停止', context => {
-  const { controls, player, world } = setup(context);
-  controls.yaw = Math.PI / 2;
-  const speed = controls.update(.1, world, { x: 1, z: 0 });
-  assert.ok(Math.abs(speed - 4.95) < 1e-9);
-  assert.ok(Math.abs(player.position.x - .495) < 1e-9);
-  assert.equal(player.position.z, 0);
-  const position = player.position.clone();
-  controls.enabled = () => false;
-  assert.equal(controls.update(.1, world, { x: 1, z: 0 }), 0);
-  assert.deepEqual(player.position, position);
-});

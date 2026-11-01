@@ -112,9 +112,18 @@
       "walkAnimation": 1
     },
     "guard": {
-      "url": "/assets/models/hadley.glb",
+      "url": "/assets/models/uniform-staff-rigged.glb",
       "height": 2.55,
-      "rotationY": 0
+      "rotationY": 0,
+      "idleUrl": "/assets/models/uniform-staff-idle.glb",
+      "walkUrl": "/assets/models/uniform-staff-walk.glb"
+    },
+    "uniform-template": {
+      "url": "/assets/models/uniform-staff-rigged.glb",
+      "height": 2.55,
+      "rotationY": 0,
+      "idleUrl": "/assets/models/uniform-staff-idle.glb",
+      "walkUrl": "/assets/models/uniform-staff-walk.glb"
     }
   }
 }

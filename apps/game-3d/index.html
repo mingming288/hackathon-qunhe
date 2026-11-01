@@ -4,22 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#e6e0ca">
-  <title>入戏 · 三维剧情</title>
+  <title>墙的另一边 · 三维剧情</title>
 </head>
 <body>
-  <canvas id="world" tabindex="0" aria-label="入戏第三人称三维场景，方向键移动，拖动旋转镜头，空格互动"></canvas>
+  <canvas id="world" tabindex="0" aria-label="墙的另一边第三人称三维场景，方向键移动，拖动旋转镜头，空格互动"></canvas>
   <header class="masthead">
     <details class="minimap"><summary><span class="minimap-title">地图 · <strong data-map-current></strong></span><span class="minimap-toggle">点击或按 M 展开 / 收起</span><svg viewBox="0 0 400 400" aria-hidden="true"></svg></summary><p>蓝色：人物　金色圆圈：当前目标　圆点：出入口</p><p class="map-accessible" data-map-accessible></p></details>
     <div class="top-actions"><button id="open-menu" type="button">游戏菜单</button><button id="return-game" type="button" hidden>返回游戏</button><button id="open-assets" type="button" hidden>资产清单</button><button id="camera-reset" type="button">重置镜头</button><button id="open-atlas" class="primary" type="button">场景总览 <span id="scene-count">01 / 19</span></button></div>
   </header>
   <aside class="scene-caption"><span id="chapter" class="eyebrow"></span><h1 id="scene-title"></h1><p id="scene-note"></p><div class="scene-status"><i></i><span id="mode-label">第三人称</span></div></aside>
   <aside id="quest" class="quest-panel" aria-live="polite" hidden><span class="eyebrow">当前目标</span><h2 id="quest-title"></h2><p id="goal-direction" hidden></p><p id="portal-hint" hidden>走近入口，自动进入。</p><p id="quest-context" hidden></p><p id="movement-hint" hidden>使用方向键移动，走近金色标记。</p><button id="guide-help" type="button">为我指路</button><details class="quest-details"><summary>物品与操作</summary><p id="inventory"></p><p id="evidence-count"></p><button id="open-journal" type="button">查看线索记录</button><p>方向键移动 · 拖动环顾 · 滚轮缩放 · 空格互动</p></details></aside>
-  <div id="floating-labels" aria-label="场景地标"></div>
+  <div id="floating-labels" aria-hidden="true"></div>
   <button id="interact" class="interaction" type="button" hidden></button>
   <div id="notice" class="notice" role="status" aria-live="polite"></div>
   <footer class="controls"><span><b>↑ ↓ ← →</b> 移动</span><span>拖动 · 环顾</span><span>滚轮 · 远近</span><span>空格 · 互动</span><span class="environment-controls">拖动 · 旋转　右键拖动或双指 · 平移　滚轮或双指 · 缩放</span><span id="build-note" class="build-note"></span></footer>
   <div class="touch-controls" aria-label="移动控制"><button data-move="ArrowUp" aria-label="向前">↑</button><button data-move="ArrowLeft" aria-label="向左">←</button><button data-move="ArrowDown" aria-label="向后">↓</button><button data-move="ArrowRight" aria-label="向右">→</button></div>
-  <dialog id="menu" aria-labelledby="menu-title"><div class="menu-content"><span class="eyebrow">第三人称 · 剧情贯通版</span><h2 id="menu-title">入戏</h2><p>一间牢房，一段漫长准备。沿着原有故事，亲自走向高墙的另一边。</p><div class="menu-actions"><button id="new-game" class="primary" type="button">开始新游戏</button><button id="resume-game" type="button">继续游戏</button><button id="menu-atlas" type="button">场景总览 · 自由查看</button><button id="menu-last-preview" type="button">继续上次的场景查看</button></div><small>十九组基础场景 · 主线、备用路线与三条结局 · 场景查看独立保存</small></div></dialog>
+  <dialog id="menu" aria-labelledby="menu-title"><div class="menu-content"><span class="eyebrow">第三人称 · 剧情贯通版</span><h2 id="menu-title">墙的另一边</h2><p>一间牢房，一段漫长准备。沿着原有故事，亲自走向高墙的另一边。</p><div class="menu-actions"><button id="new-game" class="primary" type="button">开始新游戏</button><button id="resume-game" type="button">继续游戏</button><button id="menu-atlas" type="button">场景总览 · 自由查看</button><button id="menu-last-preview" type="button">继续上次的场景查看</button></div><small>十九组基础场景 · 主线、备用路线与三条结局 · 场景查看独立保存</small></div></dialog>
   <dialog id="atlas" aria-labelledby="atlas-title">
     <div class="dialog-heading"><div><span class="eyebrow">场景与建模档案</span><h2 id="atlas-title">从高墙，到远方。</h2></div><button id="close-atlas" aria-label="关闭场景总览" type="button">关闭</button></div>
     <p id="atlas-note" class="atlas-note"></p>
@@ -31,7 +31,7 @@
     <p id="atlas-summary" class="atlas-summary" role="status" aria-live="polite"></p>
     <div id="atlas-panel" role="tabpanel" aria-labelledby="atlas-environments"></div>
   </dialog>
-  <dialog id="detail" aria-labelledby="detail-title"><span class="eyebrow">入戏</span><h2 id="detail-title"></h2><div id="detail-copy"></div><div id="challenge"></div><div id="detail-actions"></div><button id="close-detail" type="button">返回探索</button></dialog>
+  <dialog id="detail" aria-labelledby="detail-title"><span class="eyebrow">墙的另一边</span><h2 id="detail-title"></h2><div id="detail-copy"></div><div id="challenge"></div><div id="detail-actions"></div><button id="close-detail" type="button">返回探索</button></dialog>
   <div id="fade" aria-hidden="true"></div>
   <div id="fatal" class="fatal" role="alert" hidden><h2>暂时无法打开三维场景</h2><p id="fatal-message"></p><button type="button" onclick="location.reload()">重新尝试</button></div>
   <script type="module" src="/src/main.js"></script>

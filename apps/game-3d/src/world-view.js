@@ -11,7 +11,6 @@ import { AutoTravel } from './auto-travel.js';
 import { revealPendingCharacters } from './scene-load-gate.js';
 import { goalDirection, pipeExitWaypoint } from './goal-direction.js';
 import { guideWaypoint } from './guide-route.js';
-import { AutoWalk } from './auto-walk.js';
 import { SCENE_BY_ID } from './scenes.js';
 
 export class WorldView {
@@ -84,7 +83,6 @@ export class WorldView {
   }
 
   show(config, { from = null, location = null, character = 'andy', catalog = {}, environmentOnly = false, seamless = false } = {}) {
-    this.autoWalk = null;
     const previousYaw = this.controls.yaw, previousFacing = this.hero.rotation.y, previousMotionYaw = this.controls.motionYaw;
     const previousPosition = seamless ? this.position() : null;
     this.setStage(null);
@@ -153,28 +151,20 @@ export class WorldView {
     for (const portal of this.world.portals) {
       const locked = Boolean(portalRules[portal.id]);
       portal.ring.material.color.set(locked ? '#686b60' : '#b99755');
-      if (portal.object !== this.goal) this.addLabel((locked ? '暂未开放 · ' : '进入 ') + portal.name + ' ↗', portal.object, portal.object.userData.labelHeight ?? 3.3, '', !locked);
+      if (portal.object !== this.goal) this.addLabel((locked ? '暂未开放 · ' : '进入 ') + portal.name + ' ↗', portal.object, portal.object.userData.labelHeight ?? 3.3);
     }
-    this.world.anchors.filter(anchor => anchor.visible && anchor !== this.goal && anchor.userData.label).forEach(anchor => this.addLabel(anchor.userData.label, anchor, 2.9, '', this.interactions.some(item => item.object === anchor)));
-    if (this.goal) this.addLabel(goalLabel + ' ↓', this.goal, this.goal.userData.labelHeight ?? 3.6, 'goal-label', true);
+    this.world.anchors.filter(anchor => anchor.visible && anchor !== this.goal && anchor.userData.label).forEach(anchor => this.addLabel(anchor.userData.label, anchor, 2.9));
+    if (this.goal) this.addLabel(goalLabel + ' ↓', this.goal, this.goal.userData.labelHeight ?? 3.6, 'goal-label');
     for (const { object, text, height } of this.stage?.labels || []) this.addLabel(text, object, height);
   }
 
-  addLabel(text, object, height, extra = '', clickable = false) {
-    const label = document.createElement(clickable ? 'button' : 'span'); label.className = 'world-label ' + extra; label.textContent = text;
-    if (clickable) { label.type = 'button'; label.title = '点击自动走近'; label.addEventListener('click', () => this.walkTo(object)); }
+  addLabel(text, object, height, extra = '') {
+    const label = document.createElement('span'); label.className = 'world-label ' + extra; label.textContent = text;
     this.labelRoot.append(label); this.labels.push({ label, object, height });
   }
 
   position() { return { x: this.hero.position.x, z: this.hero.position.z }; }
-  pause() { this.autoWalk = null; this.controls.keys.clear(); this.stage?.release(); }
-  walkTo(object = this.goal) {
-    if (!object || !this.controls.enabled() || this.environmentOnly) return false;
-    const portal = this.world.portals.find(item => item.object === object);
-    if (portal && this.portalRules?.[portal.id]) { this.notify('这条路暂未开放。'); return false; }
-    this.pause(); this.autoWalk = new AutoWalk(object, Boolean(portal));
-    this.notify('正在走近目标，按方向键可取消。'); this.canvas.focus(); return true;
-  }
+  pause() { this.controls.keys.clear(); this.stage?.release(); }
   // 未指定方向时从人物背后看向其前方；场景预览仍使用默认视角。
   resetCamera(yaw = this.environmentOnly ? 0 : this.hero.rotation.y + Math.PI, preserveKeys = false) {
     this.controls.reset({ preserveKeys, preserveView: preserveKeys });
@@ -209,18 +199,7 @@ export class WorldView {
     let speed = 0;
     if (this.environmentOnly) this.orbit.update();
     else {
-      let automatic = null;
-      if (this.autoWalk && this.controls.enabled()) {
-        const manual = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'KeyW', 'KeyA', 'KeyS', 'KeyD'].some(key => this.controls.keys.has(key));
-        if (manual) { this.autoWalk = null; this.notify('已取消自动行走。'); }
-        else {
-          const portal = this.world.portals.find(item => item.object === this.autoWalk.object);
-          const result = this.autoWalk.update(this.world, this.hero.position, dt, portal && this.autoTravel.blocked.has(portal.id));
-          if (result.status === 'walking') automatic = result.direction;
-          else { this.autoWalk = null; this.notify(result.status === 'arrived' ? '已到达，按空格互动。' : '暂时无法到达，请手动绕过障碍。'); }
-        }
-      }
-      speed = this.controls.update(dt, this.world, automatic);
+      speed = this.controls.update(dt, this.world);
       this.hero.userData.mixer?.setMoving?.(speed > .05);
       this.heroVisual.userData.animate(this.elapsed, speed / 3.3);
     }
