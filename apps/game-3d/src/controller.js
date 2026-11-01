@@ -3,14 +3,15 @@ import { moveWithCollision } from './movement.js';
 
 // 这些房间墙边留有侧向空间，可安全调整镜头；管网等狭窄场景维持原避墙方式。
 const SIDE_CAMERA_ROOMS = new Set(['cell', 'cellCorridor', 'library', 'office', 'solitary']);
-export const DEFAULT_PITCH = Math.PI * 5 / 18;
-const MIN_PITCH = Math.PI / 4, MAX_PITCH = Math.PI / 3;
+export const DEFAULT_PITCH = Math.PI / 6;
+export const DEFAULT_DISTANCE = 10;
+const MIN_PITCH = Math.PI / 9, MAX_PITCH = Math.PI / 3;
 const MAX_AVOID_TURN = 2.2;
 
 export class ThirdPersonController {
   constructor(camera, player, canvas) {
     this.camera = camera; this.player = player; this.keys = new Set();
-    this.yaw = 0; this.pitch = DEFAULT_PITCH; this.distance = 7; this.drag = null; this.motionYaw = null;
+    this.yaw = 0; this.pitch = DEFAULT_PITCH; this.distance = DEFAULT_DISTANCE; this.drag = null; this.motionYaw = null;
     this.followDistance = null;
     this.up = new THREE.Vector3(0, 1, 0); this.direction = new THREE.Vector3();
     this.target = new THREE.Vector3(); this.offset = new THREE.Vector3();
@@ -41,7 +42,7 @@ export class ThirdPersonController {
     canvas.addEventListener('pointerup', release); canvas.addEventListener('pointercancel', release);
     canvas.addEventListener('wheel', event => {
       event.preventDefault();
-      this.distance = THREE.MathUtils.clamp(this.distance + event.deltaY * .006, 3.5, 12);
+      this.distance = THREE.MathUtils.clamp(this.distance + event.deltaY * .006, 4.5, 14);
     }, { passive: false });
     canvas.addEventListener('contextmenu', event => event.preventDefault());
     document.querySelectorAll('[data-move]').forEach(button => {
@@ -56,7 +57,7 @@ export class ThirdPersonController {
 
   reset({ preserveKeys = false, preserveView = false } = {}) {
     this.yaw = 0; this.drag = null; this.motionYaw = null;
-    if (!preserveView) { this.pitch = DEFAULT_PITCH; this.distance = 7; }
+    if (!preserveView) { this.pitch = DEFAULT_PITCH; this.distance = DEFAULT_DISTANCE; }
     if (!preserveKeys) this.keys.clear();
     this.followDistance = null;
   }
@@ -103,17 +104,17 @@ export class ThirdPersonController {
     const cameraPitch = this.pitch;
     let distance = distanceAt(this.yaw);
     // 严重遮挡时缓慢转向可用的一侧，每帧仍裁剪距离以避免穿墙。
-    if (SIDE_CAMERA_ROOMS.has(world.config.id) && distance < 2.8) {
+    if (SIDE_CAMERA_ROOMS.has(world.config.id) && distance < 4.5) {
       let bestAngle = null, bestDistance = distance;
       for (const angle of [Math.PI / 4, -Math.PI / 4, 3 * Math.PI / 4, -3 * Math.PI / 4, Math.PI / 2, -Math.PI / 2, Math.PI]) {
         const candidate = this.yaw + angle, available = distanceAt(candidate, cameraPitch);
         if (available > bestDistance + .05) { bestAngle = angle; bestDistance = available; }
-        if (available >= 3.2) break;
+        if (available >= 5.3) break;
       }
       if (bestAngle !== null) {
         if (moving && this.motionYaw == null) this.motionYaw = this.yaw;
         // 镜头几乎贴住人物时立即避让，防止墙面占满屏幕。
-        this.yaw += distance < 1.1 ? bestAngle : THREE.MathUtils.clamp(bestAngle, -MAX_AVOID_TURN * dt, MAX_AVOID_TURN * dt);
+        this.yaw += distance < 2 ? bestAngle : THREE.MathUtils.clamp(bestAngle, -MAX_AVOID_TURN * dt, MAX_AVOID_TURN * dt);
         distance = distanceAt(this.yaw, cameraPitch);
       }
     }

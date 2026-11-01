@@ -63,7 +63,9 @@ button:disabled{cursor:default;opacity:.4;transform:none}
 body[data-mode="game"] .scene-caption p,body[data-mode="game"] .scene-status,body[data-mode="game"] .controls{display:none}
 body[data-mode="game"] .scene-caption{padding:10px 14px;bottom:25px}
 body[data-mode="game"] .scene-caption h1{font-size:20px;margin:7px 0 0}
-.quest-panel{width:min(300px,35vw);background:#1c201de0;border:1px solid #a9874866;border-top:2px solid #c5a45c;pointer-events:auto}
+.quest-panel{top:24px;left:50%;right:auto;transform:translateX(-50%);width:min(340px,30vw);padding:8px 14px;background:#1c201db8;border:0;border-left:1px solid #c5a45c;pointer-events:auto}
+.quest-panel h2{margin:5px 0;font-size:15px}.quest-panel p{margin:4px 0}
+@media(max-width:900px){.quest-panel{top:95px;left:auto;right:14px;transform:none;width:min(250px,48vw);background:#1c201de0}}
 .quest-details{font-size:11px;color:#c9bea8}
 .quest-details summary{cursor:pointer;color:#d8c9aa;padding:6px 0}
 #movement-hint{color:#f0dfb6}

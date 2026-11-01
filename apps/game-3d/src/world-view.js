@@ -24,7 +24,7 @@ export class WorldView {
     this.renderer.localClippingEnabled = true;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace; this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = .95;
-    this.scene = new THREE.Scene(); this.camera = new THREE.PerspectiveCamera(48, innerWidth / innerHeight, .1, 130);
+    this.scene = new THREE.Scene(); this.camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, .1, 130);
     this.scene.add(new THREE.HemisphereLight('#ded9c7', '#4d5852', 1.8));
     const sun = new THREE.DirectionalLight('#e5d5ad', 2.4); sun.position.set(-15, 24, 12); sun.castShadow = true;
     sun.shadow.mapSize.set(2048, 2048);

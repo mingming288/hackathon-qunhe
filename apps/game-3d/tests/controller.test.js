@@ -59,9 +59,9 @@ test('手动环顾时镜头始终保持俯视角度', context => {
     Object.assign(event, { pointerId: 1, clientX: 0, clientY: y });
     canvas.dispatchEvent(event);
   };
-  assert.ok(Math.abs(controls.pitch - 50 * Math.PI / 180) < 1e-9);
+  assert.ok(Math.abs(controls.pitch - 30 * Math.PI / 180) < 1e-9);
   pointer('pointerdown', 0); pointer('pointermove', -1000);
-  assert.ok(Math.abs(controls.pitch - Math.PI / 4) < 1e-9);
+  assert.ok(Math.abs(controls.pitch - Math.PI / 9) < 1e-9);
   pointer('pointermove', 1000);
   assert.ok(Math.abs(controls.pitch - Math.PI / 3) < 1e-9);
 });
@@ -111,13 +111,13 @@ test('camera avoids walls immediately and eases back without delaying movement',
   assert.ok(clearingDistance > blockedDistance && clearingDistance < 7);
   controls.reset();
   controls.update(0, world);
-  assert.ok(Math.abs(camera.position.distanceTo(target()) - 7) < 1e-9);
+  assert.ok(Math.abs(camera.position.distanceTo(target()) - 10) < 1e-9);
 });
 
 test('一般遮挡时避墙转向平缓，人物移动方向保持稳定', context => {
   const { controls, player, world } = setup(context);
   world.config.id = 'cell';
-  world.cameraColliders = [{ x: 0, z: 1.7, w: 5, d: .2, h: 10, camera: true }];
+  world.cameraColliders = [{ x: 0, z: 2.8, w: 5, d: .2, h: 10, camera: true }];
   controls.keys.add('KeyD');
   controls.update(.016, world);
   assert.ok(Math.abs(controls.yaw) <= 2.2 * .016 + 1e-9);

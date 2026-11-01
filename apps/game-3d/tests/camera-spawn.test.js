@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as THREE from 'three';
-import { ThirdPersonController, DEFAULT_PITCH } from '../src/controller.js';
+import { ThirdPersonController, DEFAULT_PITCH, DEFAULT_DISTANCE } from '../src/controller.js';
 import { createWorld, disposeWorld } from '../src/world.js';
 import { SCENE_BY_ID } from '../src/scenes.js';
 import { canStand } from '../src/movement.js';
@@ -217,5 +217,5 @@ test('连续过门保留移动键和镜头设置，普通镜头重置恢复默�
   controller.reset();
   assert.equal(controller.keys.size, 0);
   assert.equal(controller.pitch, DEFAULT_PITCH);
-  assert.equal(controller.distance, 7);
+  assert.equal(controller.distance, DEFAULT_DISTANCE);
 });
