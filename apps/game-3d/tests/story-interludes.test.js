@@ -7,7 +7,7 @@ import { EVIDENCE } from '../src/story-data.js';
 test('新游戏开场介绍人物和可探索目标，瑞德线索说明橡树约定', () => {
   assert.match(OPENING.lines.join(''), /安迪/);
   assert.match(OPENING.lines.join(''), /观察/);
-  assert.match(EVIDENCE.red[3].join(''), /石墙.*橡树/);
+  assert.match(EVIDENCE.red[4].join(''), /石墙.*橡树/);
 });
 
 test('两条准备路线的时间跳跃有衔接，记录仍按原剧情恢复', () => {

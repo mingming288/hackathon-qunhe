@@ -72,11 +72,11 @@ export const TASKS = [
   task('oneBus', 'road', 'bus', '踏上前往海岸的旅程', 'oneMeet', ['小镇和树影从车窗外退去。前方是那片约定中的海。'], { challenge: 'route', autoScene: 'beach' }),
   task('oneMeet', 'beach', 'andy', '走向安迪，与老友重逢', null, ['在海边，安迪等到了瑞德。你们终于可以把未来交还给自己。'], { finish: '相逢的海滩' }),
   task('twoCompare', 'evidence', 'evidenceBoard', '核对名单、证言和转运记录', 'twoMail', ['编号、日期和车辆记录彼此印证。消失的人并没有被正常转移。']),
-  task('twoMail', 'evidence', 'postbox', '寄出证据与举报信', 'twoInvestigate', ['你把证据分别寄给报社和调查部门。请查清他们究竟去了哪里。']),
-  task('twoInvestigate', 'medicalExterior', 'guard', '协助调查人员核实去向', 'twoMedical', ['车辆路线指向这所医疗机构。调查继续向里面推进。']),
-  task('twoMedical', 'operatingRoom', 'medicalCart', '核对医疗机构内的记录', 'twoArrest', ['记录补全了最后一环。那些被抹去的名字，终于重新进入调查视线。']),
-  task('twoArrest', 'medicalExterior', 'warden', '见证抓捕，交出最后的证据', 'twoClose', ['典狱长和温顿被带走。', '安迪：因为还有人的名字，被留在了高墙里面。']),
-  task('twoClose', 'evidence', 'letter', '为高墙下的名单留下结语', null, ['真相得以揭露，失踪者重新得到公正。安迪和瑞德，最终没能在海边重逢。'], { finish: '高墙下的名单' }),
+  task('twoMail', 'evidence', 'postbox', '寄出证据与举报信', 'twoInvestigate', ['安迪把副本分别寄给报社和调查部门，留下自己的联系方式。', '信上只有一个请求：如果这些人真的被转移，请查清他们究竟去了哪里。']),
+  task('twoInvestigate', 'medicalExterior', 'guard', '协助调查人员核实去向', 'twoMedical', ['调查人员：你寄来的记录帮我们找到了车辆路线。车最后停在这家医疗机构。', '调查人员：文件中还有一个名字，温顿。他与这家机构有关，但我们还需要核对里面的接收记录。', '安迪：那些被带走的人，应该能在记录里找到。']),
+  task('twoMedical', 'operatingRoom', 'medicalCart', '核对医疗机构内的记录', 'twoArrest', ['推车上的接收记录与监狱的转运名单对应，却没有正常转监所需的签收凭证。', '调查人员：这些记录涉及秘密转移和非法器官交易。我们会核实每个人的身份，并联系他们的家属。', '安迪把记录交给调查人员。高墙里被抹去的名字，终于有了被查清的机会。']),
+  task('twoArrest', 'medicalExterior', 'warden', '见证抓捕，交出最后的证据', 'twoClose', ['调查人员带走了典狱长，并告知安迪，另一组人已控制温顿。', '调查人员：你已经离开了，为什么还要回来？', '安迪：因为还有人的名字，被留在了高墙里面。']),
+  task('twoClose', 'evidence', 'letter', '为高墙下的名单留下结语', null, ['调查继续推进，典狱长和温顿接受审判，失踪者的名字重新被记录。', '安迪终于洗清冤屈，也帮助那些被遗忘的人找回公正。他和瑞德，却最终没能在约定的海边重逢。'], { finish: '高墙下的名单' }),
   task('threeBank', 'bank', 'clerk', '以新身份取出资金', 'threeDrive', ['安迪用新的身份完成最后一笔手续。高墙里的账，终于翻过这一页。']),
   task('threeDrive', 'road', 'car', '沿海岸公路驶向新生活', 'threeBoat', ['摇下车窗，让风吹进来。你继续驶向海边。'], { autoScene: 'beach' }),
   task('threeBoat', 'beach', 'boat', '修整旧船，开始新的生活', 'threeManager', ['安迪在海边修整旧船。另一边，瑞德离开监狱，在超市找到了工作。'], { autoScene: 'supermarket' }),
@@ -90,7 +90,7 @@ export const TASKS = [
 export const TASK_BY_ID = new Map(TASKS.map(item => [item.id, item]));
 export const ITEM_NAMES = { hammer: '石锤', bible: '圣经', poster: '海报', soil: '碎土', map: '管网地图', ledger: '账本与记录', letter: '安迪的信', groceries: '四件商品' };
 export const EVIDENCE = {
-  red: ['yard', '瑞德', '空壳公司与结算日期', ['瑞德：三家公司的结算日期，和后门夜车出入的日期完全重合。', '安迪：如果有一天你也走出去，去石墙尽头找那棵橡树。我会在那里给你留下消息。']],
+  red: ['yard', '瑞德', '空壳公司与结算日期', ['瑞德：三家公司的结算日期，和后门夜车出入的日期完全重合。'], ['安迪：如果有一天你也走出去，去石墙尽头找那棵橡树。我会在那里给你留下消息。']],
   brooks: ['library', '老布', '转送登记页', ['老布：借阅证被划掉的人，没有归还记录，也没有出狱记录。把这页登记收好。']],
   tommy: ['yard', '汤米', '失踪者转移证言', ['汤米：转移档案没有接收方盖章。那晚被带走的人，再也没有回来。']],
   haywood: ['yard', '海伍德', '夜车车牌与日期', ['海伍德：夜车尾牌是417。六月十二日、七月三日、七月十九日，我都见过它。']],

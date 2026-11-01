@@ -46,8 +46,8 @@ export function getActions(game, scene) {
     result.push({ id: 'riskInspection', scene, target: scene === 'cell' ? 'bed' : 'guard', label: '风险选择：不藏石锤，接受检查', confirmLabel: '确认接受检查，石锤将被没收', lines: ['石锤还没藏好。现在接受检查，石锤会被没收，安迪会被送进禁闭室。', '可以返回，先完成藏锤任务；也可以选择这条备用路线。'], next: 'sideReprimand', autoScene: 'yard', consume: ['hammer'] });
   }
   if (did(game, 'repairRadio') || did(game, 'sideBrooks')) {
-    for (const [id, [place, name, label, lines]] of Object.entries(EVIDENCE)) {
-      if (place === scene && !game.evidence.includes(id)) result.push({ id: 'evidence:' + id, scene, target: id, label: '向' + name + '追问线索', lines, evidence: id, result: '已记录：' + label });
+    for (const [id, [place, name, label, lines, conversation = []]] of Object.entries(EVIDENCE)) {
+      if (place === scene && !game.evidence.includes(id)) result.push({ id: 'evidence:' + id, scene, target: id, label: '向' + name + '追问线索', lines: [...lines, ...conversation], evidence: id, result: '已记录：' + label });
     }
     if (scene === 'yard') {
       for (const [id, target, label] of [['nightTruck', 'guard', '旁听夜车与点名的消息'], ['dates', 'gate', '核对门口的车辆日期']]) {
